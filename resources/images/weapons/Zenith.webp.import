@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqp3l8q7xbxrt"
-path="res://.godot/imported/Zenith.webp-ffd5247a3fb17938c97330a5df695732.ctex"
+path="res://.godot/imported/Zenith.webp-c672fada9ce7d1a8f1f7580954f623b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/Zenith.webp"
-dest_files=["res://.godot/imported/Zenith.webp-ffd5247a3fb17938c97330a5df695732.ctex"]
+source_file="res://resources/images/weapons/Zenith.webp"
+dest_files=["res://.godot/imported/Zenith.webp-c672fada9ce7d1a8f1f7580954f623b3.ctex"]
 
 [params]
 

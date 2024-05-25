@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wf3fpixhk4by"
-path="res://.godot/imported/Star_Wrath.webp-6f7b82dcf94ab3d76b538b52d488fd32.ctex"
+uid="uid://ca6gwuskjes5u"
+path="res://.godot/imported/Star_Wrath_Original_Bullet.webp-dc7a2e5b8d3cc5ba509b230e4d7bc97f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/Star_Wrath.webp"
-dest_files=["res://.godot/imported/Star_Wrath.webp-6f7b82dcf94ab3d76b538b52d488fd32.ctex"]
+source_file="res://resources/images/bullets/star_wrath/Star_Wrath_Original_Bullet.webp"
+dest_files=["res://.godot/imported/Star_Wrath_Original_Bullet.webp-dc7a2e5b8d3cc5ba509b230e4d7bc97f.ctex"]
 
 [params]
 
