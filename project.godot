@@ -14,3 +14,7 @@ config/name="Zenith"
 run/main_scene="res://scenes/starter.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://resources/images/weapons/Zenith.webp"
+
+[display]
+
+window/size/resizable=false

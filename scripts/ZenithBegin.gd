@@ -1,10 +1,8 @@
-extends Control
+extends Sprite2D
 
-const rect_size = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# 播放天顶剑出场动画
 	pass # Replace with function body.
 
 
