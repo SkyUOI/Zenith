@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=4 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
-[ext_resource type="Texture2D" uid="uid://ca7rei4qvjp33" path="res://resources/images/Block.png" id="2_j0log"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mfuwg"]
@@ -23,11 +22,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
-
-[node name="FightBlock" type="Sprite2D" parent="."]
-position = Vector2(589, 505)
-scale = Vector2(0.497917, 0.671296)
-texture = ExtResource("2_j0log")
 
 [node name="Heart" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_mfuwg")

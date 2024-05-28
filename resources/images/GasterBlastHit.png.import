@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca7rei4qvjp33"
-path="res://.godot/imported/Block.png-fb472e4b159dd733e88383da1a31afc7.ctex"
+uid="uid://dqm6ybqearj7q"
+path="res://.godot/imported/GasterBlastHit.png-8a6ed9a67b8e7876e8a89b7f9e1674cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/Block.png"
-dest_files=["res://.godot/imported/Block.png-fb472e4b159dd733e88383da1a31afc7.ctex"]
+source_file="res://resources/images/GasterBlastHit.png"
+dest_files=["res://.godot/imported/GasterBlastHit.png-8a6ed9a67b8e7876e8a89b7f9e1674cd.ctex"]
 
 [params]
 

@@ -1,21 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://dn2ixin15jtt3"]
 
 [ext_resource type="Texture2D" uid="uid://wf3fpixhk4by" path="res://resources/images/weapons/Star_Wrath.webp" id="1_rb7dw"]
-
-[sub_resource type="GDScript" id="GDScript_5sp3g"]
-script/source = "extends Sprite2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-"
+[ext_resource type="Script" path="res://scripts/weapons/star_wrath.gd" id="2_f1cui"]
 
 [node name="Star_Wrath" type="Sprite2D"]
+position = Vector2(652, 129)
+scale = Vector2(2.97559, 2.97559)
 texture = ExtResource("1_rb7dw")
-script = SubResource("GDScript_5sp3g")
+offset = Vector2(-0.33606, -1.0082)
+flip_h = true
+script = ExtResource("2_f1cui")
