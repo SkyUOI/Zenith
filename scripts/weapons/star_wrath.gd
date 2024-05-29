@@ -11,15 +11,23 @@ var state = States.Wave1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#print("star ready")
+	#new_bullet()
+	if get_tree().current_scene == self:
+		$Fight_Timer.start()
 	pass
 
 func wave():
 	self.state = States.Wave1
+	new_bullet()
 
 var star_wrath_bullet = preload("res://scenes/bullets/star_wrath_original_bullet.tscn")
 
 func new_bullet():
 	var star = star_wrath_bullet.instantiate()
+	var sz = get_viewport_rect().size.x
+	star.init(sz, 0)
+	$"..".add_child.call_deferred(star)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -36,3 +44,7 @@ func _process(delta):
 
 func start():
 	start_flag = true
+
+
+func _on_fight_t_imer_timeout():
+	new_bullet()

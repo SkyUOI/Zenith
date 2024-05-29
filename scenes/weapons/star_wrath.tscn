@@ -10,3 +10,7 @@ texture = ExtResource("1_rb7dw")
 offset = Vector2(-0.33606, -1.0082)
 flip_h = true
 script = ExtResource("2_f1cui")
+
+[node name="Fight_Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Fight_Timer" to="." method="_on_fight_t_imer_timeout"]

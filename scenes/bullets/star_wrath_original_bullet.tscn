@@ -6,4 +6,5 @@
 [node name="Star_Wrath_Original_Bullet" type="Sprite2D"]
 visible = false
 texture = ExtResource("1_do8sq")
+flip_h = true
 script = ExtResource("2_58qfh")
