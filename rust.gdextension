@@ -1,0 +1,15 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 =     "res://gdrust/target/debug/libgdrust.so"
+linux.release.x86_64 =   "res://gdrust/target/release/libgdrust.so"
+windows.debug.x86_64 =   "res://gdrust/target/debug/gdrust.dll"
+windows.release.x86_64 = "res://gdrust/target/release/gdrust.dll"
+macos.debug =            "res://gdrust/target/debug/libgdrust.dylib"
+macos.release =          "res://gdrust/target/release/libgdrust.dylib"
+macos.debug.arm64 =      "res://gdrust/target/debug/libgdrust.dylib"
+macos.release.arm64 =    "res://gdrust/target/release/libgdrust.dylib"
+

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dn2ixin15jtt3"]
+[gd_scene load_steps=4 format=3 uid="uid://dn2ixin15jtt3"]
 
 [ext_resource type="Texture2D" uid="uid://wf3fpixhk4by" path="res://resources/images/weapons/Star_Wrath.webp" id="1_rb7dw"]
 [ext_resource type="Script" path="res://scripts/weapons/star_wrath.gd" id="2_f1cui"]
+[ext_resource type="PackedScene" uid="uid://d1po1tqcrrhe3" path="res://scenes/bullets/star_wrath_original_bullet.tscn" id="3_6didj"]
 
 [node name="Star_Wrath" type="Sprite2D"]
 position = Vector2(652, 129)
@@ -10,7 +11,13 @@ texture = ExtResource("1_rb7dw")
 offset = Vector2(-0.33606, -1.0082)
 flip_h = true
 script = ExtResource("2_f1cui")
+star_wrath_bullet = ExtResource("3_6didj")
+BULLETS_NUM = 3
 
 [node name="Fight_Timer" type="Timer" parent="."]
+editor_description = "Debug"
+
+[node name="Killer" type="VisibleOnScreenNotifier2D" parent="."]
 
 [connection signal="timeout" from="Fight_Timer" to="." method="_on_fight_t_imer_timeout"]
+[connection signal="screen_exited" from="Killer" to="." method="_on_killer_screen_exited"]
