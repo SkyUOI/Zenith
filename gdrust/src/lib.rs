@@ -15,6 +15,7 @@ struct Player {
 #[godot_api()]
 impl ISprite2D for Player {
     fn init(base: Base<Sprite2D>) -> Player {
+        // godot_print!("Player created");
         Self { base }
     }
 }

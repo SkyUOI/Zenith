@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_mfuwg"]
+[ext_resource type="Script" path="res://script/Player.gd" id="3_6nc6b"]
 
 [node name="Fight" type="Control"]
 layout_mode = 3
@@ -23,11 +22,13 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Heart" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_mfuwg")
-
 [node name="ZenithBegin" type="Sprite2D" parent="."]
 position = Vector2(563, 154)
 rotation = 2.35389
 scale = Vector2(-3.28571, -3.28571)
 texture = ExtResource("3_2spkb")
+
+[node name="Player" type="Player" parent="."]
+script = ExtResource("3_6nc6b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
