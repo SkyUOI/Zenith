@@ -1,14 +1,20 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use godot::engine::{ISprite2D, Sprite2D};
+use godot::prelude::*;
+
+struct GdExtension;
+
+#[gdextension()]
+unsafe impl ExtensionLibrary for GdExtension {}
+
+#[derive(GodotClass)]
+#[class(base = Sprite2D)]
+struct Player {
+    base: Base<Sprite2D>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+#[godot_api()]
+impl ISprite2D for Player {
+    fn init(base: Base<Sprite2D>) -> Player {
+        Self { base }
     }
 }
