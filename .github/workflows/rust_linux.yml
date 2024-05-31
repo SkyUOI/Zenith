@@ -18,8 +18,8 @@ jobs:
       - name: Build
         run: cd gdrust && cargo build --all
       - name: Build Release
-        run: cargo build --all --release
+        run: cd gdrust && cargo build --all --release
       - name: Run tests Debug
-        run: cargo test --all
+        run: cd gdrust && cargo test --all
       - name: Run tests Release
-        run: cargo test --all --release
+        run: cd gdrust && cargo test --all --release
