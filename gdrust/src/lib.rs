@@ -15,7 +15,30 @@ struct Player {
 #[godot_api()]
 impl ISprite2D for Player {
     fn init(base: Base<Sprite2D>) -> Player {
-        // godot_print!("Player created");
+        godot_print!("Player created from Godot Rust");
         Self { base }
     }
+
+    fn process(&mut self, delta: f64) {
+        let mut vel = Vector2::ZERO;
+        let input_obj = Input::singleton();
+        if input_obj.is_action_pressed("move_left".into()) {
+            vel.x -= 1.0;
+        }
+        if input_obj.is_action_pressed("move_right".into()) {
+            vel.x += 1.0;
+        }
+        if input_obj.is_action_pressed("move_up".into()) {
+            vel.y -= 1.0;
+        }
+        if input_obj.is_action_pressed("move_down".into()) {
+            vel.y += 1.0;
+        }
+    }
+}
+
+#[godot_api]
+impl Player {
+    #[constant]
+    const SPEED: i32 = 50;
 }

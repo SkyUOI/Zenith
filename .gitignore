@@ -1,6 +1,7 @@
 .vscode/
 # Godot 4+ specific ignores
 .godot/
+.lapce/
 
 # Godot-specific ignores
 .import/

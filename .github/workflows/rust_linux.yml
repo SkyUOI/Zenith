@@ -1,0 +1,25 @@
+name: RustLinux
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master", "dev"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cargo build --all
+      - name: Build Release
+        run: cargo build --all --release
+      - name: Run tests Debug
+        run: cargo test --all
+      - name: Run tests Release
+        run: cargo test --all --release
