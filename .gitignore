@@ -17,3 +17,6 @@ data_*/
 mono_crash.*.json
 
 target/
+
+# Godot Cpp
+gdcpp/extension_api.json
