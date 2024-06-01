@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
-[ext_resource type="Script" path="res://script/Player.gd" id="3_6nc6b"]
+[ext_resource type="Script" path="res://scripts/Player.gd" id="3_6nc6b"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 
 [node name="Fight" type="Control"]
