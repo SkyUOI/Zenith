@@ -1,10 +1,17 @@
+cargo-features = ["edition2024", "profile-rustflags"]
 [package]
 name = "gdrust"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 
 [lib]
 crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+rustflags = ["-D", "warnings"]
