@@ -7,4 +7,3 @@ struct GdExtension;
 
 #[gdextension()]
 unsafe impl ExtensionLibrary for GdExtension {}
-

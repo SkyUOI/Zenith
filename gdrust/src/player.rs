@@ -1,5 +1,5 @@
-use godot::prelude::*;
 use godot::engine::{Area2D, IArea2D};
+use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base = Area2D)]
