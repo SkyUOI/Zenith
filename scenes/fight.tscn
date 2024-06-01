@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=7 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="Script" path="res://scripts/Player.gd" id="3_6nc6b"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
+[ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 
 [node name="Fight" type="Control"]
 layout_mode = 3
@@ -29,9 +32,19 @@ rotation = 2.35389
 scale = Vector2(-3.28571, -3.28571)
 texture = ExtResource("3_2spkb")
 
+[node name="Star_Wrath" parent="." instance=ExtResource("4_8ipx5")]
+
 [node name="Player" type="Player" parent="."]
+position = Vector2(570, 463)
+rotation = 1.5708
+scale = Vector2(0.2, 0.2)
 script = ExtResource("3_6nc6b")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="HitPoint" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_yfrnq")
 
-[node name="Star_Wrath" parent="." instance=ExtResource("4_8ipx5")]
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+scale = Vector2(6.6, 6.6)
+texture = ExtResource("5_3ufqu")
+
+[node name="BlockDrawer" type="BlockDrawer" parent="."]

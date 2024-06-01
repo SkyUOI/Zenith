@@ -1,6 +1,6 @@
 # Zenith
 
-A indie fan game developed in godot engine
+A indie fan game about undertale and terraria, developed in godot engine
 
 ## Build Guide
 
