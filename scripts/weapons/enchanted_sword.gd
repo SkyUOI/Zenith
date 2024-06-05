@@ -10,8 +10,9 @@ var finished : bool # 当前状态是否完成
 var now_state : int # 当前阶段(对应vectors)
 var now_func : String # 当前状态对应函数名
 
-func start(func_name : String, vectors : Array[Vector2]):
-	if !finished: # 没完成 就摆烂
+
+func start(func_name : String, vector : Vector2):
+	if !finished: # 没完成 
 		return
 	finished = false
 	
