@@ -1,3 +1,4 @@
+mod Zenith;
 mod fight_items;
 mod player;
 

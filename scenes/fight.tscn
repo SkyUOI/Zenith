@@ -26,10 +26,12 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="ZenithBegin" type="Sprite2D" parent="."]
-position = Vector2(563, 154)
-rotation = 2.35389
-scale = Vector2(-3.28571, -3.28571)
+[node name="ZenithBegin" type="ZenithBegin" parent="."]
+position = Vector2(569, 137)
+rotation = -0.787703
+scale = Vector2(3.28571, 3.28571)
+
+[node name="image" type="Sprite2D" parent="ZenithBegin"]
 texture = ExtResource("3_2spkb")
 
 [node name="Star_Wrath" parent="." instance=ExtResource("4_8ipx5")]
