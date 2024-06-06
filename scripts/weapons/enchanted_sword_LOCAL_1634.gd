@@ -20,7 +20,7 @@ var now_func: Callable
 
 
 func start(func_name: Callable) -> bool:
-	# todo
+	# 没完成
 	if !finished:
 		return false
 	finished = false
@@ -60,8 +60,8 @@ func swordToRotation(rad: float) -> float:
 
 
 # 旋转并移动到指定位置
-# end_rotation:剑头的角度
-# Return:是否达到指定位置
+# return: 是否达到指定位置
+# end_rotation: 剑头的角度
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
 	if (position - end_point).length() <= speed / 100:
 		return true
@@ -84,8 +84,8 @@ var target: Vector2
 var times: int
 var totTimes: int
 var toTargetRad: float
-# 挥舞后的等待
 var wait: Timer
+# 挥舞后的等待
 var shot: Timer
 
 
@@ -123,7 +123,7 @@ func evenTimes() -> bool:
 	return times % 2 == 0
 
 
-# 发射附魔光束
+#发射附魔光束
 func swingShotBeam():
 	var beam = enchanted_beam.instantiate()
 	beam.get_node("Start").wait_time = 0.05
@@ -229,6 +229,7 @@ func vertical(delta: float):
 
 
 #--------------
+# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if !finished && now_func:
 		now_func.call(delta)
