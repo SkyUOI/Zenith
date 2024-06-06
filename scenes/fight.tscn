@@ -1,10 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=15 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="Script" path="res://scripts/Player.gd" id="3_6nc6b"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 [ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
+[ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UIFight/Default/000.png" id="6_5cs44"]
+[ext_resource type="Texture2D" uid="uid://dscxanl5ikwrj" path="res://resources/images/UIFight/Highlight/000.png" id="7_rklqi"]
+[ext_resource type="Texture2D" uid="uid://cvx31mw3e38mx" path="res://resources/images/UIAct/Default/000.png" id="8_yjyfq"]
+[ext_resource type="Texture2D" uid="uid://cho5eldvgpv3j" path="res://resources/images/UIAct/Highlight/000.png" id="9_2s82g"]
+[ext_resource type="Texture2D" uid="uid://r8fejoruchch" path="res://resources/images/UIItem/Default/000.png" id="10_1wnge"]
+[ext_resource type="Texture2D" uid="uid://br34m74mf8wh6" path="res://resources/images/UIItem/Highlight/000.png" id="11_s6quu"]
+[ext_resource type="Texture2D" uid="uid://cjdh86b5aivef" path="res://resources/images/UIMercy/Default/000.png" id="12_3kr44"]
+[ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UIMercy/Highlight/000.png" id="13_lrcvx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 
@@ -27,7 +35,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="ZenithBegin" type="ZenithBegin" parent="."]
-position = Vector2(569, 137)
+position = Vector2(576, 137)
 rotation = -0.787703
 scale = Vector2(3.28571, 3.28571)
 
@@ -50,3 +58,72 @@ scale = Vector2(6.6, 6.6)
 texture = ExtResource("5_3ufqu")
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
+
+[node name="Bar" type="Bar" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 6.0
+offset_right = 20.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="fight" type="TextureButton" parent="Bar"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -123.0
+offset_right = -290.0
+offset_bottom = -81.0
+grow_vertical = 0
+texture_normal = ExtResource("6_5cs44")
+texture_pressed = ExtResource("7_rklqi")
+
+[node name="act" type="TextureButton" parent="Bar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -3.95
+anchor_top = -2.175
+anchor_right = -1.2
+anchor_bottom = -1.125
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 8.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("8_yjyfq")
+texture_pressed = ExtResource("9_2s82g")
+metadata/_edit_use_anchors_ = true
+
+[node name="item" type="TextureButton" parent="Bar"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = -83.0
+offset_right = 210.0
+offset_bottom = -41.0
+texture_normal = ExtResource("10_1wnge")
+texture_pressed = ExtResource("11_s6quu")
+
+[node name="mercy" type="TextureButton" parent="Bar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 330.0
+offset_top = -123.0
+offset_right = 440.0
+offset_bottom = -81.0
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("12_3kr44")
+texture_pressed = ExtResource("13_lrcvx")

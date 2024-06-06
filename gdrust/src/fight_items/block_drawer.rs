@@ -12,6 +12,9 @@ struct BlockDrawer {
     y: f32,
 }
 
+const BLOCK_COLOR: Color = Color::from_rgb(10.0, 10.0, 10.0);
+const WIDTH: f32 = 12.0;
+
 #[godot_api]
 impl INode2D for BlockDrawer {
     fn init(base: Base<Node2D>) -> BlockDrawer {
@@ -34,9 +37,9 @@ impl INode2D for BlockDrawer {
         self.base_mut()
             .draw_rect_ex(
                 Rect2::new(tmp, Vector2::new(xsize, Self::Y_SIZE_DEFAULT)),
-                Color::from_rgb(10.0, 10.0, 10.0),
+                BLOCK_COLOR,
             )
-            .width(20.0)
+            .width(WIDTH)
             .filled(false)
             .done();
     }
@@ -45,7 +48,7 @@ impl INode2D for BlockDrawer {
 #[godot_api]
 impl BlockDrawer {
     const BOX_START_POS_X: f32 = 400.0;
-    const BOX_START_POS_Y: f32 = 330.0;
+    const BOX_START_POS_Y: f32 = 300.0;
     const Y_SIZE_DEFAULT: f32 = 200.0;
 
     #[func]
