@@ -13,12 +13,10 @@ func _ready():
 
 func start():
 	set_process(1)
-	show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	print(position)
-	position += delta * 0.01 * direction 
+	position += delta * speed * direction 
 		
 
 func _on_out_screen_screen_exited():
