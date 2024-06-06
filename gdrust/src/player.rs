@@ -4,14 +4,19 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(base = Area2D)]
 struct Player {
+    #[var]
+    health: i32,
     base: Base<Area2D>,
 }
 
 #[godot_api()]
 impl IArea2D for Player {
     fn init(base: Base<Area2D>) -> Player {
-        godot_print!("Player created from Godot Rust");
-        Self { base }
+        // godot_print!("Player created from Godot Rust");
+        Self {
+            base,
+            health: Self::MAX_HEALTH,
+        }
     }
 
     fn physics_process(&mut self, delta: f64) {
@@ -43,4 +48,6 @@ impl IArea2D for Player {
 impl Player {
     #[constant]
     const SPEED: i32 = 500;
+    #[constant]
+    const MAX_HEALTH: i32 = 100;
 }
