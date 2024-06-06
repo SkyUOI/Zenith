@@ -2,28 +2,54 @@ extends Sprite2D
 
 var finished: bool
 
+# 操作序列(也许只是测试用)
+var opers: Array[Callable]
+
 
 func _ready():
-	finished = true
-	swingStart(Vector2(330, 330), Vector2(600, 300), 4)
+	opers = [
+		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
+		func(): verticalStart(Vector2(200, 200), Vector2(700, 200), 4)
+	]
+	exit()
 
 
 @export var enchanted_beam: PackedScene
-var now_func: Callable  # 当前动作对应函数
+# 当前动作对应函数
+var now_func: Callable
 
 
 func start(func_name: Callable) -> bool:
-	if !finished:  # 没完成
+	# 没完成
+	if !finished:
 		return false
 	finished = false
 	now_func = func_name
 	return true
 
 
+# 当前是第几个oper(用于opers)
+var oper_num: int = -1
+
+
+# 完成某一动作
 func exit():
 	finished = true
+	# 可能要加个signal?
+	# ???.emit()
+	# 也许只是测试用, 前往下一个操作
+	nextOper()
 
 
+# 前往下一个动作
+func nextOper():
+	oper_num += 1
+	if oper_num >= opers.size():
+		return
+	opers[oper_num].call()
+
+
+# 角度对应向量
 func radToVector(rad: float) -> Vector2:
 	return Vector2(cos(rad), sin(rad))
 
@@ -33,8 +59,9 @@ func swordToRotation(rad: float) -> float:
 	return rad + PI / 4
 
 
-#返回是否达到指定位置
-# 旋转并移动到指定位置                     #剑头的角度
+# 旋转并移动到指定位置
+# return: 是否达到指定位置
+# end_rotation: 剑头的角度
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
 	if (position - end_point).length() <= speed / 100:
 		return true
@@ -44,9 +71,10 @@ func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: fl
 	var direction = radToVector(rotation).angle_to(radToVector(swordToRotation(end_rotation)))
 	var rotate_speed = direction / vector.length() * speed
 	vector = vector.normalized() * speed
-
-	rotation += rotate_speed * delta  #旋转
-	position += vector * delta  # 向指定位置移动
+	#旋转
+	rotation += rotate_speed * delta
+	# 向指定位置移动
+	position += vector * delta
 	return false
 
 
@@ -56,16 +84,21 @@ var target: Vector2
 var times: int
 var totTimes: int
 var toTargetRad: float
-var wait: Timer  # 挥舞后的等待
+var wait: Timer
+# 挥舞后的等待
 var shot: Timer
 
 
 func swingExit():
-	exit()
+	times = 0
 	wait.queue_free()
 	shot.queue_free()
+	exit()
 
 
+# 启动挥舞动作
+# point: 挥舞路径中点
+# to: 目标点
 func swingStart(point: Vector2, to: Vector2, tim: int):
 	if !start(swing):
 		return
@@ -79,12 +112,13 @@ func swingStart(point: Vector2, to: Vector2, tim: int):
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.08
+	shot.wait_time = 0.07
 	add_child(shot)
 	shot.timeout.connect(swingShotBeam)
 	toTargetRad = start_point.angle_to_point(target)
 
 
+# return: 次数是否为偶数
 func evenTimes() -> bool:
 	return times % 2 == 0
 
@@ -95,10 +129,11 @@ func swingShotBeam():
 	beam.get_node("Start").wait_time = 0.05
 	#偶数次弹幕收拢
 	beam.direction = target - position
-	if !evenTimes():  #奇数次弹幕发散
+	#奇数次弹幕发散
+	if !evenTimes():
 		beam.direction = Vector2(beam.direction.x, -beam.direction.y)
 	beam.position = position + beam.direction.normalized() * 50
-	beam.speed = 1000
+	beam.speed = 600
 	get_parent().add_child(beam)
 	beam.get_node("Start").start()
 
@@ -130,14 +165,18 @@ func swing(delta: float):
 
 #---vertical---
 # 垂直攻击
-
 # 在这两个点间反复横跳
 
 
-func verticalStart(point: Vector2, to: Vector2):
+# point, to: 首尾点
+# tim: 重复次数
+# 在point 和 to 间反复横跳
+# 剑头方向为 point 指向 to 的向量转 PI / 2
+func verticalStart(point: Vector2, to: Vector2, tim: int):
 	if !start(vertical):
 		return
 	start_point = point
+	totTimes = tim
 	target = to
 	# 初始化wait
 	wait = Timer.new()
@@ -146,22 +185,28 @@ func verticalStart(point: Vector2, to: Vector2):
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.08
+	shot.wait_time = 0.06
 	add_child(shot)
 	shot.timeout.connect(verticalShotBeam)
 
 
+# 垂直攻击发射弹幕
+# 弹幕与剑头方向一致
 func verticalShotBeam():
 	var beam = enchanted_beam.instantiate()
 	beam.get_node("Start").wait_time = 0.05
-	#偶数次弹幕收拢
-	beam.direction = target - position
-	if !evenTimes():  #奇数次弹幕发散
-		beam.direction = Vector2(beam.direction.x, -beam.direction.y)
+	beam.direction = radToVector((target - start_point).angle() + PI / 2)
 	beam.position = position + beam.direction.normalized() * 50
-	beam.speed = 1000
+	beam.speed = 600
 	get_parent().add_child(beam)
 	beam.get_node("Start").start()
+
+
+func verticalExit():
+	times = 0
+	wait.queue_free()
+	shot.queue_free()
+	exit()
 
 
 func vertical(delta: float):
@@ -169,16 +214,13 @@ func vertical(delta: float):
 		return
 	if shot.time_left == 0 && times != 0:
 		shot.start()
-	if times >= 4:
-		swingExit()
+	if times >= totTimes:
+		verticalExit()
 		return
-	# 移到(从start_point向(start_point与target连线垂直方向)一定距离)
-	var to_position = 150 * radToVector(toTargetRad + (-PI / 2 if evenTimes() else PI / 2))
+
+	#在两个点之间反复横跳
 	var arrive = normalMove(
-		start_point + to_position,
-		toTargetRad + ((-PI * 1.8 / 3) if evenTimes() else (PI / 3)),
-		1150,
-		delta
+		start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1000, delta
 	)
 	if arrive:
 		wait.start()
