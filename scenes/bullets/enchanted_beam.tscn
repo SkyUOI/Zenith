@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6uw0pckwbylu"]
+
+[ext_resource type="Texture2D" uid="uid://doavl47vaddfj" path="res://resources/images/bullets/Enchanted_Sword/Enchanted_Beam.png" id="1_185ht"]
+[ext_resource type="Script" path="res://scripts/bullets/enchanted_beam.gd" id="2_quqb1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fb1sb"]
+radius = 8.48529
+height = 70.7107
+
+[node name="Enchanted_Beam" type="Area2D"]
+position = Vector2(629, 285)
+script = ExtResource("2_quqb1")
+direction = Vector2(-1, -1.5)
+speed = 500.0
+metadata/_edit_group_ = true
+
+[node name="Out_Screen" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="Start" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_185ht")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 0.785398
+shape = SubResource("CapsuleShape2D_fb1sb")
