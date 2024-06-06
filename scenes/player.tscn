@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://k0xrl25jvanb"]
-
-[ext_resource type="Script" path="res://scripts/Player.gd" id="1_igj8d"]
-
-[node name="Player" type="Player"]
-position = Vector2(570, 463)
-rotation = 1.5708
-scale = Vector2(0.2, 0.2)
-script = ExtResource("1_igj8d")

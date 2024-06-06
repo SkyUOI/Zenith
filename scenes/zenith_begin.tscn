@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://dknmaa8domjoh"]
-
-[node name="ZenithBegin" type="ZenithBegin"]
-position = Vector2(576, 137)
-rotation = -0.787703
-scale = Vector2(3.28571, 3.28571)

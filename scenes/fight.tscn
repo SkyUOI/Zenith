@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=14 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://r8fejoruchch" path="res://resources/images/UIItem/Default/000.png" id="10_1wnge"]
 [ext_resource type="Texture2D" uid="uid://br34m74mf8wh6" path="res://resources/images/UIItem/Highlight/000.png" id="11_s6quu"]
 [ext_resource type="Texture2D" uid="uid://cjdh86b5aivef" path="res://resources/images/UIMercy/Default/000.png" id="12_3kr44"]
+[ext_resource type="Texture2D" uid="uid://uadb5jfhrn5b" path="res://resources/images/HP/Default/000.png" id="12_sm4t8"]
 [ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UIMercy/Highlight/000.png" id="13_lrcvx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
@@ -129,3 +130,11 @@ grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("12_3kr44")
 texture_pressed = ExtResource("13_lrcvx")
+
+[node name="HealthBar" type="HealthBar" parent="."]
+modulate = Color(1, 0.996078, 0.278447, 1)
+
+[node name="HP" type="Sprite2D" parent="."]
+position = Vector2(500, 530)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("12_sm4t8")
