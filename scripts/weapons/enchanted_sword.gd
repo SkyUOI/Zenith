@@ -75,10 +75,12 @@ func swingStart(point : Vector2, to : Vector2):
 #发射附魔光束
 func shotBeam():
 	var beam = enchanted_beam.instantiate()
-	beam.get_node("Start").wait_time = 0.1
-	beam.direction = target - position
-	beam.position = position + beam.direction.normalized() * 150
 	add_child(beam)
+	beam.get_node("Start").wait_time = 0.1
+	beam.get_node("Start").start()
+	beam.direction = target - position
+	beam.global_position = global_position
+	#beam.position = position + beam.direction.normalized() * 150
 	
 	
 # 在大概start_point这个位置, 向target挥舞攻击	
