@@ -20,7 +20,11 @@ var now_func: Callable
 
 
 func start(func_name: Callable) -> bool:
+<<<<<<< HEAD
+	# 没完成
+=======
 	# todo
+>>>>>>> origin/main
 	if !finished:
 		return false
 	finished = false
@@ -60,8 +64,13 @@ func swordToRotation(rad: float) -> float:
 
 
 # 旋转并移动到指定位置
+<<<<<<< HEAD
+# return: 是否达到指定位置
+# end_rotation: 剑头的角度
+=======
 # end_rotation:剑头的角度
 # Return:是否达到指定位置
+>>>>>>> origin/main
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
 	if (position - end_point).length() <= speed / 100:
 		return true
@@ -84,8 +93,13 @@ var target: Vector2
 var times: int
 var totTimes: int
 var toTargetRad: float
+<<<<<<< HEAD
+var wait: Timer
+# 挥舞后的等待
+=======
 # 挥舞后的等待
 var wait: Timer
+>>>>>>> origin/main
 var shot: Timer
 
 
