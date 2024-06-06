@@ -1,4 +1,4 @@
-use godot::engine::{INode2D, Node2D};
+use godot::engine::{Area2D, CollisionPolygon2D, INode2D, Node2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
@@ -26,11 +26,26 @@ impl INode2D for BlockDrawer {
         }
     }
 
+    fn ready(&mut self) {
+        let mut collision_obj = self
+            .base_mut()
+            .get_node_as::<CollisionPolygon2D>("collision/collision");
+        let mut points = PackedVector2Array::new();
+        points.push(Vector2::new(self.x, self.y));
+        points.push(Vector2::new(self.get_opposite_x(), self.y));
+        points.push(Vector2::new(
+            self.get_opposite_x(),
+            self.y + Self::Y_SIZE_DEFAULT,
+        ));
+        points.push(Vector2::new(self.x, self.y + Self::Y_SIZE_DEFAULT));
+        collision_obj.set_polygon(points);
+        collision_obj.set_disabled(false);
+    }
+
     fn process(&mut self, delta: f64) {}
 
     fn draw(&mut self) {
-        let tmp = self.x;
-        let xsize = self.base_mut().get_viewport_rect().size.x - tmp * 2.0;
+        let xsize = self.get_opposite_x();
 
         godot_print!("enter");
         let tmp = Vector2::new(self.x, self.y);
@@ -42,6 +57,14 @@ impl INode2D for BlockDrawer {
             .width(WIDTH)
             .filled(false)
             .done();
+    }
+}
+
+impl BlockDrawer {
+    fn get_opposite_x(&self) -> f32 {
+        let tmp = self.x;
+        let xsize = self.base().get_viewport_rect().size.x - tmp * 2.0;
+        xsize
     }
 }
 
@@ -71,4 +94,7 @@ impl BlockDrawer {
         // self.base().
         (self.base().get_viewport_rect().size.x - self.x) as i32
     }
+
+    #[func]
+    fn collision_signal(&mut self, obj: Gd<Area2D>) {}
 }
