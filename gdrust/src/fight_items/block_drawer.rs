@@ -12,8 +12,11 @@ struct BlockDrawer {
     y: f32,
 }
 
-const BLOCK_COLOR: Color = Color::from_rgb(10.0, 10.0, 10.0);
-const WIDTH: f32 = 12.0;
+const WIDTH: f32 = 10.0;
+
+fn get_block_color() -> Color {
+    Color::from_rgba8(255, 255, 255, 255)
+}
 
 #[godot_api]
 impl INode2D for BlockDrawer {
@@ -32,9 +35,9 @@ impl INode2D for BlockDrawer {
             .get_node_as::<CollisionPolygon2D>("collision/collision");
         let mut points = PackedVector2Array::new();
         points.push(Vector2::new(self.x, self.y));
-        points.push(Vector2::new(self.get_opposite_x(), self.y));
+        points.push(Vector2::new(self.get_x_len(), self.y));
         points.push(Vector2::new(
-            self.get_opposite_x(),
+            self.get_x_len(),
             self.y + Self::Y_SIZE_DEFAULT,
         ));
         points.push(Vector2::new(self.x, self.y + Self::Y_SIZE_DEFAULT));
@@ -45,14 +48,14 @@ impl INode2D for BlockDrawer {
     fn process(&mut self, delta: f64) {}
 
     fn draw(&mut self) {
-        let xsize = self.get_opposite_x();
+        let xsize = self.get_x_len();
 
         godot_print!("enter");
         let tmp = Vector2::new(self.x, self.y);
         self.base_mut()
             .draw_rect_ex(
                 Rect2::new(tmp, Vector2::new(xsize, Self::Y_SIZE_DEFAULT)),
-                BLOCK_COLOR,
+                get_block_color(),
             )
             .width(WIDTH)
             .filled(false)
@@ -61,7 +64,7 @@ impl INode2D for BlockDrawer {
 }
 
 impl BlockDrawer {
-    fn get_opposite_x(&self) -> f32 {
+    fn get_x_len(&self) -> f32 {
         let tmp = self.x;
         let xsize = self.base().get_viewport_rect().size.x - tmp * 2.0;
         xsize
