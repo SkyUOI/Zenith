@@ -1,6 +1,8 @@
 use godot::engine::{Area2D, IArea2D};
 use godot::prelude::*;
 
+use crate::consts;
+
 #[derive(GodotClass)]
 #[class(base = Area2D)]
 struct Player {
@@ -50,4 +52,12 @@ impl Player {
     const SPEED: i32 = 500;
     #[constant]
     const MAX_HEALTH: i32 = 100;
+
+    #[func]
+    fn collision(&mut self, obj: Gd<Area2D>) {
+        if obj.get_collision_layer() == consts::WALL_LAYER {}
+    }
+
+    #[func]
+    fn area_exited(&mut self, obj: Gd<Area2D>) {}
 }

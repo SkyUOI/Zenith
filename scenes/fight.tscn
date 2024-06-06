@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=15 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://br34m74mf8wh6" path="res://resources/images/UIItem/Highlight/000.png" id="11_s6quu"]
 [ext_resource type="Texture2D" uid="uid://cjdh86b5aivef" path="res://resources/images/UIMercy/Default/000.png" id="12_3kr44"]
 [ext_resource type="Texture2D" uid="uid://uadb5jfhrn5b" path="res://resources/images/HP/Default/000.png" id="12_sm4t8"]
+[ext_resource type="PackedScene" uid="uid://dcuw1h05xwa5b" path="res://scenes/weapons/enchanted_sword.tscn" id="13_1n0f0"]
 [ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UIMercy/Highlight/000.png" id="13_lrcvx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
@@ -57,6 +58,7 @@ scale = Vector2(6.6, 6.6)
 texture = ExtResource("5_3ufqu")
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
+visibility_layer = 2
 
 [node name="collision" type="Area2D" parent="BlockDrawer"]
 
@@ -138,3 +140,5 @@ modulate = Color(1, 0.996078, 0.278447, 1)
 position = Vector2(500, 530)
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("12_sm4t8")
+
+[node name="Enchanted_Sword" parent="." instance=ExtResource("13_1n0f0")]

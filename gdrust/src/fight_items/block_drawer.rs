@@ -43,6 +43,7 @@ impl INode2D for BlockDrawer {
         points.push(Vector2::new(self.x, self.y + Self::Y_SIZE_DEFAULT));
         collision_obj.set_polygon(points);
         collision_obj.set_disabled(false);
+        godot_print!("nihao")
     }
 
     fn process(&mut self, delta: f64) {}
@@ -97,7 +98,4 @@ impl BlockDrawer {
         // self.base().
         (self.base().get_viewport_rect().size.x - self.x) as i32
     }
-
-    #[func]
-    fn collision_signal(&mut self, obj: Gd<Area2D>) {}
 }
