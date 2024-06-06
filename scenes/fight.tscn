@@ -1,12 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=13 format=3 uid="uid://cibwxaqnuodid"]
 
-[ext_resource type="Script" path="res://scripts/fight.gd" id="1_fov6f"]
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
-[ext_resource type="Script" path="res://scripts/Player.gd" id="3_6nc6b"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 [ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
 [ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UIFight/Default/000.png" id="6_5cs44"]
-[ext_resource type="Script" path="res://scripts/BlockDrawer.gd" id="6_6q3lq"]
 [ext_resource type="Texture2D" uid="uid://dscxanl5ikwrj" path="res://resources/images/UIFight/Highlight/000.png" id="7_rklqi"]
 [ext_resource type="Texture2D" uid="uid://cvx31mw3e38mx" path="res://resources/images/UIAct/Default/000.png" id="8_yjyfq"]
 [ext_resource type="Texture2D" uid="uid://cho5eldvgpv3j" path="res://resources/images/UIAct/Highlight/000.png" id="9_2s82g"]
@@ -25,7 +22,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_fov6f")
 
 [node name="BgColor" type="ColorRect" parent="."]
 layout_mode = 1
@@ -50,7 +46,6 @@ texture = ExtResource("3_2spkb")
 position = Vector2(570, 463)
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
-script = ExtResource("3_6nc6b")
 
 [node name="HitPoint" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_yfrnq")
@@ -61,7 +56,6 @@ scale = Vector2(6.6, 6.6)
 texture = ExtResource("5_3ufqu")
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
-script = ExtResource("6_6q3lq")
 
 [node name="collision" type="Area2D" parent="BlockDrawer"]
 
