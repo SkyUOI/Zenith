@@ -31,6 +31,10 @@ func swordToRotation(rad : float) -> float:
 #返回是否达到指定位置
 # 旋转并移动到指定位置                     #剑头的角度 
 func normalMove(end_point : Vector2, end_rotation : float , speed : float, delta : float) -> bool: 
+	while end_rotation > PI * 2:
+		end_rotation -= PI * 2
+	while end_rotation < -PI * 2:
+		end_rotation += PI * 2
 	if (position - end_point).length() <= speed / 100:
 		return true
 	# 起点指向终点的向量
@@ -67,20 +71,26 @@ func swingStart(point : Vector2, to : Vector2):
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.15
+	shot.wait_time = 0.08
 	add_child(shot)
 	shot.timeout.connect(shotBeam)
 	toTargetRad = start_point.angle_to_point(target)
 
+func evenTimes() -> bool:
+	return times % 2 == 0
+
 #发射附魔光束
 func shotBeam():
 	var beam = enchanted_beam.instantiate()
-	add_child(beam)
 	beam.get_node("Start").wait_time = 0.1
-	beam.get_node("Start").start()
+	#偶数次弹幕收拢
 	beam.direction = target - position
-	beam.global_position = global_position
-	#beam.position = position + beam.direction.normalized() * 150
+	if !evenTimes(): #奇数次弹幕发散
+		beam.direction = Vector2(beam.direction.x, -beam.direction.y)
+	beam.position = position + beam.direction.normalized() * 50
+	get_parent().add_child(beam)
+	beam.get_node("Start").start()
+	
 	
 	
 # 在大概start_point这个位置, 向target挥舞攻击	
@@ -93,9 +103,8 @@ func swing(delta : float):
 		swingExit()
 		return
 	# 移到(从start_point向(start_point与target连线垂直方向)一定距离)
-	var even = times % 2 == 0
-	var to_position = 150 * radToVector(toTargetRad + (- PI / 2 if even else PI / 2))
-	var arrive = normalMove(start_point + to_position, toTargetRad + (- PI * 1.8 / 3) if even else (PI / 3), 900, delta) 
+	var to_position = 150 * radToVector(toTargetRad + (- PI / 2 if evenTimes() else PI / 2))
+	var arrive = normalMove(start_point + to_position, toTargetRad + ((- PI * 1.8 / 3) if evenTimes() else (PI / 3)), 1000, delta) 
 	if arrive: 
 		wait.start()
 		shot.stop()

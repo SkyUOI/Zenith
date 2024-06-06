@@ -9,6 +9,7 @@ height = 70.7107
 
 [node name="Enchanted_Beam" type="Area2D"]
 position = Vector2(629, 285)
+scale = Vector2(1.5, 1.5)
 script = ExtResource("2_quqb1")
 direction = Vector2(-1, -1.5)
 speed = 500.0

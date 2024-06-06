@@ -5,9 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://bi0hwjyalpjn6" path="res://scenes/bullets/enchanted_beam.tscn" id="3_ndj1h"]
 
 [node name="Enchanted_Sword" type="Sprite2D"]
-position = Vector2(600, 300)
-rotation = -2.2218
-scale = Vector2(2, 2)
+position = Vector2(1011, 383)
+rotation = -5.57284
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("1_cwcxs")
 script = ExtResource("2_h56vq")
 enchanted_beam = ExtResource("3_ndj1h")
