@@ -9,11 +9,13 @@ func _ready():
 
 
 @export var enchanted_beam: PackedScene
-var now_func: Callable  # 当前动作对应函数
+# 当前动作对应函数
+var now_func: Callable
 
 
 func start(func_name: Callable) -> bool:
-	if !finished:  # 没完成
+	# todo
+	if !finished:
 		return false
 	finished = false
 	now_func = func_name
@@ -33,8 +35,9 @@ func swordToRotation(rad: float) -> float:
 	return rad + PI / 4
 
 
-#返回是否达到指定位置
-# 旋转并移动到指定位置                     #剑头的角度
+# 旋转并移动到指定位置
+# end_rotation:剑头的角度
+# Return:是否达到指定位置
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
 	if (position - end_point).length() <= speed / 100:
 		return true
@@ -56,7 +59,8 @@ var target: Vector2
 var times: int
 var totTimes: int
 var toTargetRad: float
-var wait: Timer  # 挥舞后的等待
+# 挥舞后的等待
+var wait: Timer
 var shot: Timer
 
 
@@ -89,7 +93,7 @@ func evenTimes() -> bool:
 	return times % 2 == 0
 
 
-#发射附魔光束
+# 发射附魔光束
 func swingShotBeam():
 	var beam = enchanted_beam.instantiate()
 	beam.get_node("Start").wait_time = 0.05
@@ -187,7 +191,6 @@ func vertical(delta: float):
 
 
 #--------------
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if !finished && now_func:
 		now_func.call(delta)
