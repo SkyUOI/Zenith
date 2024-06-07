@@ -15,5 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Config Env
+        run: rustup install nightly && rustup default nightly
       - name: Check Fmt
         run: cd gdrust && cargo fmt -- --check
