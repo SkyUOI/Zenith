@@ -145,5 +145,3 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("12_sm4t8")
 
 [node name="Enchanted_Sword" parent="." instance=ExtResource("13_1n0f0")]
-
-[connection signal="hit_sig" from="Player" to="HealthBar" method="attack"]

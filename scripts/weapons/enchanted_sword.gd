@@ -9,7 +9,7 @@ var opers: Array[Callable]
 func _ready():
 	opers = [
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
+		func(): swingStart(Vector2(430, 330), Vector2(700, 300), 4),
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
 		func(): verticalStart(Vector2(200, 200), Vector2(700, 200), 4),
 		func(): rotateStart(Vector2(1000, 100), 6),
