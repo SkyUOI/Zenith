@@ -13,6 +13,10 @@ fn get_health_color() -> Color {
     Color::from_rgba8(255, 254, 71, 255)
 }
 
+fn get_health_background_color() -> Color {
+    Color::from_rgba8(154, 53, 29, 255)
+}
+
 #[godot_api()]
 impl INode2D for HealthBar {
     fn init(base: Base<Node2D>) -> Self {
@@ -24,15 +28,19 @@ impl INode2D for HealthBar {
 
     fn draw(&mut self) {
         let health = self.health;
+        let start_pos = (Vector2::new(Self::START_POSITION_X, Self::START_POSITION_Y));
+        let end_pos = Vector2::new(
+            Self::LEN * (health as f32 / Self::INIT_HEALTH as f32) + Self::START_POSITION_X,
+            Self::START_POSITION_Y,
+        );
+        // background
         self.base_mut()
-            .draw_line_ex(
-                Vector2::new(Self::START_POSITION_X, Self::START_POSITION_Y),
-                Vector2::new(
-                    Self::LEN * (health as f32 / Self::INIT_HEALTH as f32) + Self::START_POSITION_X,
-                    Self::START_POSITION_Y,
-                ),
-                get_health_color(),
-            )
+            .draw_line_ex(start_pos, end_pos, get_health_background_color())
+            .width(Self::WIDTH)
+            .done();
+        // health
+        self.base_mut()
+            .draw_line_ex(start_pos, end_pos, get_health_color())
             .width(Self::WIDTH)
             .done();
     }

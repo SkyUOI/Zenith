@@ -35,9 +35,13 @@ impl ICharacterBody2D for Player {
         if input_obj.is_action_pressed("move_down".into()) {
             vel.y += 1.0;
         }
+        let mut speed = Self::SPEED;
+        if input_obj.is_action_pressed("slow_down".into()) {
+            speed /= 2;
+        }
         let res = self
             .base_mut()
-            .move_and_collide(vel.normalized() * Self::SPEED as f32 * delta as f32);
+            .move_and_collide(vel.normalized() * speed as f32 * delta as f32);
     }
 }
 
