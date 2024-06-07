@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=22 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
@@ -15,6 +15,28 @@
 [ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UI/UIMercy/Highlight/000.png" id="13_lrcvx"]
 [ext_resource type="Texture2D" uid="uid://do5eitiicfjge" path="res://resources/images/shields/Shield_of_Cthulhu.webp" id="14_gkc4x"]
 [ext_resource type="Texture2D" uid="uid://drljhif31i83o" path="res://resources/images/UI/CategoryPanel.png" id="14_miw1s"]
+
+[sub_resource type="Gradient" id="Gradient_w6p7b"]
+offsets = PackedFloat32Array(0.315, 0.435, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0mtog"]
+gradient = SubResource("Gradient_w6p7b")
+
+[sub_resource type="Curve" id="Curve_k6gjo"]
+_data = [Vector2(0, 0.494505), 0.0, 0.0, 0, 0, Vector2(1, 0.274725), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yl2ko"]
+curve = SubResource("Curve_k6gjo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_adfmi"]
+gravity = Vector3(0, 0, 0)
+scale_min = 4.5
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_yl2ko")
+color = Color(1, 0, 0, 1)
+color_ramp = SubResource("GradientTexture1D_0mtog")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 radius = 52.67
@@ -48,8 +70,16 @@ texture = ExtResource("3_2spkb")
 
 [node name="Player" type="Player" parent="."]
 position = Vector2(570, 414)
-rotation = 1.5708
 scale = Vector2(0.2, 0.2)
+
+[node name="virtual" type="GPUParticles2D" parent="Player"]
+emitting = false
+amount = 4
+process_material = SubResource("ParticleProcessMaterial_adfmi")
+texture = ExtResource("5_3ufqu")
+lifetime = 0.2
+speed_scale = 2.0
+trail_lifetime = 0.5
 
 [node name="HitPoint" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_yfrnq")
@@ -66,6 +96,9 @@ texture = ExtResource("5_3ufqu")
 scale = Vector2(0.2, 0.2)
 shape = SubResource("CircleShape2D_yfrnq")
 debug_color = Color(1, 1, 1, 1)
+
+[node name="Cthulhu" type="Timer" parent="Player"]
+wait_time = 0.1
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
 light_mask = 3
@@ -161,3 +194,4 @@ position = Vector2(0, -1)
 texture = ExtResource("14_gkc4x")
 
 [connection signal="hit_sig" from="Player" to="HealthBar" method="attack"]
+[connection signal="timeout" from="Player/Cthulhu" to="Player" method="stop_rush"]
