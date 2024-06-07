@@ -143,7 +143,7 @@ func swingShotBeam():
 	var beam = enchanted_beam.instantiate()
 	beam.get_node("Start").wait_time = 0.05
 	var vector = target - position
-	
+
 	#偶数次弹幕收拢
 	if evenTimes():
 		beam.direction = vector
@@ -152,7 +152,7 @@ func swingShotBeam():
 		var basic_vector = target - start_point
 		var rad = basic_vector.angle_to(vector)
 		beam.direction = radToVector(basic_vector.angle() - rad)
-		
+
 	beam.position = position + beam.direction.normalized() * 50
 	beam.speed = 600
 	get_parent().add_child(beam)
@@ -193,12 +193,13 @@ func swing(delta: float):
 func motionlessShotBeam():
 	var beams: Array[Node] = []
 	#让整体偏移
-	var temp : float = randf_range(-PI, PI)
+	var temp: float = randf_range(-PI, PI)
 	for i in range(totTimes):
 		beams.push_back(enchanted_beam.instantiate())
 		beams[i].get_node("Start").wait_time = 0.05
-		beams[i].direction = radToVector(2 * PI * i \
-		/ totTimes + temp + randf_range(-PI / 6, PI / 6))
+		beams[i].direction = radToVector(
+			2 * PI * i / totTimes + temp + randf_range(-PI / 6, PI / 6)
+		)
 		beams[i].position = position
 		beams[i].speed = 600
 	for beam in beams:
@@ -212,10 +213,11 @@ func motionlessExit():
 	shot.queue_free()
 	exit()
 
+
 # to: 攻击时所在位置
 # time: 攻击持续时间
 # 先旋转到to, 再攻击time
-func motionlessStart(to : Vector2, time : float):
+func motionlessStart(to: Vector2, time: float):
 	if !start(motionless):
 		return
 	target = to
@@ -240,19 +242,17 @@ func motionless(delta):
 		shot.start()
 
 	# 旋转移向target
-	var arrive : bool = false
+	var arrive: bool = false
 	if times == 0:
 		arrive = rotateMove(target, 1000, 4 * PI, delta)
 		if arrive:
 			wait.start()
 			times += 1
-	else: 
+	else:
 		rotation += PI * 6 * delta
-	
 
 
 #------------
-
 
 #---rotate---
 # 旋转攻击, 并释放星型弹幕
@@ -380,7 +380,9 @@ func vertical(delta: float):
 		shot.stop()
 		times += 1
 
+
 #-----------
+
 
 #---rush---
 # 冲刺攻击
@@ -432,17 +434,16 @@ func rush(delta: float):
 		return
 
 	var arrive = normalMove(
-		start_point if evenTimes() else target,
-		(target - start_point).angle(), 
-		1300, 
-		delta
+		start_point if evenTimes() else target, (target - start_point).angle(), 1300, delta
 	)
 	if arrive:
 		wait.start()
 		shot.stop()
 		times += 1
 
+
 #-----------
+
 
 func _process(delta):
 	if !finished && now_func:
