@@ -9,7 +9,11 @@ var opers: Array[Callable]
 func _ready():
 	opers = [
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): verticalStart(Vector2(200, 200), Vector2(700, 200), 4)
+		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
+		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
+		func(): verticalStart(Vector2(200, 200), Vector2(700, 200), 4),
+		func(): rotateStart(Vector2(1000, 100), 6),
+		func(): rotateStart(Vector2(500, 500), 6)
 	]
 	exit()
 
@@ -59,22 +63,28 @@ func swordToRotation(rad: float) -> float:
 	return rad + PI / 4
 
 
-# 旋转并移动到指定位置
+# 旋转不超过PI到指定角度并移动到指定位置
 # end_rotation:剑头的角度
 # Return:是否达到指定位置
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
+	var direction = radToVector(rotation).angle_to(radToVector(swordToRotation(end_rotation)))
+	var vector = end_point - position
+	var rotate_speed = direction / vector.length() * speed
+	return rotateMove(end_point, speed, rotate_speed, delta)
+
+
+# 旋转几周并移动到指定位置(不考虑剑头方向)
+# return: 是否达到指定位置
+func rotateMove(end_point: Vector2, speed: float, rotate_speed: float, delta: float) -> bool:
+	rotation += rotate_speed * delta
+	# 避免到达后振动
 	if (position - end_point).length() <= speed / 100:
+		position = end_point
 		return true
 	# 起点指向终点的向量
-	var vector = end_point - position
-	# 起点到终点转的角度
-	var direction = radToVector(rotation).angle_to(radToVector(swordToRotation(end_rotation)))
-	var rotate_speed = direction / vector.length() * speed
-	vector = vector.normalized() * speed
-	#旋转
-	rotation += rotate_speed * delta
-	# 向指定位置移动
+	var vector = (end_point - position).normalized() * speed
 	position += vector * delta
+	rotation += rotate_speed * delta
 	return false
 
 
@@ -112,7 +122,7 @@ func swingStart(point: Vector2, to: Vector2, tim: int):
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.07
+	shot.wait_time = 0.06
 	add_child(shot)
 	shot.timeout.connect(swingShotBeam)
 	toTargetRad = start_point.angle_to_point(target)
@@ -152,7 +162,7 @@ func swing(delta: float):
 	var arrive = normalMove(
 		start_point + to_position,
 		toTargetRad + ((-PI * 1.8 / 3) if evenTimes() else (PI / 3)),
-		1150,
+		1300,
 		delta
 	)
 	if arrive:
@@ -162,6 +172,70 @@ func swing(delta: float):
 
 
 # -----------
+
+#--------------
+
+#---rotate---
+# 旋转攻击, 并释放星型弹幕
+
+# point, to: 首尾点
+
+
+func rotateShotBeam():
+	var beams: Array[Node] = []
+	for i in range(totTimes):
+		beams.push_back(enchanted_beam.instantiate())
+		beams[i].get_node("Start").wait_time = 0.35
+		beams[i].direction = radToVector(rotation + 2 * PI * i / totTimes)
+		beams[i].position = position
+		beams[i].speed = 600
+	for beam in beams:
+		get_parent().add_child(beam)
+		beam.get_node("Start").start()
+
+
+func rotateExit():
+	times = 0
+	wait.queue_free()
+	shot.queue_free()
+	exit()
+
+
+func rotateStart(to: Vector2, tim: int):
+	if !start(rotateAttack):
+		return
+	target = to
+	# 一次几个弹幕
+	totTimes = tim
+	# 初始化wait
+	wait = Timer.new()
+	wait.one_shot = true
+	wait.wait_time = 0.15
+	add_child(wait)
+	# 初始化shot
+	shot = Timer.new()
+	shot.wait_time = 0.2
+	add_child(shot)
+	shot.timeout.connect(rotateShotBeam)
+
+
+func rotateAttack(delta):
+	# 到达且wait超时
+	if wait.time_left == 0 && times > 0:
+		verticalExit()
+		return
+	if shot.time_left == 0:
+		shot.start()
+
+	# 旋转移向target
+	var arrive = rotateMove(target, 1000, 4 * PI, delta)
+	if arrive && wait.time_left == 0:
+		wait.start()
+		shot.stop()
+		times += 1
+
+
+#------------
 
 #---vertical---
 # 垂直攻击
@@ -220,7 +294,7 @@ func vertical(delta: float):
 
 	#在两个点之间反复横跳
 	var arrive = normalMove(
-		start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1000, delta
+		start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1300, delta
 	)
 	if arrive:
 		wait.start()
@@ -228,7 +302,6 @@ func vertical(delta: float):
 		times += 1
 
 
-#--------------
 func _process(delta):
 	if !finished && now_func:
 		now_func.call(delta)

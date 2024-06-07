@@ -8,18 +8,12 @@ extends Area2D
 func _ready():
 	rotation = PI / 4 + Vector2(0, 0).angle_to_point(direction)
 	direction = direction.normalized()
-	set_process(0)
-	$Start.timeout.connect(start)
 	$Out_Screen.screen_exited.connect(queue_free)
-
-
-func start():
-	set_process(1)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position += delta * speed * direction
+	position += delta * speed * direction * (1.0 if $Start.time_left == 0 else (1.0 / 6.0))
 
 
 func _on_out_screen_screen_exited():
