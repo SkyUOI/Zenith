@@ -6,6 +6,7 @@ edition = "2024"
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
+rand = "0.8"
 
 [lib]
 crate-type = ["cdylib"]
