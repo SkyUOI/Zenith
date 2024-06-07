@@ -6,4 +6,3 @@ macro_rules! godot_assert {
         }
     };
 }
-
