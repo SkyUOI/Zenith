@@ -9,11 +9,16 @@ var opers: Array[Callable]
 func _ready():
 	opers = [
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): swingStart(Vector2(430, 330), Vector2(700, 300), 4),
-		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): verticalStart(Vector2(200, 200), Vector2(700, 200), 4),
+		func(): swingStart(Vector2(430, 100), Vector2(400, 750), 4),
+		func(): swingStart(Vector2(830, 330), Vector2(300, 300), 4),
+		func(): verticalStart(Vector2(200, 100), Vector2(700, 100), 4),
+		func(): verticalStart(Vector2(100, 500), Vector2(500, 100), 4),
 		func(): rotateStart(Vector2(1000, 100), 6),
-		func(): rotateStart(Vector2(500, 500), 6)
+		func(): rotateStart(Vector2(500, 500), 6),
+		func(): motionlessStart(Vector2(500, 300), 5),
+		func(): motionlessStart(Vector2(600, 400), 6),
+		func(): rushStart(Vector2(330, 330), Vector2(800, 300)),
+		func(): rushStart(Vector2(800, 600), Vector2(100, 100)),
 	]
 	exit()
 
@@ -137,11 +142,17 @@ func evenTimes() -> bool:
 func swingShotBeam():
 	var beam = enchanted_beam.instantiate()
 	beam.get_node("Start").wait_time = 0.05
+	var vector = target - position
+	
 	#偶数次弹幕收拢
-	beam.direction = target - position
+	if evenTimes():
+		beam.direction = vector
 	#奇数次弹幕发散
-	if !evenTimes():
-		beam.direction = Vector2(beam.direction.x, -beam.direction.y)
+	else:
+		var basic_vector = target - start_point
+		var rad = basic_vector.angle_to(vector)
+		beam.direction = radToVector(basic_vector.angle() - rad)
+		
 	beam.position = position + beam.direction.normalized() * 50
 	beam.speed = 600
 	get_parent().add_child(beam)
@@ -174,6 +185,74 @@ func swing(delta: float):
 # -----------
 
 #--------------
+
+#---motionless---
+# 原地旋转攻击, 并释放星型弹幕
+
+
+func motionlessShotBeam():
+	var beams: Array[Node] = []
+	#让整体偏移
+	var temp : float = randf_range(-PI, PI)
+	for i in range(totTimes):
+		beams.push_back(enchanted_beam.instantiate())
+		beams[i].get_node("Start").wait_time = 0.05
+		beams[i].direction = radToVector(2 * PI * i \
+		/ totTimes + temp + randf_range(-PI / 6, PI / 6))
+		beams[i].position = position
+		beams[i].speed = 600
+	for beam in beams:
+		get_parent().add_child(beam)
+		beam.get_node("Start").start()
+
+
+func motionlessExit():
+	times = 0
+	wait.queue_free()
+	shot.queue_free()
+	exit()
+
+# to: 攻击时所在位置
+# time: 攻击持续时间
+# 先旋转到to, 再攻击time
+func motionlessStart(to : Vector2, time : float):
+	if !start(motionless):
+		return
+	target = to
+	totTimes = 6
+	# 初始化wait
+	wait = Timer.new()
+	wait.one_shot = true
+	wait.wait_time = time
+	add_child(wait)
+	# 初始化shot
+	shot = Timer.new()
+	shot.wait_time = 0.15
+	add_child(shot)
+	shot.timeout.connect(motionlessShotBeam)
+
+
+func motionless(delta):
+	if wait.time_left == 0 && times > 0:
+		motionlessExit()
+		return
+	if shot.time_left == 0 && times > 0:
+		shot.start()
+
+	# 旋转移向target
+	var arrive : bool = false
+	if times == 0:
+		arrive = rotateMove(target, 1000, 4 * PI, delta)
+		if arrive:
+			wait.start()
+			times += 1
+	else: 
+		rotation += PI * 6 * delta
+	
+
+
+#------------
+
 
 #---rotate---
 # 旋转攻击, 并释放星型弹幕
@@ -301,6 +380,69 @@ func vertical(delta: float):
 		shot.stop()
 		times += 1
 
+#-----------
+
+#---rush---
+# 冲刺攻击
+# point, to: 首尾点
+# 剑头方向为 point 指向 to
+func rushStart(point: Vector2, to: Vector2):
+	if !start(rush):
+		return
+	start_point = point
+	totTimes = 2
+	target = to
+	# 初始化wait
+	wait = Timer.new()
+	wait.one_shot = true
+	wait.wait_time = 0.1
+	add_child(wait)
+	# 初始化shot
+	shot = Timer.new()
+	shot.wait_time = 0.06
+	add_child(shot)
+	shot.timeout.connect(rushShotBeam)
+
+
+# 弹幕与剑头方向一致
+func rushShotBeam():
+	var beam = enchanted_beam.instantiate()
+	beam.get_node("Start").wait_time = 0.3
+	beam.direction = radToVector((target - start_point).angle())
+	beam.position = position - beam.direction.normalized() * 50
+	beam.speed = 600
+	get_parent().add_child(beam)
+	beam.get_node("Start").start()
+
+
+func rushExit():
+	times = 0
+	wait.queue_free()
+	shot.queue_free()
+	exit()
+
+
+func rush(delta: float):
+	if wait.time_left != 0:
+		return
+	if shot.time_left == 0 && times != 0:
+		shot.start()
+	if times >= totTimes:
+		rushExit()
+		return
+
+	var arrive = normalMove(
+		start_point if evenTimes() else target,
+		(target - start_point).angle(), 
+		1300, 
+		delta
+	)
+	if arrive:
+		wait.start()
+		shot.stop()
+		times += 1
+
+#-----------
 
 func _process(delta):
 	if !finished && now_func:
