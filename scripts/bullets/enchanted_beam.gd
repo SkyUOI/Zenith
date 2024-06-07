@@ -18,3 +18,8 @@ func _process(delta):
 
 func _on_out_screen_screen_exited():
 	queue_free()
+
+
+func _on_area_entered(area):
+	print(area.name)
+	pass # Replace with function body.

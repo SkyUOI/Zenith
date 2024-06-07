@@ -28,4 +28,5 @@ texture = ExtResource("1_185ht")
 rotation = 0.785398
 shape = SubResource("CapsuleShape2D_fb1sb")
 
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="screen_exited" from="Out_Screen" to="." method="_on_out_screen_screen_exited"]
