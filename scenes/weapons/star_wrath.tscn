@@ -8,15 +8,7 @@
 size = Vector2(28.6936, 31.8029)
 
 [node name="StarWrath" type="StarWrath"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-editor_description = ""
 position = Vector2(618, 236)
-script = null
 
 [node name="Star_Wrath" type="Sprite2D" parent="."]
 scale = Vector2(2.97559, 2.97559)
