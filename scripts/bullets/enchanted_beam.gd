@@ -22,4 +22,4 @@ func _on_out_screen_screen_exited():
 
 func _on_area_entered(area):
 	print(area.name)
-	pass # Replace with function body.
+	pass  # Replace with function body.
