@@ -1,19 +1,18 @@
-use godot::engine::{Area2D, IArea2D};
+use godot::engine::{CharacterBody2D, ICharacterBody2D};
+use godot::obj::WithBaseField;
 use godot::prelude::*;
 
-use crate::consts;
-
 #[derive(GodotClass)]
-#[class(base = Area2D)]
+#[class(base = CharacterBody2D)]
 struct Player {
     #[var]
     health: i32,
-    base: Base<Area2D>,
+    base: Base<CharacterBody2D>,
 }
 
 #[godot_api()]
-impl IArea2D for Player {
-    fn init(base: Base<Area2D>) -> Player {
+impl ICharacterBody2D for Player {
+    fn init(base: Base<CharacterBody2D>) -> Player {
         // godot_print!("Player created from Godot Rust");
         Self {
             base,
@@ -36,13 +35,9 @@ impl IArea2D for Player {
         if input_obj.is_action_pressed("move_down".into()) {
             vel.y += 1.0;
         }
-        // if vel != Vector2::ZERO {
-        //     godot_error!("fuck you")
-        // }
-        let pos = self.base().get_position();
-        self.base_mut()
-            .set_position(pos + vel.normalized() * Self::SPEED as f32 * delta as f32);
-        // godot_print!("position move")
+        let res = self
+            .base_mut()
+            .move_and_collide(vel.normalized() * Self::SPEED as f32 * delta as f32);
     }
 }
 
@@ -52,12 +47,4 @@ impl Player {
     const SPEED: i32 = 500;
     #[constant]
     const MAX_HEALTH: i32 = 100;
-
-    #[func]
-    fn collision(&mut self, obj: Gd<Area2D>) {
-        if obj.get_collision_layer() == consts::WALL_LAYER {}
-    }
-
-    #[func]
-    fn area_exited(&mut self, obj: Gd<Area2D>) {}
 }

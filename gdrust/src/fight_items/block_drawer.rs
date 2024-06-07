@@ -1,5 +1,5 @@
-use godot::engine::{Area2D, CollisionPolygon2D, INode2D, Node2D};
-use godot::obj::WithBaseField;
+use godot::engine::{Area2D, CollisionPolygon2D, INode2D, Node2D, StaticBody2D};
+use godot::obj::{NewAlloc, WithBaseField};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -18,6 +18,8 @@ fn get_block_color() -> Color {
     Color::from_rgba8(255, 255, 255, 255)
 }
 
+const COLLISION_WIDTH: f32 = 20.0;
+
 #[godot_api]
 impl INode2D for BlockDrawer {
     fn init(base: Base<Node2D>) -> BlockDrawer {
@@ -30,20 +32,40 @@ impl INode2D for BlockDrawer {
     }
 
     fn ready(&mut self) {
-        let mut collision_obj = self
-            .base_mut()
-            .get_node_as::<CollisionPolygon2D>("collision/collision");
-        let mut points = PackedVector2Array::new();
-        points.push(Vector2::new(self.x, self.y));
-        points.push(Vector2::new(self.get_x_len(), self.y));
-        points.push(Vector2::new(
-            self.get_x_len(),
-            self.y + Self::Y_SIZE_DEFAULT,
-        ));
-        points.push(Vector2::new(self.x, self.y + Self::Y_SIZE_DEFAULT));
-        collision_obj.set_polygon(points);
-        collision_obj.set_disabled(false);
-        godot_print!("nihao")
+        let points = [
+            Vector2::new(self.x, self.y),
+            Vector2::new(self.x + self.get_x_len(), self.y),
+            Vector2::new(self.x + self.get_x_len(), self.y + Self::Y_SIZE_DEFAULT),
+            Vector2::new(self.x, self.y + Self::Y_SIZE_DEFAULT),
+        ];
+        let offset = [
+            COLLISION_WIDTH - 15.0,
+            -COLLISION_WIDTH + 15.0,
+            -COLLISION_WIDTH + 15.0,
+            COLLISION_WIDTH - 15.0,
+        ];
+        let mut staticbody = self.base_mut().get_node_as::<StaticBody2D>("collision");
+        for i in 0..4 {
+            let mut colliison_obj = CollisionPolygon2D::new_alloc();
+            let mut line = PackedVector2Array::new();
+            let start_point = points[i % 4];
+            let end_point = points[(i + 1) % 4];
+            let offset_vec = if start_point.x == end_point.x {
+                // 竖线
+                Vector2::new(offset[i], 0.0)
+            } else {
+                // 横线
+                Vector2::new(0.0, offset[i])
+            };
+            line.push(start_point);
+            let start_near = start_point + offset_vec;
+            line.push(start_near);
+            let end_near = end_point + offset_vec;
+            line.push(end_near);
+            line.push(end_point);
+            colliison_obj.set_polygon(line);
+            staticbody.add_child(colliison_obj.upcast());
+        }
     }
 
     fn process(&mut self, delta: f64) {}
@@ -98,4 +120,7 @@ impl BlockDrawer {
         // self.base().
         (self.base().get_viewport_rect().size.x - self.x) as i32
     }
+
+    #[func]
+    fn collision(&mut self, obj: Gd<Area2D>) {}
 }
