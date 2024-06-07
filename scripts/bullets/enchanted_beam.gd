@@ -18,3 +18,8 @@ func _process(delta):
 
 func _on_out_screen_screen_exited():
 	queue_free()
+
+
+func _on_area_entered(area):
+	if area.name == "Player":
+		area.get_node("..").hit(10)
