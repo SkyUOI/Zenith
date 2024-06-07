@@ -444,6 +444,69 @@ func rush(delta: float):
 
 #-----------
 
+#-----------
+
+
+#---rush---
+# 冲刺攻击
+# point, to: 首尾点
+# 剑头方向为 point 指向 to
+func rushStart(point: Vector2, to: Vector2):
+	if !start(rush):
+		return
+	start_point = point
+	totTimes = 2
+	target = to
+	# 初始化wait
+	wait = Timer.new()
+	wait.one_shot = true
+	wait.wait_time = 0.1
+	add_child(wait)
+	# 初始化shot
+	shot = Timer.new()
+	shot.wait_time = 0.06
+	add_child(shot)
+	shot.timeout.connect(rushShotBeam)
+
+
+# 弹幕与剑头方向一致
+func rushShotBeam():
+	var beam = enchanted_beam.instantiate()
+	beam.get_node("Start").wait_time = 0.3
+	beam.direction = radToVector((target - start_point).angle())
+	beam.position = position - beam.direction.normalized() * 50
+	beam.speed = 600
+	get_parent().add_child(beam)
+	beam.get_node("Start").start()
+
+
+func rushExit():
+	times = 0
+	wait.queue_free()
+	shot.queue_free()
+	exit()
+
+
+func rush(delta: float):
+	if wait.time_left != 0:
+		return
+	if shot.time_left == 0 && times != 0:
+		shot.start()
+	if times >= totTimes:
+		rushExit()
+		return
+
+	var arrive = normalMove(
+		start_point if evenTimes() else target, (target - start_point).angle(), 1300, delta
+	)
+	if arrive:
+		wait.start()
+		shot.stop()
+		times += 1
+
+
+#-----------
+
 
 func _process(delta):
 	if !finished && now_func:
