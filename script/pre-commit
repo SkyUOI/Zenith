@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# format gdscript
-gdformat .
-# format rust
-cd gdrust && cargo fmt -- --check
-# save
-git add -A
