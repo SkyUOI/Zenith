@@ -21,5 +21,5 @@ func _on_out_screen_screen_exited():
 
 
 func _on_area_entered(area):
-	print(area.name)
-	pass  # Replace with function body.
+	if area.name == "Player":
+		area.get_node("..").hit(10)
