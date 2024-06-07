@@ -1,18 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=17 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 [ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
-[ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UIFight/Default/000.png" id="6_5cs44"]
-[ext_resource type="Texture2D" uid="uid://dscxanl5ikwrj" path="res://resources/images/UIFight/Highlight/000.png" id="7_rklqi"]
-[ext_resource type="Texture2D" uid="uid://cvx31mw3e38mx" path="res://resources/images/UIAct/Default/000.png" id="8_yjyfq"]
-[ext_resource type="Texture2D" uid="uid://cho5eldvgpv3j" path="res://resources/images/UIAct/Highlight/000.png" id="9_2s82g"]
-[ext_resource type="Texture2D" uid="uid://r8fejoruchch" path="res://resources/images/UIItem/Default/000.png" id="10_1wnge"]
-[ext_resource type="Texture2D" uid="uid://br34m74mf8wh6" path="res://resources/images/UIItem/Highlight/000.png" id="11_s6quu"]
-[ext_resource type="Texture2D" uid="uid://cjdh86b5aivef" path="res://resources/images/UIMercy/Default/000.png" id="12_3kr44"]
+[ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UI/UIFight/Default/000.png" id="6_5cs44"]
+[ext_resource type="Texture2D" uid="uid://dscxanl5ikwrj" path="res://resources/images/UI/UIFight/Highlight/000.png" id="7_rklqi"]
+[ext_resource type="Texture2D" uid="uid://cvx31mw3e38mx" path="res://resources/images/UI/UIAct/Default/000.png" id="8_yjyfq"]
+[ext_resource type="Texture2D" uid="uid://cho5eldvgpv3j" path="res://resources/images/UI/UIAct/Highlight/000.png" id="9_2s82g"]
+[ext_resource type="Texture2D" uid="uid://r8fejoruchch" path="res://resources/images/UI/UIItem/Default/000.png" id="10_1wnge"]
+[ext_resource type="Texture2D" uid="uid://br34m74mf8wh6" path="res://resources/images/UI/UIItem/Highlight/000.png" id="11_s6quu"]
+[ext_resource type="Texture2D" uid="uid://cjdh86b5aivef" path="res://resources/images/UI/UIMercy/Default/000.png" id="12_3kr44"]
 [ext_resource type="Texture2D" uid="uid://uadb5jfhrn5b" path="res://resources/images/HP/Default/000.png" id="12_sm4t8"]
 [ext_resource type="PackedScene" uid="uid://dcuw1h05xwa5b" path="res://scenes/weapons/enchanted_sword.tscn" id="13_1n0f0"]
-[ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UIMercy/Highlight/000.png" id="13_lrcvx"]
+[ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://resources/images/UI/UIMercy/Highlight/000.png" id="13_lrcvx"]
+[ext_resource type="Texture2D" uid="uid://do5eitiicfjge" path="res://resources/images/shields/Shield_of_Cthulhu.webp" id="14_gkc4x"]
+[ext_resource type="Texture2D" uid="uid://drljhif31i83o" path="res://resources/images/UI/CategoryPanel.png" id="14_miw1s"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 radius = 52.67
@@ -61,6 +63,7 @@ texture = ExtResource("5_3ufqu")
 [node name="Player" type="Area2D" parent="Player"]
 
 [node name="HitPoint" type="CollisionShape2D" parent="Player/Player"]
+scale = Vector2(0.2, 0.2)
 shape = SubResource("CircleShape2D_yfrnq")
 debug_color = Color(1, 1, 1, 1)
 
@@ -148,5 +151,13 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("12_sm4t8")
 
 [node name="Enchanted_Sword" parent="." instance=ExtResource("13_1n0f0")]
+
+[node name="CategoryPanel" type="Sprite2D" parent="."]
+position = Vector2(41, 35)
+texture = ExtResource("14_miw1s")
+
+[node name="ShieldOfCthulhu" type="Sprite2D" parent="CategoryPanel"]
+position = Vector2(0, -1)
+texture = ExtResource("14_gkc4x")
 
 [connection signal="hit_sig" from="Player" to="HealthBar" method="attack"]

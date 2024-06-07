@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://r8fejoruchch"
-path="res://.godot/imported/000.png-0378d9d3b65c258038aecad9ad5d8465.ctex"
+uid="uid://do5eitiicfjge"
+path="res://.godot/imported/Shield_of_Cthulhu.webp-13fb3b07c201a583d1db694bdcc8f89b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/UIItem/Default/000.png"
-dest_files=["res://.godot/imported/000.png-0378d9d3b65c258038aecad9ad5d8465.ctex"]
+source_file="res://resources/images/shields/Shield_of_Cthulhu.webp"
+dest_files=["res://.godot/imported/Shield_of_Cthulhu.webp-13fb3b07c201a583d1db694bdcc8f89b.ctex"]
 
 [params]
 

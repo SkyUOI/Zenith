@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cho5eldvgpv3j"
-path="res://.godot/imported/000.png-04b562133c649371c21a030a599dbf27.ctex"
+uid="uid://drljhif31i83o"
+path="res://.godot/imported/CategoryPanel.png-77d685af9149a229982fa41b63180e05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/UIAct/Highlight/000.png"
-dest_files=["res://.godot/imported/000.png-04b562133c649371c21a030a599dbf27.ctex"]
+source_file="res://resources/images/UI/CategoryPanel.png"
+dest_files=["res://.godot/imported/CategoryPanel.png-77d685af9149a229982fa41b63180e05.ctex"]
 
 [params]
 
