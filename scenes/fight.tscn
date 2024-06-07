@@ -58,6 +58,12 @@ modulate = Color(1, 0, 0, 1)
 scale = Vector2(6.6, 6.6)
 texture = ExtResource("5_3ufqu")
 
+[node name="Area2D" type="Area2D" parent="Player"]
+
+[node name="HitPoint" type="CollisionShape2D" parent="Player/Area2D"]
+shape = SubResource("CircleShape2D_yfrnq")
+debug_color = Color(1, 1, 1, 1)
+
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
 light_mask = 3
 visibility_layer = 3

@@ -2,6 +2,8 @@ use godot::engine::{INode2D, Node2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
+use crate::player::Player;
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct HealthBar {
@@ -26,6 +28,8 @@ impl INode2D for HealthBar {
         }
     }
 
+    fn ready(&mut self) {}
+
     fn draw(&mut self) {
         let health = self.health;
         let start_pos = (Vector2::new(Self::START_POSITION_X, Self::START_POSITION_Y));
@@ -33,9 +37,10 @@ impl INode2D for HealthBar {
             Self::LEN * (health as f32 / Self::INIT_HEALTH as f32) + Self::START_POSITION_X,
             Self::START_POSITION_Y,
         );
+        let end_pos_back = Vector2::new(Self::LEN + Self::START_POSITION_X, Self::START_POSITION_Y);
         // background
         self.base_mut()
-            .draw_line_ex(start_pos, end_pos, get_health_background_color())
+            .draw_line_ex(start_pos, end_pos_back, get_health_background_color())
             .width(Self::WIDTH)
             .done();
         // health
@@ -53,4 +58,13 @@ impl HealthBar {
     const WIDTH: f32 = 25.0;
     const LEN: f32 = 150.0;
     const INIT_HEALTH: i32 = 100;
+
+    #[func]
+    fn attack(&mut self, harm: i32) {
+        if harm > self.health {
+            self.health = 0;
+        } else {
+            self.health -= harm;
+        }
+    }
 }

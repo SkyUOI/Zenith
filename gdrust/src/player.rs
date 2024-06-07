@@ -1,10 +1,10 @@
-use godot::engine::{CharacterBody2D, ICharacterBody2D};
+use godot::engine::{Area2D, CharacterBody2D, ICharacterBody2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base = CharacterBody2D)]
-struct Player {
+pub struct Player {
     #[var]
     health: i32,
     base: Base<CharacterBody2D>,
@@ -19,6 +19,8 @@ impl ICharacterBody2D for Player {
             health: Self::MAX_HEALTH,
         }
     }
+
+    fn ready(&mut self) {}
 
     fn physics_process(&mut self, delta: f64) {
         let mut vel = Vector2::ZERO;
@@ -51,4 +53,12 @@ impl Player {
     const SPEED: i32 = 500;
     #[constant]
     const MAX_HEALTH: i32 = 100;
+    #[signal]
+    fn hit_sig(attack: i32);
+
+    #[func]
+    fn hit(&mut self, attack: i32) {
+        self.base_mut()
+            .emit_signal("hit".into(), &[attack.to_variant()]);
+    }
 }
