@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wawi1y6785j5"
-path="res://.godot/imported/000.png-b9108474afd37f30f94d83744bc98dc6.ctex"
+uid="uid://dscxanl5ikwrj"
+path="res://.godot/imported/000.png-a80354cf4c652900d7ceb3e3b1216935.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/UIMercy/Highlight/000.png"
-dest_files=["res://.godot/imported/000.png-b9108474afd37f30f94d83744bc98dc6.ctex"]
+source_file="res://resources/images/UI/UIFight/Highlight/000.png"
+dest_files=["res://.godot/imported/000.png-a80354cf4c652900d7ceb3e3b1216935.ctex"]
 
 [params]
 
