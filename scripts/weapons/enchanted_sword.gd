@@ -12,16 +12,16 @@ func _ready():
 		set_process(0)
 	opers = [
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): swingStart(Vector2(430, 100), Vector2(400, 750), 4),
-		func(): swingStart(Vector2(830, 330), Vector2(300, 300), 4),
-		func(): verticalStart(Vector2(200, 100), Vector2(700, 100), 4),
-		func(): verticalStart(Vector2(100, 500), Vector2(500, 100), 4),
+		func(): swingStart(Vector2(430, 200), Vector2(800, 750), 4),
+		func(): swingStart(Vector2(830, 330), Vector2(300, 400), 4),
+		func(): verticalStart(Vector2(200, 100), Vector2(900, 100), 4),
+		func(): verticalStart(Vector2(200, 500), Vector2(600, 100), 4),
 		func(): rotateStart(Vector2(1000, 100), 6),
 		func(): rotateStart(Vector2(500, 500), 6),
 		func(): motionlessStart(Vector2(500, 300), 5),
 		func(): motionlessStart(Vector2(600, 400), 6),
-		func(): rushStart(Vector2(330, 330), Vector2(800, 300)),
-		func(): rushStart(Vector2(800, 600), Vector2(100, 100)),
+		func(): rushStart(Vector2(130, 230), Vector2(800, 400)),
+		func(): rushStart(Vector2(800, 600), Vector2(200, 200)),
 	]
 	exit()
 
@@ -409,11 +409,11 @@ func rushStart(point: Vector2, to: Vector2):
 	# 初始化wait
 	wait = Timer.new()
 	wait.one_shot = true
-	wait.wait_time = 0.1
+	wait.wait_time = 0.06
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.06
+	shot.wait_time = 0.04
 	add_child(shot)
 	shot.timeout.connect(rushShotBeam)
 
@@ -447,7 +447,7 @@ func rush(delta: float):
 		return
 
 	var arrive = normalMove(
-		start_point if evenTimes() else target, (target - start_point).angle(), 1700, delta
+		start_point if evenTimes() else target, (target - start_point).angle(), 2000, delta
 	)
 	if arrive:
 		wait.start()
