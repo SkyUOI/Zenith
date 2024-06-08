@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnhbuadu80gjc"]
+
+[ext_resource type="Texture2D" uid="uid://g6vbpvi4ja4e" path="res://resources/images/bullets/Seedler/Seedler_Nut.png" id="1_f2324"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_70b6q"]
+radius = 16.0312
+
+[node name="SeedlerNut" type="Area2D"]
+position = Vector2(600, 344)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_f2324")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_70b6q")
