@@ -1,1 +1,1 @@
-mod star_wrath_bullet;
+pub mod star_wrath_bullet;

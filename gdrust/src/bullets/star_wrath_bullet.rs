@@ -39,6 +39,7 @@ impl IArea2D for StarWrathBullet {
 #[godot_api()]
 impl StarWrathBullet {
     /// 带方向的初始化
+    #[func]
     pub fn init_with_direct(&mut self, direct: Vector2) {
         self.direct = direct;
         self.base_init((direct.y / direct.x).atan());
@@ -56,6 +57,7 @@ impl StarWrathBullet {
     }
 
     /// 从左上角初始化弹幕，方向随机
+    #[func]
     pub fn init_from_corner(&mut self) {
         // 随机方向
         let direct_rad = thread_rng().gen_range(DIRECT_MIN..=DIRECT_MAX);
