@@ -1,9 +1,9 @@
 # Code Style
 
-## 1.工具辅助
+## 1.Tools-based Assistance
 
-- 你需要使用[gdtoolkit](https://github.com/Scony/godot-gdscript-toolkit)和rustfmt进行格式化，你可以通过将```script/pre-commit```复制到```.git/hooks```来自动执行这个过程
+- You need to use [gdtoolkit](https://github.com/Scony/godot-gdscript-toolkit) and rustfmt to format the code.You can copy ```script/pre-commit``` to ```.git/hooks``` to do that automatically
 
-## 2.命名规范
+## 2.Naming Conventions
 
-- 对于所有节点的名称，我们规定采用**大驼峰**格式
+- For the names of all nodes, we stipulate the use of PascalCase format.

@@ -1,36 +1,37 @@
-# 如何为该项目做出贡献
+# How to contribute to this project
 
-首先，感谢您对该项目感兴趣并愿意做出贡献！
+First, thank you for being interested in this project and willing to do some contributions.
 
-## 目录
+## Content
 
-- [代码风格](#代码风格)
-- [提交更改](#提交更改)
-- [版本控制](#版本控制)
+- [Code Style](#code-style)
+- [Commit Changes](#commit-changes)
+- [Version Control](#version-control)
+- [Other Resource](#other-resource)
 
-## 代码风格
+## Code Style
 
-请遵循我们的[代码风格指南](docs/code_style.md)以保持代码的一致性。
+Please obey our [Code Style Guide](docs/code_style.md) to maintain code consistency
 
-## 提交更改
+## Commit Changes
 
-如果您想提交代码更改，请遵循以下步骤：
+If you want to commit changes,please obey the following steps:
 
-1. 从`main`分支 fork 本项目。
-2. 创建一个新的分支来处理您的更改。
-3. 确保您的代码遵循我们的代码风格。
-4. 编写必要的单元测试来覆盖您的更改。
-5. 提交您的更改到您的fork。
-6. 创建一个Pull Request（PR）到我们的主分支。
+1. Fork the project from `main`.
+2. Create a new branch to develop.
+3. Make sure that you code follow our code style.
+4. Write down necessary unit test to cover your changes.
+5. Commit your changes to your fork.
+6. Create a Pull Request(PR) to our main branch.
 
-## 版本控制
+## Version Control
 
-请使用[约定式提交](https://www.conventionalcommits.org/zh-hans/v1.0.0/)来书写您的提交。
+Please write your commit message in [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)。
 
-## 其他资源
+## Other Resource
 
-- [项目文档](docs/)
+- [Project Docs](docs/)
 
 ---
 
-我们期待您的贡献，并希望您在参与过程中感到愉快和有成就感。
+We are looking forward to your contributions and hope that you can gain joy and sense of achievement
