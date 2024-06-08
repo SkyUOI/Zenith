@@ -11,3 +11,7 @@ Because of the godot extensions of Rust and Cpp,you should make sure that the ru
 Then you can run ```cd script && python build.py``` to build the extension (both Debug and Release)
 
 Finally,you can start godot editor and develop or export the game.
+
+## Contribution
+
+If you want to do any contribution, please see [CONTRIBUTING.md](./CONTRIBUTING.md)

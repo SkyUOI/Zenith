@@ -6,6 +6,7 @@
 size = Vector2(28.6936, 31.8029)
 
 [node name="StarWrath" type="StarWrath"]
+visible = false
 position = Vector2(618, 236)
 
 [node name="Star_Wrath" type="Sprite2D" parent="."]
