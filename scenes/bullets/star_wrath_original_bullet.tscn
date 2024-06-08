@@ -7,9 +7,9 @@ radius = 27.3309
 height = 172.02
 
 [node name="StarWrathBullet" type="StarWrathBullet"]
+visible = false
 
 [node name="image" type="Sprite2D" parent="."]
-visible = false
 scale = Vector2(2, 2)
 texture = ExtResource("1_do8sq")
 flip_h = true
@@ -19,3 +19,8 @@ position = Vector2(-32, 0)
 rotation = 1.55575
 scale = Vector2(1, 0.600045)
 shape = SubResource("CapsuleShape2D_kmd7p")
+
+[node name="Killer" type="VisibleOnScreenEnabler2D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="area_entered"]
+[connection signal="screen_exited" from="Killer" to="." method="on_killer_screen_exited"]

@@ -1,5 +1,4 @@
 use crate::bullets::star_wrath_bullet::StarWrathBullet;
-use crate::player::*;
 use godot::engine::{Area2D, IArea2D, Timer};
 use godot::obj::{NewAlloc, WithBaseField};
 use godot::prelude::*;
@@ -28,7 +27,7 @@ impl IArea2D for StarWrath {
         Self {
             base,
             start_flag: false,
-            state: State::None,
+            state: State::Wave1,
         }
     }
 
@@ -59,25 +58,19 @@ impl IArea2D for StarWrath {
 
 #[godot_api()]
 impl StarWrath {
-    fn init() {}
-
     #[func]
     fn new_bullet(&mut self) {
-        let player = Player::new_alloc();
+        // bullet scene
+        let scene = load::<PackedScene>("res://scenes/bullets/star_wrath_original_bullet.tscn");
         for i in 0..BULLETS_NUM {
-            let mut star = StarWrathBullet::new_alloc();
-            let sz = self.base_mut().get_viewport_rect().size.x;
-            star.bind_mut().init_from_corner();
+            let mut star = scene.instantiate_as::<StarWrathBullet>();
             self.base_mut()
                 .get_parent()
                 .unwrap()
                 .call_deferred("add_child".into(), &[star.to_variant()]);
+            let sz = self.base_mut().get_viewport_rect().size.x;
+            star.bind_mut().init_from_corner(Vector2::new(sz, 0.0));
         }
-    }
-
-    #[func]
-    fn on_killer_screen_exited(&mut self) {
-        self.base_mut().queue_free()
     }
 
     #[func]
@@ -87,6 +80,7 @@ impl StarWrath {
 
     #[func]
     fn start(&mut self) {
+        self.start_flag = true;
         self.new_bullet()
     }
 }
