@@ -41,8 +41,7 @@ color_ramp = SubResource("GradientTexture1D_0mtog")
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 radius = 52.67
 
-[node name="Fight" type="Control"]
-layout_mode = 3
+[node name="Fight" type="Fight"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -184,6 +183,7 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("12_sm4t8")
 
 [node name="Enchanted_Sword" parent="." instance=ExtResource("13_1n0f0")]
+rotation = 0.710345
 
 [node name="CategoryPanel" type="Sprite2D" parent="."]
 position = Vector2(41, 35)
