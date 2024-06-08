@@ -11,6 +11,11 @@ func _ready():
 	$Out_Screen.screen_exited.connect(queue_free)
 
 
+func start():
+	set_process(1)
+	$Start.start()
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	position += delta * speed * direction * (1.0 if $Start.time_left == 0 else (1.0 / 6.0))

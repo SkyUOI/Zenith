@@ -4,6 +4,7 @@ var finished: bool
 
 # 操作序列(也许只是测试用)
 var opers: Array[Callable]
+signal attack_finished
 
 
 func _ready():
@@ -44,8 +45,7 @@ var oper_num: int = -1
 # 完成某一动作
 func exit():
 	finished = true
-	# 可能要加个signal?
-	# ???.emit()
+	attack_finished.emit()
 	# 也许只是测试用, 前往下一个操作
 	nextOper()
 
@@ -154,7 +154,7 @@ func swingShotBeam():
 		beam.direction = radToVector(basic_vector.angle() - rad)
 
 	beam.position = position + beam.direction.normalized() * 50
-	beam.speed = 600
+	beam.speed = 800
 	get_parent().add_child(beam)
 	beam.get_node("Start").start()
 
@@ -169,11 +169,11 @@ func swing(delta: float):
 		swingExit()
 		return
 	# 移到(从start_point向(start_point与target连线垂直方向)一定距离)
-	var to_position = 150 * radToVector(toTargetRad + (-PI / 2 if evenTimes() else PI / 2))
+	var to_position = 170 * radToVector(toTargetRad + (-PI / 2 if evenTimes() else PI / 2))
 	var arrive = normalMove(
 		start_point + to_position,
 		toTargetRad + ((-PI * 1.8 / 3) if evenTimes() else (PI / 3)),
-		1300,
+		1700,
 		delta
 	)
 	if arrive:
@@ -189,19 +189,21 @@ func swing(delta: float):
 #---motionless---
 # 原地旋转攻击, 并释放星型弹幕
 
+var last_rotation = 0.0
+
 
 func motionlessShotBeam():
 	var beams: Array[Node] = []
 	#让整体偏移
-	var temp: float = randf_range(-PI, PI)
+	last_rotation += randf_range(-PI / 10, PI / 10)
 	for i in range(totTimes):
 		beams.push_back(enchanted_beam.instantiate())
 		beams[i].get_node("Start").wait_time = 0.05
 		beams[i].direction = radToVector(
-			2 * PI * i / totTimes + temp + randf_range(-PI / 6, PI / 6)
+			last_rotation + 2 * PI * i / totTimes + randf_range(-PI / 20, PI / 20)
 		)
 		beams[i].position = position
-		beams[i].speed = 600
+		beams[i].speed = 800
 	for beam in beams:
 		get_parent().add_child(beam)
 		beam.get_node("Start").start()
@@ -267,7 +269,7 @@ func rotateShotBeam():
 		beams[i].get_node("Start").wait_time = 0.35
 		beams[i].direction = radToVector(rotation + 2 * PI * i / totTimes)
 		beams[i].position = position
-		beams[i].speed = 600
+		beams[i].speed = 800
 	for beam in beams:
 		get_parent().add_child(beam)
 		beam.get_node("Start").start()
@@ -338,7 +340,7 @@ func verticalStart(point: Vector2, to: Vector2, tim: int):
 	add_child(wait)
 	# 初始化shot
 	shot = Timer.new()
-	shot.wait_time = 0.06
+	shot.wait_time = 0.05
 	add_child(shot)
 	shot.timeout.connect(verticalShotBeam)
 
@@ -350,7 +352,7 @@ func verticalShotBeam():
 	beam.get_node("Start").wait_time = 0.05
 	beam.direction = radToVector((target - start_point).angle() + PI / 2)
 	beam.position = position + beam.direction.normalized() * 50
-	beam.speed = 600
+	beam.speed = 800
 	get_parent().add_child(beam)
 	beam.get_node("Start").start()
 
@@ -373,7 +375,7 @@ func vertical(delta: float):
 
 	#在两个点之间反复横跳
 	var arrive = normalMove(
-		start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1300, delta
+		start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1600, delta
 	)
 	if arrive:
 		wait.start()
@@ -411,12 +413,13 @@ func rushStart(point: Vector2, to: Vector2):
 # 弹幕与剑头方向一致
 func rushShotBeam():
 	var beam = enchanted_beam.instantiate()
-	beam.get_node("Start").wait_time = 0.3
+	beam.get_node("Start").wait_time = 0.1
 	beam.direction = radToVector((target - start_point).angle())
 	beam.position = position - beam.direction.normalized() * 50
-	beam.speed = 600
+	beam.speed = 1000
 	get_parent().add_child(beam)
-	beam.get_node("Start").start()
+	beam.set_process(0)
+	attack_finished.connect(beam.start)
 
 
 func rushExit():
@@ -436,7 +439,7 @@ func rush(delta: float):
 		return
 
 	var arrive = normalMove(
-		start_point if evenTimes() else target, (target - start_point).angle(), 1300, delta
+		start_point if evenTimes() else target, (target - start_point).angle(), 1700, delta
 	)
 	if arrive:
 		wait.start()
