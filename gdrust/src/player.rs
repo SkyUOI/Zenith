@@ -12,7 +12,7 @@ pub struct Player {
     base: Base<CharacterBody2D>,
     status: Movement,
     /// 上一次点击克盾冲刺键的时间,记录来判断双击
-    click_time: Instant,
+    click_time: Option<Instant>,
     /// 上一次的类型
     click_type: Click,
 }
@@ -41,6 +41,7 @@ const MOVE_LEFT: &str = "move_left";
 const MOVE_UP: &str = "move_up";
 const MOVE_DOWN: &str = "move_down";
 const SLOW_DOWN: &str = "slow_down";
+const DOUBLE_CLICK_DURATION: Duration = Duration::from_millis(500);
 
 #[godot_api()]
 impl ICharacterBody2D for Player {
@@ -50,7 +51,7 @@ impl ICharacterBody2D for Player {
             base,
             health: Self::MAX_HEALTH,
             status: Movement::Move,
-            click_time: Instant::now(),
+            click_time: None,
             click_type: Click::None,
         }
     }
@@ -59,16 +60,16 @@ impl ICharacterBody2D for Player {
 
     fn physics_process(&mut self, delta: f64) {
         let input_obj = Input::singleton();
-        let mut speed = Self::SPEED;
+        let mut down_rate = 1.0;
         if input_obj.is_action_pressed(SLOW_DOWN.into()) {
-            speed /= 2;
+            down_rate = 0.5;
         }
         if self.status == Movement::Rush {
             godot_print!("rush inside!");
             let vel = Vector2::new(
                 match self.click_type {
-                    Click::Left => -Self::RUSH_SPEED as f32,
-                    Click::Right => Self::RUSH_SPEED as f32,
+                    Click::Left => -1.0,
+                    Click::Right => 1.0,
                     _ => {
                         let msg = format!("wrong movement {:?} when rush", self.click_type);
                         godot_error!("{}", &msg);
@@ -77,8 +78,9 @@ impl ICharacterBody2D for Player {
                 },
                 0.0,
             );
-            self.base_mut()
-                .move_and_collide(vel * delta as f32 * speed as f32);
+            self.base_mut().move_and_collide(
+                vel.normalized() * Self::RUSH_SPEED as f32 * delta as f32 * down_rate as f32,
+            );
             return;
         }
         let mut vel = Vector2::ZERO;
@@ -89,32 +91,15 @@ impl ICharacterBody2D for Player {
             vel.x += 1.0;
         }
         // 触发克盾
-        if input_obj.is_action_just_pressed(MOVE_LEFT.into())
-            && self.click_type == Click::Left
-            && self.click_time.elapsed() < Duration::new(0, 100 * 1000)
-        {
-            self.start_rush();
-        }
-        if input_obj.is_action_just_pressed(MOVE_LEFT.into())
-            && self.click_type == Click::Left
-            && self.click_time.elapsed() < Duration::new(0, 100 * 1000)
-        {
-            self.start_rush();
-        }
-        // 记录克盾第一次按按钮
-        if input_obj.is_action_just_released(MOVE_RIGHT.into()) {
-            self.click_time = Instant::now();
-            self.click_type = Click::Right;
-        }
-        if input_obj.is_action_just_released(MOVE_LEFT.into()) {
-            self.click_time = Instant::now();
-            self.click_type = Click::Left;
-        }
-        if input_obj.is_action_just_released(MOVE_DOWN.into()) {
-            self.click_type = Click::Down;
-        }
-        if input_obj.is_action_just_released(MOVE_UP.into()) {
+        self.process_rush(MOVE_LEFT.into(), Click::Left);
+        self.process_rush(MOVE_RIGHT.into(), Click::Right);
+        if input_obj.is_action_just_pressed(MOVE_UP.into()) {
             self.click_type = Click::Up;
+            self.click_time = None;
+        }
+        if input_obj.is_action_just_pressed(MOVE_DOWN.into()) {
+            self.click_type = Click::Down;
+            self.click_time = None;
         }
         if input_obj.is_action_pressed(MOVE_UP.into()) {
             vel.y -= 1.0;
@@ -124,7 +109,7 @@ impl ICharacterBody2D for Player {
         }
         let res = self
             .base_mut()
-            .move_and_collide(vel.normalized() * speed as f32 * delta as f32);
+            .move_and_collide(vel.normalized() * Self::SPEED as f32 * down_rate * delta as f32);
     }
 }
 
@@ -147,7 +132,6 @@ impl Player {
     }
 
     fn start_rush(&mut self) {
-        godot_print!("rush inside!");
         self.status = Movement::Rush;
         // 冲刺结束计时器
         let mut timer = self.base().get_node_as::<Timer>("Cthulhu");
@@ -163,10 +147,41 @@ impl Player {
 
     #[func]
     fn stop_rush(&mut self) {
-        godot_print!("rush!");
         let mut particle = self.get_virtual_particle();
         particle.set_emitting(false);
         self.status = Movement::Move;
         self.click_type = Click::None;
+    }
+
+    fn process_rush(&mut self, movement_name: StringName, click_type: Click) {
+        let input_obj = Input::singleton();
+        if input_obj.is_action_just_pressed(movement_name) {
+            godot_print!("enter rust process");
+            // 先检查上一次按下的键是不是双击键
+            if self.click_type != click_type {
+                self.click_type = click_type;
+                return;
+            } // 判断第一次还是第二次
+            match self.click_time {
+                None => {
+                    // 第一次按下按钮，记录时间
+                    self.click_time = Some(Instant::now())
+                }
+                Some(t) => {
+                    // 第二次按下，比较两次中间的间隔
+                    let dur = t.elapsed();
+                    if dur <= DOUBLE_CLICK_DURATION {
+                        // 达成双击条件
+                        // 清除双击时间
+                        self.click_time = None;
+                        self.click_type = Click::None;
+                        self.start_rush();
+                    } else {
+                        // 否则将当前时间设为双击开头
+                        self.click_time = Some(Instant::now());
+                    }
+                }
+            }
+        }
     }
 }
