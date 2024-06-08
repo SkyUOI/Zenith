@@ -79,7 +79,7 @@ impl ICharacterBody2D for Player {
                 0.0,
             );
             self.base_mut().move_and_collide(
-                vel.normalized() * Self::RUSH_SPEED as f32 * delta as f32 * down_rate as f32,
+                vel.normalized() * Self::RUSH_SPEED as f32 * delta as f32 * down_rate,
             );
             return;
         }
@@ -106,6 +106,9 @@ impl ICharacterBody2D for Player {
         }
         if input_obj.is_action_pressed(MOVE_DOWN.into()) {
             vel.y += 1.0;
+        }
+        if vel == Vector2::ZERO {
+            return;
         }
         let res = self
             .base_mut()
