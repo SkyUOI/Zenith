@@ -193,5 +193,12 @@ texture = ExtResource("14_miw1s")
 position = Vector2(0, -1)
 texture = ExtResource("14_gkc4x")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
+
+[node name="ShakeTimer" type="Timer" parent="Camera2D"]
+wait_time = 0.1
+
 [connection signal="hit_sig" from="Player" to="HealthBar" method="attack"]
 [connection signal="timeout" from="Player/Cthulhu" to="Player" method="stop_rush"]
+[connection signal="timeout" from="Camera2D/ShakeTimer" to="." method="shake_timeout"]
