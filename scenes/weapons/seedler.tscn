@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7unyob7tl6gs"]
+
+[ext_resource type="Texture2D" uid="uid://bqwx5dm7jefu6" path="res://resources/images/weapons/Seedler.png" id="1_3obt5"]
+
+[node name="Seedler" type="Sprite2D"]
+position = Vector2(561, 324)
+scale = Vector2(2, 2)
+texture = ExtResource("1_3obt5")

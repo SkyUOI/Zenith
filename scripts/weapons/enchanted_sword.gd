@@ -8,6 +8,8 @@ signal attack_finished
 
 
 func _ready():
+	if get_tree().current_scene != self:
+		set_process(0)
 	opers = [
 		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
 		func(): swingStart(Vector2(430, 100), Vector2(400, 750), 4),
@@ -22,6 +24,12 @@ func _ready():
 		func(): rushStart(Vector2(800, 600), Vector2(100, 100)),
 	]
 	exit()
+
+
+# fight调用这个
+# 开始
+func fightStart():
+	set_process(1)
 
 
 @export var enchanted_beam: PackedScene
