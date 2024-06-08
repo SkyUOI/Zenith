@@ -459,6 +459,9 @@ func rush(delta: float):
 
 
 func _process(delta):
+	# FIXME:If you remove this show(),
+	# although there is not any hide(),the sword will disappear by random
+	show()
 	if !finished && now_func:
 		now_func.call(delta)
 	# else :
