@@ -8,7 +8,7 @@ extends Area2D
 func _ready():
 	rotation = PI / 4 + Vector2(0, 0).angle_to_point(direction)
 	direction = direction.normalized()
-	$Out_Screen.screen_exited.connect(queue_free)
+	$OutScreen.screen_exited.connect(queue_free)
 
 
 func start():
