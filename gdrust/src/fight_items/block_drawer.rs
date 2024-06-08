@@ -44,7 +44,7 @@ impl INode2D for BlockDrawer {
             -COLLISION_WIDTH + 15.0,
             COLLISION_WIDTH - 15.0,
         ];
-        let mut staticbody = self.base_mut().get_node_as::<StaticBody2D>("collision");
+        let mut staticbody = self.base_mut().get_node_as::<StaticBody2D>("Collision");
         for i in 0..4 {
             let mut colliison_obj = CollisionPolygon2D::new_alloc();
             let mut line = PackedVector2Array::new();

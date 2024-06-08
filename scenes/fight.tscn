@@ -103,7 +103,7 @@ wait_time = 0.1
 light_mask = 3
 visibility_layer = 3
 
-[node name="collision" type="StaticBody2D" parent="BlockDrawer"]
+[node name="Collision" type="StaticBody2D" parent="BlockDrawer"]
 
 [node name="Bar" type="Bar" parent="."]
 layout_mode = 1
@@ -119,7 +119,7 @@ offset_bottom = 46.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="fight" type="TextureButton" parent="Bar"]
+[node name="Fight" type="TextureButton" parent="Bar"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -132,7 +132,7 @@ grow_vertical = 0
 texture_normal = ExtResource("6_5cs44")
 texture_pressed = ExtResource("7_rklqi")
 
-[node name="act" type="TextureButton" parent="Bar"]
+[node name="Act" type="TextureButton" parent="Bar"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -3.95
@@ -149,7 +149,7 @@ texture_normal = ExtResource("8_yjyfq")
 texture_pressed = ExtResource("9_2s82g")
 metadata/_edit_use_anchors_ = true
 
-[node name="item" type="TextureButton" parent="Bar"]
+[node name="Item" type="TextureButton" parent="Bar"]
 layout_mode = 0
 offset_left = 100.0
 offset_top = -83.0
@@ -158,7 +158,7 @@ offset_bottom = -41.0
 texture_normal = ExtResource("10_1wnge")
 texture_pressed = ExtResource("11_s6quu")
 
-[node name="mercy" type="TextureButton" parent="Bar"]
+[node name="Mercy" type="TextureButton" parent="Bar"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

@@ -9,13 +9,13 @@ size = Vector2(28.6936, 31.8029)
 visible = false
 position = Vector2(618, 236)
 
-[node name="Star_Wrath" type="Sprite2D" parent="."]
+[node name="StarWrath" type="Sprite2D" parent="."]
 scale = Vector2(2.97559, 2.97559)
 texture = ExtResource("1_rb7dw")
 offset = Vector2(-0.33606, -1.0082)
 flip_h = true
 
-[node name="Fight_Timer" type="Timer" parent="."]
+[node name="FightTimer" type="Timer" parent="."]
 editor_description = "Debug"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -24,4 +24,4 @@ rotation = 0.792934
 scale = Vector2(4.2, 1)
 shape = SubResource("RectangleShape2D_qm46a")
 
-[connection signal="timeout" from="Fight_Timer" to="." method="on_fight_timer_timeout"]
+[connection signal="timeout" from="FightTimer" to="." method="on_fight_timer_timeout"]

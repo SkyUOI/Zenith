@@ -9,7 +9,7 @@ height = 172.02
 [node name="StarWrathBullet" type="StarWrathBullet"]
 visible = false
 
-[node name="image" type="Sprite2D" parent="."]
+[node name="Image" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("1_do8sq")
 flip_h = true

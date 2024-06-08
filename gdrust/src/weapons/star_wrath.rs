@@ -1,6 +1,6 @@
 use crate::bullets::star_wrath_bullet::StarWrathBullet;
 use godot::engine::{Area2D, IArea2D, Timer};
-use godot::obj::{NewAlloc, WithBaseField};
+use godot::obj::WithBaseField;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -37,7 +37,7 @@ impl IArea2D for StarWrath {
         if self.base().get_tree().unwrap().get_current_scene().unwrap()
             == self.base().clone().upcast()
         {
-            let mut fight_time = self.base().get_node_as::<Timer>("Fight_Timer");
+            let mut fight_time = self.base().get_node_as::<Timer>("FightTimer");
             fight_time.start();
             self.start();
         }
