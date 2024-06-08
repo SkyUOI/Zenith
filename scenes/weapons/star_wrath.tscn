@@ -17,15 +17,10 @@ flip_h = true
 [node name="Fight_Timer" type="Timer" parent="."]
 editor_description = "Debug"
 
-[node name="Killer" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(652, 129)
-scale = Vector2(2.97559, 2.97559)
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-20.1263, -13.6814)
 rotation = 0.792934
 scale = Vector2(4.2, 1)
 shape = SubResource("RectangleShape2D_qm46a")
 
-[connection signal="timeout" from="Fight_Timer" to="Star_Wrath" method="_on_fight_t_imer_timeout"]
-[connection signal="screen_exited" from="Killer" to="Star_Wrath" method="_on_killer_screen_exited"]
+[connection signal="timeout" from="Fight_Timer" to="." method="on_fight_timer_timeout"]

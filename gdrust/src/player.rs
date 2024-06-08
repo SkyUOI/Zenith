@@ -140,7 +140,7 @@ impl Player {
     fn hit_sig(attack: i32);
 
     #[func]
-    fn hit(&mut self, attack: i32) {
+    pub fn hit(&mut self, attack: i32) {
         // godot_print!("attack!");
         self.base_mut()
             .emit_signal("hit_sig".into(), &[attack.to_variant()]);

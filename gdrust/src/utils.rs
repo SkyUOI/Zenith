@@ -3,13 +3,24 @@ use godot::prelude::*;
 #[macro_export()]
 macro_rules! godot_assert {
     ($($tok:tt)*) => {
-        if !$($tok)* {
+        if !($($tok)*) {
             godot::prelude::godot_error!("{} failed", stringify!($($tok)*))
         }
     };
 }
 
+#[macro_export()]
+macro_rules! godot_debug_assert {
+    ($($tok:tt)*) => {
+        #[cfg(debug_assertions)] {
+            if !($($tok)*) {
+                godot::prelude::godot_error!("{} failed", stringify!($($tok)*))
+            }
+        }
+    };
+}
+
 /// 将传入的弧度转换成单位向量
-pub fn split_to_vec(vec: f32) -> Vector2 {
-    Vector2::new(vec.cos(), vec.sin())
+pub fn split_to_vec(rad: f32) -> Vector2 {
+    Vector2::new(rad.cos(), rad.sin())
 }
