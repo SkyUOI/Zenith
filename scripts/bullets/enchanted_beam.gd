@@ -16,21 +16,27 @@ func start():
 	$Start.start()
 
 
+# 是否攻击过player
+var is_bound = false
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position += delta * speed * direction * (1.0 if $Start.time_left == 0 else (1.0 / 6.0))
+	# 没用过正常移动
+	if !is_bound:
+		position += delta * speed * direction * (1.0 if $Start.time_left == 0 else (1.0 / 6.0))
+	else:
+		position -= delta * speed * direction
 
 
 func _on_out_screen_screen_exited():
 	queue_free()
 
 
-# 是否攻击过player
-var is_used = false
-
-
 func _on_area_entered(area):
 	# 防止重复伤害
-	if area.name == "Player" && !is_used:
+	if area.name == "Player":
 		area.get_node("..").hit(10)
-		is_used = true
+		$CollisionShape2D.disabled = true
+	#elif area.name == 盾
+	#is_bound = true
