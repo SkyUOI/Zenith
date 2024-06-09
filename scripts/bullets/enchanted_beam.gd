@@ -25,6 +25,12 @@ func _on_out_screen_screen_exited():
 	queue_free()
 
 
+# 是否攻击过player
+var is_used = false
+
+
 func _on_area_entered(area):
-	if area.name == "Player":
+	# 防止重复伤害
+	if area.name == "Player" && !is_used:
 		area.get_node("..").hit(10)
+		is_used = true
