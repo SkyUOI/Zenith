@@ -110,7 +110,7 @@ impl ICharacterBody2D for Player {
         if vel == Vector2::ZERO {
             return;
         }
-        let res = self
+        let _res = self
             .base_mut()
             .move_and_collide(vel.normalized() * Self::SPEED as f32 * down_rate * delta as f32);
     }
