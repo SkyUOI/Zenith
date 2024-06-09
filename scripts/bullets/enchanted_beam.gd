@@ -37,6 +37,6 @@ func _on_area_entered(area):
 	# 防止重复伤害
 	if area.name == "Player":
 		area.get_node("..").hit(10)
-		$CollisionShape2D.disabled = true
+		$CollisionShape2D.set_deferred("disabled", true)
 	#elif area.name == 盾
 	#is_bound = true
