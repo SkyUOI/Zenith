@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/weapons/enchanted_sword.gd" id="2_h56vq"]
 [ext_resource type="PackedScene" uid="uid://bi0hwjyalpjn6" path="res://scenes/bullets/enchanted_beam.tscn" id="3_ndj1h"]
 
-[node name="Enchanted_Sword" type="Sprite2D"]
+[node name="EnchantedSword" type="Sprite2D"]
 z_index = 1
 position = Vector2(574, 291)
 rotation = -5.57284
