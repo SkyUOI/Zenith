@@ -15,10 +15,12 @@ pub struct Player {
     click_time: Option<Instant>,
     /// 上一次的类型
     click_type: Click,
+    /// type to rush,单独设立防止被干扰
+    rush_type: Click,
 }
 
 /// 描述按键点击状态
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 enum Click {
     Right,
     Left,
@@ -53,6 +55,7 @@ impl ICharacterBody2D for Player {
             status: Movement::Move,
             click_time: None,
             click_type: Click::None,
+            rush_type: Click::None,
         }
     }
 
@@ -67,12 +70,11 @@ impl ICharacterBody2D for Player {
         if self.status == Movement::Rush {
             // godot_print!("rush inside!");
             let vel = Vector2::new(
-                match self.click_type {
+                match self.rush_type {
                     Click::Left => -1.0,
                     Click::Right => 1.0,
                     _ => {
                         let msg = format!("wrong movement {:?} when rush", self.click_type);
-                        godot_error!("{}", &msg);
                         panic!("{}", &msg);
                     }
                 },
@@ -136,6 +138,7 @@ impl Player {
 
     fn start_rush(&mut self) {
         self.status = Movement::Rush;
+        self.rush_type = self.click_type.clone();
         // 冲刺结束计时器
         let mut timer = self.base().get_node_as::<Timer>("Cthulhu");
         timer.start();

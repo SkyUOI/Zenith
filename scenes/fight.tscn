@@ -73,10 +73,10 @@ scale = Vector2(0.2, 0.2)
 
 [node name="virtual" type="GPUParticles2D" parent="Player"]
 emitting = false
-amount = 4
+amount = 6
 process_material = SubResource("ParticleProcessMaterial_adfmi")
 texture = ExtResource("5_3ufqu")
-lifetime = 0.2
+lifetime = 0.1
 speed_scale = 2.0
 trail_lifetime = 0.5
 
@@ -97,7 +97,7 @@ shape = SubResource("CircleShape2D_yfrnq")
 debug_color = Color(1, 1, 1, 1)
 
 [node name="Cthulhu" type="Timer" parent="Player"]
-wait_time = 0.1
+wait_time = 0.2
 one_shot = true
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
