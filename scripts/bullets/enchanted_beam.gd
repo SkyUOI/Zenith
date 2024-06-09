@@ -16,7 +16,7 @@ func start():
 	$Start.start()
 
 
-# 是否攻击过player
+# 是否被反弹
 var is_bound = false
 
 
