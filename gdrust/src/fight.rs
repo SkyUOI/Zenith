@@ -69,7 +69,7 @@ impl Fight {
 
     #[debug]
     fn get_enchanted_sword(&self) -> Gd<Sprite2D> {
-        self.base().get_node_as::<Sprite2D>("Enchanted_Sword")
+        self.base().get_node_as::<Sprite2D>("EnchantedSword")
     }
 
     #[debug]
