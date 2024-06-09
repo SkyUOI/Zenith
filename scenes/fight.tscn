@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=24 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
+[ext_resource type="Texture2D" uid="uid://b5jjl8np5jm6q" path="res://resources/images/shields/shield.png" id="3_bdq2j"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 [ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
 [ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UI/UIFight/Default/000.png" id="6_5cs44"]
@@ -40,6 +41,9 @@ color_ramp = SubResource("GradientTexture1D_0mtog")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfrnq"]
 radius = 52.67
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g5ci8"]
+height = 100.0
 
 [node name="Fight" type="Fight"]
 anchors_preset = 15
@@ -99,6 +103,18 @@ debug_color = Color(1, 1, 1, 1)
 [node name="Cthulhu" type="Timer" parent="Player"]
 wait_time = 0.2
 one_shot = true
+
+[node name="Shield" type="Area2D" parent="Player"]
+visible = false
+
+[node name="Shield" type="Sprite2D" parent="Player/Shield"]
+position = Vector2(95, -5)
+scale = Vector2(5, 6)
+texture = ExtResource("3_bdq2j")
+
+[node name="Protect" type="CollisionShape2D" parent="Player/Shield"]
+position = Vector2(110, -5)
+shape = SubResource("CapsuleShape2D_g5ci8")
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
 light_mask = 3

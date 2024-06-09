@@ -1,5 +1,6 @@
 use core::panic;
-use godot::engine::{CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
+use derive::gen_debug;
+use godot::engine::{Area2D, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use std::time::{Duration, Instant};
@@ -119,6 +120,7 @@ impl ICharacterBody2D for Player {
 }
 
 #[godot_api]
+#[gen_debug]
 impl Player {
     #[constant]
     const SPEED: i32 = 500;
@@ -140,13 +142,14 @@ impl Player {
         self.status = Movement::Rush;
         self.rush_type = self.click_type.clone();
         // 冲刺结束计时器
-        let mut timer = self.base().get_node_as::<Timer>("Cthulhu");
+        let mut timer = self.get_cthulhu_timer();
         timer.start();
         // 启动拖尾粒子
         let mut particle = self.get_virtual_particle();
         particle.set_emitting(true);
     }
 
+    #[debug]
     fn get_virtual_particle(&self) -> Gd<GpuParticles2D> {
         self.base().get_node_as::<GpuParticles2D>("virtual")
     }
@@ -192,5 +195,22 @@ impl Player {
                 }
             }
         }
+    }
+
+    #[debug]
+    fn get_shield(&self) -> Gd<Area2D> {
+        self.base().get_node_as::<Area2D>("Shield")
+    }
+
+    /// 启动克盾保护
+    #[func]
+    fn turn_on_shield(&mut self) {
+        let mut shield = self.get_shield();
+        shield.show();
+    }
+
+    #[debug]
+    fn get_cthulhu_timer(&self) -> Gd<Timer> {
+        self.base().get_node_as::<Timer>("Cthulhu")
     }
 }

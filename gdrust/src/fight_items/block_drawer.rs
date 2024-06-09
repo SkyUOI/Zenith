@@ -2,6 +2,8 @@ use godot::engine::{Area2D, CollisionPolygon2D, INode2D, Node2D, StaticBody2D};
 use godot::obj::{NewAlloc, WithBaseField};
 use godot::prelude::*;
 
+use crate::debug_check;
+
 #[derive(GodotClass)]
 #[class(base = Node2D)]
 struct BlockDrawer {
@@ -44,7 +46,7 @@ impl INode2D for BlockDrawer {
             -COLLISION_WIDTH + 15.0,
             COLLISION_WIDTH - 15.0,
         ];
-        let mut staticbody = self.base_mut().get_node_as::<StaticBody2D>("Collision");
+        let mut staticbody = self.get_staticbody();
         for i in 0..4 {
             let mut colliison_obj = CollisionPolygon2D::new_alloc();
             let mut line = PackedVector2Array::new();
@@ -66,6 +68,7 @@ impl INode2D for BlockDrawer {
             colliison_obj.set_polygon(line);
             staticbody.add_child(colliison_obj.upcast());
         }
+        debug_check!(self)
     }
 
     fn process(&mut self, delta: f64) {}
@@ -94,6 +97,7 @@ impl BlockDrawer {
     }
 }
 
+#[derive::gen_debug]
 #[godot_api]
 impl BlockDrawer {
     const BOX_START_POS_X: f32 = 400.0;
@@ -123,4 +127,9 @@ impl BlockDrawer {
 
     #[func]
     fn collision(&mut self, obj: Gd<Area2D>) {}
+
+    #[debug]
+    fn get_staticbody(&self) -> Gd<StaticBody2D> {
+        self.base().get_node_as::<StaticBody2D>("Collision")
+    }
 }

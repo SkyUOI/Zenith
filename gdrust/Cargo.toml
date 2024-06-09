@@ -7,6 +7,7 @@ edition = "2024"
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 rand = "0.8"
+derive = { path = "./derive" }
 
 [lib]
 crate-type = ["cdylib"]
@@ -15,3 +16,6 @@ crate-type = ["cdylib"]
 lto = true
 codegen-units = 1
 strip = true
+
+[workspace]
+members = [".", "derive"]

@@ -1,3 +1,4 @@
+use crate::debug_check;
 use godot::engine::{Control, IControl, Sprite2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -12,6 +13,8 @@ struct Fight {
     shake_delta: f32,
 }
 
+const ENCHANTED_START: &str = "fightStart";
+
 #[godot_api]
 impl IControl for Fight {
     fn init(base: Base<Control>) -> Self {
@@ -24,13 +27,15 @@ impl IControl for Fight {
     }
 
     fn ready(&mut self) {
-        let mut enchanted_sword = self.base().get_node_as::<Sprite2D>("Enchanted_Sword");
-        enchanted_sword.call("fightStart".into(), &[]);
+        let mut enchanted_sword = self.get_enchanted_sword();
+        enchanted_sword.call(ENCHANTED_START.into(), &[]);
         self.shake(3.0, 1.0);
+        debug_check!(self)
     }
 }
 
 #[godot_api()]
+#[derive::gen_debug]
 impl Fight {
     /// 晃动屏幕
     /// duration: 持续时间
@@ -50,14 +55,28 @@ impl Fight {
         timer.start();
     }
 
+    #[debug]
     fn get_camera(&self) -> Gd<Camera2D> {
         self.base().get_node_as::<Camera2D>("Camera2D")
     }
 
+    #[debug]
     fn get_shake_timer(&self) -> (Gd<Camera2D>, Gd<Timer>) {
         let camera = self.get_camera();
         let timer = camera.get_node_as::<Timer>("Shake");
         (camera, timer)
+    }
+
+    #[debug]
+    fn get_enchanted_sword(&self) -> Gd<Sprite2D> {
+        self.base().get_node_as::<Sprite2D>("Enchanted_Sword")
+    }
+
+    #[debug]
+    #[cfg(debug_assertions)]
+    fn method_check(&self) {
+        let sword = self.get_enchanted_sword();
+        assert!(sword.has_method(ENCHANTED_START.into()))
     }
 
     #[func]

@@ -72,7 +72,7 @@ impl StarWrathBullet {
 
     #[func]
     fn on_killer_screen_exited(&mut self) {
-        godot_print!("free bullet");
+        // godot_print!("free bullet");
         self.base_mut().queue_free()
     }
 
