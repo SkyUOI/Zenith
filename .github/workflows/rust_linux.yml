@@ -28,4 +28,4 @@ jobs:
       - name: Install Godot
         run: wget https://github.com/godotengine/godot/releases/download/4.2.2-stable/Godot_v4.2.2-stable_linux.x86_64.zip && unzip Godot_v4.2.2-stable_linux.x86_64.zip && mv ./Godot_v4.2.2-stable_linux.x86_64 ./godot
       - name: Godot Test
-        run: godot --headless ./scenes/fight.tscn
+        run: cd script && python godot_test.py

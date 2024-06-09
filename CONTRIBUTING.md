@@ -6,6 +6,7 @@ First, thank you for being interested in this project and willing to do some con
 
 - [Code Style](#code-style)
 - [Commit Changes](#commit-changes)
+- [Tests](#tests)
 - [Version Control](#version-control)
 - [Other Resource](#other-resource)
 
@@ -20,9 +21,16 @@ If you want to commit changes,please obey the following steps:
 1. Fork the project from `main`.
 2. Create a new branch to develop.
 3. Make sure that you code follow our code style.
-4. Write down necessary unit test to cover your changes.
-5. Commit your changes to your fork.
-6. Create a Pull Request(PR) to our main branch.
+4. Commit your changes to your fork.
+5. Create a Pull Request(PR) to our main branch.
+
+## Tests
+
+For your code,your should write necessary tests to cover your code in both GDScript and Rust.We use Github Action to run the tests
+
+[Rust Test Guide](./docs/rust_test.md)
+
+We will run some Godot scenes to check basic errors.The scenes should be ran is recorded in ```test_scene```.In daily development,you can run ```script/godot_test.py```to conduct basic testing
 
 ## Version Control
 
