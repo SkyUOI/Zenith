@@ -1,5 +1,7 @@
 # Zenith
 
+## [中文](./README_zh.md)
+
 ![Total Lines](https://tokei.rs/github/skyuoi/zenith)
 |Platform|Status|
 |:--|:--|

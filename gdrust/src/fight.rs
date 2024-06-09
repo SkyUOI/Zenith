@@ -22,8 +22,8 @@ impl IControl for Fight {
     }
 
     fn ready(&mut self) {
-        let mut EnchantedSword = self.base().get_node_as::<Sprite2D>("Enchanted_Sword");
-        EnchantedSword.call("fightStart".into(), &[]);
+        let mut enchanted_sword = self.base().get_node_as::<Sprite2D>("Enchanted_Sword");
+        enchanted_sword.call("fightStart".into(), &[]);
         self.shake(3.0);
     }
 }
@@ -31,6 +31,7 @@ impl IControl for Fight {
 #[godot_api()]
 impl Fight {
     /// 晃动屏幕
+    /// duration: 持续时间
     #[func]
     fn shake(&mut self, duration: f64) {
         // 根据每次等待时间和总时间算出需要震动多少次

@@ -2,8 +2,6 @@ use godot::engine::{INode2D, Node2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
-use crate::player::Player;
-
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct HealthBar {

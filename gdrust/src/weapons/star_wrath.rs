@@ -62,7 +62,7 @@ impl StarWrath {
     fn new_bullet(&mut self) {
         // bullet scene
         let scene = load::<PackedScene>("res://scenes/bullets/star_wrath_original_bullet.tscn");
-        for i in 0..BULLETS_NUM {
+        for _ in 0..BULLETS_NUM {
             let mut star = scene.instantiate_as::<StarWrathBullet>();
             self.base_mut()
                 .get_parent()
