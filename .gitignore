@@ -21,3 +21,4 @@ target/
 
 # Godot Cpp
 gdcpp/extension_api.json
+__pycache__/

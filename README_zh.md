@@ -15,9 +15,9 @@ Godot 4.2.2
 
 由于Rust和Cpp的godot extensions，你需要确保rust和Cpp编译器已经安装好了
 
-接下来，你可以运行```cd script && python build.py```来构建extension(Debug和Release)
+接下来，你可以运行`cd script && python build.py`来构建extension(Debug和Release)
 
-最终，你可以启动godot编辑器来开发或到处游戏.
+最终，你可以启动godot编辑器来开发或导出游戏.
 
 ## 贡献
 
