@@ -82,6 +82,8 @@ func swordToRotation(rad: float) -> float:
 func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
 	var direction = radToVector(rotation).angle_to(radToVector(swordToRotation(end_rotation)))
 	var vector = end_point - position
+	if vector.length() == 0:
+		return true
 	var rotate_speed = direction / vector.length() * speed
 	return rotateMove(end_point, speed, rotate_speed, delta)
 
