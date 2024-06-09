@@ -98,6 +98,7 @@ debug_color = Color(1, 1, 1, 1)
 
 [node name="Cthulhu" type="Timer" parent="Player"]
 wait_time = 0.1
+one_shot = true
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]
 light_mask = 3

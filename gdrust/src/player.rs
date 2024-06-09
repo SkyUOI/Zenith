@@ -65,7 +65,7 @@ impl ICharacterBody2D for Player {
             down_rate = 0.5;
         }
         if self.status == Movement::Rush {
-            godot_print!("rush inside!");
+            // godot_print!("rush inside!");
             let vel = Vector2::new(
                 match self.click_type {
                     Click::Left => -1.0,
@@ -159,12 +159,16 @@ impl Player {
     fn process_rush(&mut self, movement_name: StringName, click_type: Click) {
         let input_obj = Input::singleton();
         if input_obj.is_action_just_pressed(movement_name) {
-            godot_print!("enter rust process");
             // 先检查上一次按下的键是不是双击键
             if self.click_type != click_type {
+                // godot_print!("previous movement {:?}", self.click_type);
                 self.click_type = click_type;
+                // godot_print!("previous movement {:?}", self.click_type);
+                self.click_time = Some(Instant::now());
                 return;
-            } // 判断第一次还是第二次
+            }
+            // 判断第一次还是第二次
+            // godot_print!("start to select");
             match self.click_time {
                 None => {
                     // 第一次按下按钮，记录时间
@@ -177,7 +181,6 @@ impl Player {
                         // 达成双击条件
                         // 清除双击时间
                         self.click_time = None;
-                        self.click_type = Click::None;
                         self.start_rush();
                     } else {
                         // 否则将当前时间设为双击开头

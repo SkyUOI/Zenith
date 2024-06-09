@@ -73,7 +73,7 @@ impl INode2D for BlockDrawer {
     fn draw(&mut self) {
         let xsize = self.get_x_len();
 
-        godot_print!("enter");
+        // godot_print!("enter");
         let tmp = Vector2::new(self.x, self.y);
         self.base_mut()
             .draw_rect_ex(

@@ -29,7 +29,7 @@ impl INode2D for HealthBar {
     fn ready(&mut self) {}
 
     fn draw(&mut self) {
-        godot_print!("again！");
+        // godot_print!("again！");
         let start_pos = Vector2::new(Self::START_POSITION_X, Self::START_POSITION_Y);
         let end_pos = Vector2::new(
             Self::LEN * (self.health as f32 / Self::INIT_HEALTH as f32) + Self::START_POSITION_X,
@@ -59,7 +59,7 @@ impl HealthBar {
 
     #[func]
     fn attack(&mut self, harm: i32) {
-        godot_print!("received!{}", self.health);
+        // godot_print!("received!{}", self.health);
         self.base_mut().queue_redraw();
         if harm > self.health {
             self.health = 0;
