@@ -62,6 +62,7 @@ func exit():
 func nextOper():
 	oper_num += 1
 	if oper_num >= opers.size():
+		attack_finished.emit()
 		return
 	opers[oper_num].call()
 
