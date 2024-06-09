@@ -5,6 +5,8 @@ use godot::obj::WithBaseField;
 use godot::prelude::*;
 use std::time::{Duration, Instant};
 
+use crate::debug_check;
+
 #[derive(GodotClass)]
 #[class(base = CharacterBody2D)]
 pub struct Player {
@@ -60,7 +62,9 @@ impl ICharacterBody2D for Player {
         }
     }
 
-    fn ready(&mut self) {}
+    fn ready(&mut self) {
+        debug_check!(self)
+    }
 
     fn physics_process(&mut self, delta: f64) {
         let input_obj = Input::singleton();

@@ -27,10 +27,10 @@ impl IControl for Fight {
     }
 
     fn ready(&mut self) {
+        debug_check!(self);
         let mut enchanted_sword = self.get_enchanted_sword();
         enchanted_sword.call(ENCHANTED_START.into(), &[]);
         self.shake(3.0, 1.0);
-        debug_check!(self)
     }
 }
 

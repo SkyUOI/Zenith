@@ -34,6 +34,7 @@ impl INode2D for BlockDrawer {
     }
 
     fn ready(&mut self) {
+        debug_check!(self);
         let points = [
             Vector2::new(self.x, self.y),
             Vector2::new(self.x + self.get_x_len(), self.y),
@@ -68,7 +69,6 @@ impl INode2D for BlockDrawer {
             colliison_obj.set_polygon(line);
             staticbody.add_child(colliison_obj.upcast());
         }
-        debug_check!(self)
     }
 
     fn process(&mut self, delta: f64) {}

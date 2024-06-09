@@ -35,6 +35,7 @@ impl IArea2D for StarWrath {
     fn ready(&mut self) {
         // for debug
         // 检查是否是当前场景
+        debug_check!(self);
         if self.base().get_tree().unwrap().get_current_scene().unwrap()
             == self.base().clone().upcast()
         {
@@ -42,7 +43,6 @@ impl IArea2D for StarWrath {
             fight_time.start();
             self.start();
         }
-        debug_check!(self)
     }
 
     fn process(&mut self, delta: f64) {
