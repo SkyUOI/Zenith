@@ -3,6 +3,7 @@ use derive::gen_debug;
 use godot::engine::{Area2D, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
+use real_consts::PI;
 use std::time::{Duration, Instant};
 
 use crate::debug_check;
@@ -151,6 +152,7 @@ impl Player {
         // 启动拖尾粒子
         let mut particle = self.get_virtual_particle();
         particle.set_emitting(true);
+        self.turn_on_shield();
     }
 
     #[debug]
@@ -164,6 +166,7 @@ impl Player {
         particle.set_emitting(false);
         self.status = Movement::Move;
         self.click_type = Click::None;
+        self.turn_off_shield();
     }
 
     fn process_rush(&mut self, movement_name: StringName, click_type: Click) {
@@ -210,11 +213,30 @@ impl Player {
     #[func]
     fn turn_on_shield(&mut self) {
         let mut shield = self.get_shield();
+        shield.set_rotation(self.cthulhu_rad());
         shield.show();
+    }
+
+    /// 关闭克盾保护
+    #[func]
+    fn turn_off_shield(&mut self) {
+        let mut shield = self.get_shield();
+        shield.hide();
     }
 
     #[debug]
     fn get_cthulhu_timer(&self) -> Gd<Timer> {
         self.base().get_node_as::<Timer>("Cthulhu")
+    }
+
+    fn cthulhu_rad(&self) -> f32 {
+        match self.rush_type {
+            Click::Left => PI,
+            Click::Right => 0.0,
+            _ => {
+                let msg = format!("wrong movement {:?} when rush", self.click_type);
+                panic!("{}", &msg);
+            }
+        }
     }
 }

@@ -69,7 +69,7 @@ scale = Vector2(3.28571, 3.28571)
 [node name="image" type="Sprite2D" parent="ZenithBegin"]
 texture = ExtResource("3_2spkb")
 
-[node name="StarWrath" parent="." instance=ExtResource("4_8ipx5")]
+[node name="Star_Wrath" parent="." instance=ExtResource("4_8ipx5")]
 
 [node name="Player" type="Player" parent="."]
 position = Vector2(570, 414)
