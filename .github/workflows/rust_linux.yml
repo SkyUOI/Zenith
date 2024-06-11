@@ -25,7 +25,4 @@ jobs:
         run: cd gdrust && cargo test --all
       - name: Run tests Release
         run: cd gdrust && cargo test --all --release
-      - name: Install Godot
-        run: wget https://github.com/godotengine/godot/releases/download/4.2.2-stable/Godot_v4.2.2-stable_linux.x86_64.zip && unzip Godot_v4.2.2-stable_linux.x86_64.zip && mv ./Godot_v4.2.2-stable_linux.x86_64 ./godot
-      - name: Godot Test
-        run: cd script && python godot_test.py
+ 

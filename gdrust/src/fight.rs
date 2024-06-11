@@ -113,10 +113,6 @@ impl Fight {
 
     #[func]
     fn end_fight(&mut self) {
-        #[cfg(feature = "action")]
-        {
-            self.exit_tree();
-        }
         godot_print!("end fight")
     }
 }
