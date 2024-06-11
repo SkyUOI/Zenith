@@ -31,6 +31,7 @@ impl IControl for Fight {
         let mut enchanted_sword = self.get_enchanted_sword();
         enchanted_sword.call(ENCHANTED_START.into(), &[]);
         self.shake(3.0, 1.0);
+        enchanted_sword.connect("attack_finished".into(), self.get_end_fight());
     }
 }
 
@@ -97,5 +98,25 @@ impl Fight {
                     rand::thread_rng().gen_range(-self.shake_delta..=self.shake_delta),
                 ),
         );
+    }
+
+    #[debug]
+    fn get_end_fight(&self) -> Callable {
+        self.base().callable("end_fight")
+    }
+
+    #[debug]
+    fn check_end_signal(&self) {
+        let sword = self.get_enchanted_sword();
+        assert!(sword.has_signal("attack_finished".into()));
+    }
+
+    #[func]
+    fn end_fight(&mut self) {
+        #[cfg(feature = "action")]
+        {
+            self.exit_tree();
+        }
+        godot_print!("end fight")
     }
 }

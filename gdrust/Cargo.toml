@@ -17,5 +17,9 @@ lto = true
 codegen-units = 1
 strip = true
 
+[profile.action]
+inherits = "dev"
+features = ["action"]
+
 [workspace]
 members = [".", "derive"]
