@@ -1,6 +1,6 @@
 use crate::bullets::star_wrath_bullet::StarWrathBullet;
 use crate::debug_check;
-use godot::engine::{Area2D, IArea2D, Timer};
+use godot::engine::{AnimationPlayer, AnimationTree, Area2D, IArea2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
@@ -42,19 +42,24 @@ impl IArea2D for StarWrath {
             let mut fight_time = self.get_fight_timer();
             fight_time.start();
             self.start();
+        } else {
+            self.base_mut().hide();
         }
     }
 
     fn process(&mut self, delta: f64) {
+        let mut animation = self.get_animation();
+        // animation.play_ex().name("Wave".into()).done();
+        // if !animation.is_playing() {
+        //     animation.play_ex().name("Float".into()).done();
+        // }
         if !self.start_flag {
             return;
         }
         if self.state == State::None {
             return;
         }
-        if self.state == State::Wave1 {
-            self.base_mut().rotate(0.1 * delta as f32)
-        }
+        if self.state == State::Wave1 {}
     }
 }
 
@@ -84,6 +89,11 @@ impl StarWrath {
     #[debug]
     fn get_fight_timer(&self) -> Gd<Timer> {
         self.base().get_node_as::<Timer>("FightTimer")
+    }
+
+    #[debug]
+    fn get_animation(&self) -> Gd<AnimationTree> {
+        self.base().get_node_as::<AnimationTree>("AnimationTree")
     }
 
     #[func]
