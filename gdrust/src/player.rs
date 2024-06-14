@@ -91,13 +91,6 @@ impl ICharacterBody2D for Player {
             );
             return;
         }
-        let mut vel = Vector2::ZERO;
-        if input_obj.is_action_pressed(MOVE_LEFT.into()) {
-            vel.x -= 1.0;
-        }
-        if input_obj.is_action_pressed(MOVE_RIGHT.into()) {
-            vel.x += 1.0;
-        }
         // 触发克盾
         self.process_rush(MOVE_LEFT.into(), Click::Left);
         self.process_rush(MOVE_RIGHT.into(), Click::Right);
@@ -109,18 +102,17 @@ impl ICharacterBody2D for Player {
             self.click_type = Click::Down;
             self.click_time = None;
         }
-        if input_obj.is_action_pressed(MOVE_UP.into()) {
-            vel.y -= 1.0;
+        let vel = input_obj.get_vector(
+            MOVE_LEFT.into(),
+            MOVE_RIGHT.into(),
+            MOVE_UP.into(),
+            MOVE_DOWN.into(),
+        );
+        if vel != Vector2::ZERO {
+            let _res = self
+                .base_mut()
+                .move_and_collide(vel.normalized() * Self::SPEED as f32 * down_rate * delta as f32);
         }
-        if input_obj.is_action_pressed(MOVE_DOWN.into()) {
-            vel.y += 1.0;
-        }
-        if vel == Vector2::ZERO {
-            return;
-        }
-        let _res = self
-            .base_mut()
-            .move_and_collide(vel.normalized() * Self::SPEED as f32 * down_rate * delta as f32);
     }
 }
 

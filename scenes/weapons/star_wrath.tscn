@@ -5,6 +5,23 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm46a"]
 size = Vector2(28.6936, 31.8029)
 
+[sub_resource type="Animation" id="Animation_i5jfn"]
+resource_name = "Float"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(618, 248), Vector2(618, 259), Vector2(618, 248)]
+}
+
 [sub_resource type="Animation" id="Animation_ftjfs"]
 length = 0.001
 tracks/0/type = "value"
@@ -47,23 +64,6 @@ tracks/1/keys = {
 "values": []
 }
 
-[sub_resource type="Animation" id="Animation_i5jfn"]
-resource_name = "Float"
-length = 1.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(618, 248), Vector2(618, 259), Vector2(618, 248)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_julpp"]
 _data = {
 "Float": SubResource("Animation_i5jfn"),
@@ -80,7 +80,6 @@ animation = &"Float"
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_xm082"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_rpkys"]
-graph_offset = Vector2(-190.879, -68.5505)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_eoxxg")
 nodes/Animation/position = Vector2(40, 0)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_f2u5f")
