@@ -18,4 +18,4 @@ codegen-units = 1
 strip = true
 
 [workspace]
-members = [".", "derive"]
+members = [".", "derive", "server"]
