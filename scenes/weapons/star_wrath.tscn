@@ -116,6 +116,21 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_rpkys")
 anim_player = NodePath("../AnimationPlayer")
+parameters/current_length = null
+parameters/current_position = null
+parameters/current_delta = null
+parameters/Animation/current_length = null
+parameters/Animation/current_position = null
+parameters/Animation/current_delta = null
+"parameters/Animation 2/current_length" = null
+"parameters/Animation 2/current_position" = null
+"parameters/Animation 2/current_delta" = null
+parameters/Blend2/current_length = 0
+parameters/Blend2/current_position = 0
+parameters/Blend2/current_delta = 0
 parameters/Blend2/blend_amount = 0.5
+parameters/output/current_length = null
+parameters/output/current_position = null
+parameters/output/current_delta = null
 
 [connection signal="timeout" from="FightTimer" to="." method="on_fight_timer_timeout"]
