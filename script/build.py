@@ -5,9 +5,9 @@ from utils import msg_system
 def main():
     # build rust extension
     os.chdir("../gdrust")
-    msg_system("cargo build", "Failed to build rust extension in debug mode")
+    msg_system("cargo build --all", "Failed to build rust extension in debug mode")
     msg_system(
-        "cargo build --release", "Failed to build rust extension in release mode"
+        "cargo build --release --all", "Failed to build rust extension in release mode"
     )
     os.chdir("..")
     print("Rust extension compilation is success")
