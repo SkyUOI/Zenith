@@ -74,6 +74,12 @@ texture = ExtResource("3_2spkb")
 [node name="Player" type="Player" parent="."]
 position = Vector2(570, 414)
 scale = Vector2(0.2, 0.2)
+motion_mode = 1
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.5708
+platform_floor_layers = 0
+platform_wall_layers = 4294967295
 
 [node name="virtual" type="GPUParticles2D" parent="Player"]
 emitting = false

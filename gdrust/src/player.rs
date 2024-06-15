@@ -1,6 +1,7 @@
 use core::panic;
 use derive::gen_debug;
 use godot::engine::{Area2D, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
+use godot::global::abs;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use real_consts::PI;
@@ -109,9 +110,43 @@ impl ICharacterBody2D for Player {
             MOVE_DOWN.into(),
         );
         if vel != Vector2::ZERO {
-            let _res = self
+            let res = self
                 .base_mut()
                 .move_and_collide(vel.normalized() * Self::SPEED as f32 * down_rate * delta as f32);
+            if let Some(obj) = res {
+                let me = self.base_mut().get_position();
+                let point = obj.get_position();
+                let diff_x = (me.x - point.x).abs().abs();
+                let diff_y = (me.y - point.y).abs().abs();
+                if (diff_x - diff_y).abs() >= 6.0 {
+                    // 确认没有卡墙角
+                    let vel = if diff_x > diff_y {
+                        Vector2::new(
+                            0.0,
+                            if input_obj.is_action_pressed(MOVE_UP.into()) {
+                                -1.0
+                            } else if input_obj.is_action_pressed(MOVE_DOWN.into()) {
+                                1.0
+                            } else {
+                                0.0
+                            },
+                        )
+                    } else {
+                        Vector2::new(
+                            if input_obj.is_action_pressed(MOVE_LEFT.into()) {
+                                -1.0
+                            } else if input_obj.is_action_pressed(MOVE_RIGHT.into()) {
+                                1.0
+                            } else {
+                                0.0
+                            },
+                            0.0,
+                        )
+                    };
+                    self.base_mut()
+                        .move_and_collide(vel * Self::SPEED as f32 * down_rate * delta as f32);
+                }
+            }
         }
     }
 }
