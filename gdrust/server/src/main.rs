@@ -3,7 +3,7 @@ mod cfg;
 use bytes::BytesMut;
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
-use std::error::Error;
+use std::{error::Error, io::Write, process::exit, thread};
 use tokio::net::{TcpListener, TcpStream};
 
 struct Connection {
@@ -37,19 +37,48 @@ struct ArgsParser {
 
 shadow_rs::shadow!(build);
 
+async fn process_request(connect: Connection) {}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
+    log::info!("Server initing...");
     let parser = ArgsParser::parse();
     let port = parser.port;
     let ip = parser.ip;
     let bind_ip = format!("{}:{}", ip, port);
-    let tcplistener = TcpListener::bind(&bind_ip).await?;
+    let tcplistener = match TcpListener::bind(&bind_ip).await {
+        Ok(listener) => listener,
+        Err(e) => {
+            log::error!("Failed to bind {}:{}", bind_ip, e);
+            exit(1);
+        }
+    };
+    tokio::spawn(async move {
+        loop {
+            let ret = tcplistener.accept().await;
+            match ret {
+                Ok((socket, _)) => {
+                    if let Err(e) =
+                        tokio::spawn(async { process_request(Connection::new(socket)).await }).await
+                    {
+                        log::error!("Async error:{}", e);
+                    }
+                }
+                Err(e) => {
+                    log::error!("Accepting a new player failed:{}", e)
+                }
+            }
+        }
+    });
     loop {
-        let ret = tcplistener.accept().await;
-        match ret {
-            Ok(_) => {}
-            Err(_) => {}
+        print!(">>>");
+        std::io::stdout().flush().unwrap();
+        let mut command = String::new();
+        std::io::stdin().read_line(&mut command)?;
+        if command.trim() == "exit" {
+            log::info!("Exiting now...");
+            break;
         }
     }
     Ok(())
