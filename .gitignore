@@ -21,4 +21,9 @@ target/
 
 # Godot Cpp
 gdcpp/extension_api.json
+
+# Python
 __pycache__/
+
+# Protobuf
+gdrust/server/src/proto

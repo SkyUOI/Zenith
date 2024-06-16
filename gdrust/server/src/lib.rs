@@ -1,9 +1,12 @@
 mod cfg;
+mod proto;
 
 use anyhow::anyhow;
 use bytes::BytesMut;
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
+use prost::Message;
+use proto::connect::Join;
 use std::{
     error::Error,
     io::{Cursor, Write},
@@ -20,13 +23,6 @@ struct Connection {
     buffer: BytesMut,
 }
 
-#[derive(Debug)]
-/// 请求类型
-enum Request {
-    /// 加入服务器的请求
-    Join,
-}
-
 impl Connection {
     pub fn new(stream: TcpStream) -> Self {
         Self {
@@ -35,9 +31,9 @@ impl Connection {
         }
     }
 
-    pub async fn read_request(&mut self) -> anyhow::Result<Option<Request>> {
+    pub async fn read_join(&mut self) -> anyhow::Result<Option<Join>> {
         loop {
-            if let Some(request) = self.parse_request()? {
+            if let Some(request) = self.parse_join()? {
                 return Ok(Some(request));
             }
             if 0 == self.stream.read_buf(&mut self.buffer).await? {
@@ -52,10 +48,12 @@ impl Connection {
         }
     }
 
-    pub fn parse_request(&mut self) -> anyhow::Result<Option<Request>> {
-        let mut buf = Cursor::new(&self.buffer[..]);
-
-        todo!()
+    pub fn parse_join(&mut self) -> anyhow::Result<Option<Join>> {
+        let buf = Cursor::new(&self.buffer[..]);
+        match proto::connect::Join::decode(buf) {
+            Ok(val) => Ok(Some(val)),
+            Err(_) => Err(anyhow!("Not a join message")),
+        }
     }
 }
 
@@ -76,8 +74,11 @@ struct ArgsParser {
 
 shadow_rs::shadow!(build);
 
-async fn process_request(connect: Connection) {
+async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
+    // 首先获取连接请求
+    let join_data = connect.read_join().await?;
     loop {}
+    Ok(())
 }
 
 pub async fn lib_main() -> Result<(), Box<dyn Error>> {
@@ -97,8 +98,12 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
             let ret = tcplistener.accept().await;
             match ret {
                 Ok((socket, _)) => {
-                    if let Err(e) =
-                        tokio::spawn(async { process_request(Connection::new(socket)).await }).await
+                    if let Err(e) = tokio::spawn(async {
+                        if let Err(e) = process_request(Connection::new(socket)).await {
+                            log::error!("When processing a request:{}", e)
+                        }
+                    })
+                    .await
                     {
                         log::error!("Async error:{}", e);
                     }
