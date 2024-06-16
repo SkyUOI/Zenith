@@ -2,7 +2,7 @@ name: RustLinux
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "dev"]
   pull_request:
     branches: ["main", "dev"]
 
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Config Env
-        run: rustup install nightly && rustup default nightly
+        run: rustup install nightly && rustup default nightly && rustup component add rustfmt
       - name: Build
         run: cd gdrust && cargo build --all
       - name: Build Release
@@ -25,4 +25,5 @@ jobs:
         run: cd gdrust && cargo test --all
       - name: Run tests Release
         run: cd gdrust && cargo test --all --release
- 
+      - name: Check Fmt
+        run: cd gdrust && cargo fmt -- --check
