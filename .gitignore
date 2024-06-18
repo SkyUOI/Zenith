@@ -26,4 +26,4 @@ gdcpp/extension_api.json
 __pycache__/
 
 # Protobuf
-gdrust/server/src/proto/*.rs
+gdrust/proto/src/proto/*.rs

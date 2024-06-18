@@ -325,6 +325,7 @@ version = "0.1.0"
 dependencies = [
  "derive",
  "godot",
+ "proto",
  "rand",
 ]
 
@@ -976,6 +977,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "proto"
+version = "0.1.0"
+dependencies = [
+ "prost",
+ "prost-build",
+ "prost-types",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1107,8 +1117,8 @@ dependencies = [
  "env_logger",
  "log",
  "prost",
- "prost-build",
  "prost-types",
+ "proto",
  "shadow-rs",
  "tokio",
 ]

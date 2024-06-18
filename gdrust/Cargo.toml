@@ -8,6 +8,7 @@ edition = "2024"
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 rand = "0.8"
 derive = { path = "./derive" }
+proto = { path = "proto" }
 
 [lib]
 crate-type = ["cdylib"]
@@ -18,4 +19,4 @@ codegen-units = 1
 strip = true
 
 [workspace]
-members = [".", "derive", "server"]
+members = [".", "derive", "proto", "server"]

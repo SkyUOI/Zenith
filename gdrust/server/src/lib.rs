@@ -1,5 +1,4 @@
 mod cfg;
-mod proto;
 
 use anyhow::anyhow;
 use bytes::BytesMut;
@@ -11,7 +10,6 @@ use std::{
     error::Error,
     io::{Cursor, Write},
     process::exit,
-    thread,
 };
 use tokio::{
     io::AsyncReadExt,
