@@ -11,9 +11,12 @@
 
 ## 构建指南
 
-Godot 4.2.2
-
-由于Rust和Cpp的godot extensions，你需要确保rust和Cpp编译器已经安装好了
+| 依赖              |
+| :---------------- |
+| Godot 4.3         |
+| Gettext           |
+| Protobuf Compiler |
+| Rust Compiler     |
 
 接下来，你可以运行`cd script && python build.py`来构建extension(Debug和Release)
 

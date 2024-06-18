@@ -3,6 +3,7 @@ mod consts;
 mod fight;
 mod fight_items;
 mod player;
+mod ui;
 mod utils;
 mod weapons;
 mod zenith;
