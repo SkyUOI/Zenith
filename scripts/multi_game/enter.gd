@@ -1,4 +1,4 @@
-extends Button
+extends MultiEnter
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,4 +22,6 @@ func _on_pressed() -> void:
 		$WrongDialog.dialog_text = "Player name is empty"
 		$WrongDialog.popup_centered()
 		return
-	get_tree().change_scene_to_file("res://scenes/fight.tscn")
+	var state = self.connect_to_server(Global.connected_ip)
+	if state:
+		get_tree().change_scene_to_file("res://scenes/fight.tscn")
