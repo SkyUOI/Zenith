@@ -58,19 +58,19 @@ impl Fight {
 
     #[debug]
     fn get_camera(&self) -> Gd<Camera2D> {
-        self.base().get_node_as::<Camera2D>("Camera2D")
+        self.base().get_node_as("Camera2D")
     }
 
     #[debug]
     fn get_shake_timer(&self) -> (Gd<Camera2D>, Gd<Timer>) {
         let camera = self.get_camera();
-        let timer = camera.get_node_as::<Timer>("Shake");
+        let timer = camera.get_node_as("Shake");
         (camera, timer)
     }
 
     #[debug]
     fn get_enchanted_sword(&self) -> Gd<Sprite2D> {
-        self.base().get_node_as::<Sprite2D>("EnchantedSword")
+        self.base().get_node_as("EnchantedSword")
     }
 
     #[debug]

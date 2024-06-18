@@ -184,7 +184,7 @@ impl Player {
 
     #[debug]
     fn get_virtual_particle(&self) -> Gd<GpuParticles2D> {
-        self.base().get_node_as::<GpuParticles2D>("virtual")
+        self.base().get_node_as("virtual")
     }
 
     #[func]
@@ -233,7 +233,7 @@ impl Player {
 
     #[debug]
     fn get_shield(&self) -> Gd<Area2D> {
-        self.base().get_node_as::<Area2D>("Shield")
+        self.base().get_node_as("Shield")
     }
 
     /// 启动克盾保护
@@ -253,7 +253,7 @@ impl Player {
 
     #[debug]
     fn get_cthulhu_timer(&self) -> Gd<Timer> {
-        self.base().get_node_as::<Timer>("Cthulhu")
+        self.base().get_node_as("Cthulhu")
     }
 
     fn cthulhu_rad(&self) -> f32 {

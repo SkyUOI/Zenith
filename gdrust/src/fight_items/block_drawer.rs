@@ -130,6 +130,6 @@ impl BlockDrawer {
 
     #[debug]
     fn get_staticbody(&self) -> Gd<StaticBody2D> {
-        self.base().get_node_as::<StaticBody2D>("Collision")
+        self.base().get_node_as("Collision")
     }
 }
