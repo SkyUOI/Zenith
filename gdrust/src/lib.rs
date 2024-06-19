@@ -11,9 +11,19 @@ mod weapons;
 mod zenith;
 
 use godot::prelude::*;
-use std::panic::{set_hook, PanicInfo};
+use multi::{MultiManager, MultiManagerImpl};
+use std::{
+    panic::{set_hook, PanicInfo},
+    sync::{Arc, Mutex, OnceLock},
+};
 
 struct GdExtension;
+
+type MultiSingle = Arc<Mutex<MultiManagerImpl>>;
+fn get_multi_single() -> &'static MultiSingle {
+    static TMP: OnceLock<MultiSingle> = OnceLock::new();
+    TMP.get_or_init(|| Arc::new(Mutex::new(MultiManagerImpl::new())))
+}
 
 fn panic_handler(info: &PanicInfo) {
     if let Some(p) = info.location() {

@@ -15,12 +15,10 @@ func _on_pressed() -> void:
 	Global.connected_ip = $"../Input/IPBox/IP".text
 	Global.player_name = $"../Input/PlayerBox/Player".text
 	if Global.connected_ip.is_empty():
-		$WrongDialog.dialog_text = "Ip address is empty"
-		$WrongDialog.popup_centered()
+		self.show_dialog("Ip address is empty")
 		return
 	if Global.player_name.is_empty():
-		$WrongDialog.dialog_text = "Player name is empty"
-		$WrongDialog.popup_centered()
+		self.show_dialog("Player name is empty")
 		return
 	var state = self.connect_to_server(Global.connected_ip)
 	if state:

@@ -18,4 +18,16 @@ struct GlobalClass {
 impl INode for GlobalClass {}
 
 #[godot_api()]
-impl GlobalClass {}
+impl GlobalClass {
+    #[func]
+    fn flush_multi(&mut self) {
+        match &mut self.multi_manager {
+            Some(manager) => {
+                manager;
+            }
+            None => {
+                godot_error!("MultiManager has not been initial")
+            }
+        }
+    }
+}

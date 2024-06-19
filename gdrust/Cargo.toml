@@ -9,6 +9,8 @@ godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 rand = "0.8"
 derive = { path = "./derive" }
 proto = { path = "proto" }
+tokio = "1"
+anyhow = "1"
 
 [lib]
 crate-type = ["cdylib"]

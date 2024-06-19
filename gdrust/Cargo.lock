@@ -317,10 +317,12 @@ source = "git+https://github.com/godot-rust/godot4-prebuilt?branch=4.2#b3bdb57bd
 name = "gdrust"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "derive",
  "godot",
  "proto",
  "rand",
+ "tokio",
 ]
 
 [[package]]
