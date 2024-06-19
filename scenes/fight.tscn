@@ -222,9 +222,6 @@ position = Vector2(576, 324)
 [node name="Shake" type="Timer" parent="Camera2D"]
 wait_time = 0.1
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("..")
-
 [connection signal="hit_sig" from="Player" to="HealthBar" method="attack"]
 [connection signal="timeout" from="Player/Cthulhu" to="Player" method="stop_rush"]
 [connection signal="timeout" from="Camera2D/Shake" to="." method="shake_timeout"]

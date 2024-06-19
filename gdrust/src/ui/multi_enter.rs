@@ -28,6 +28,7 @@ impl IButton for MultiEnter {
 impl MultiEnter {
     #[func]
     fn connect_to_server(&mut self, ip: String) -> bool {
+        let global = self.base().get_node_as::<Node>("/root/Global");
         let ret;
         (self.socket, ret) = match TcpStream::connect(&ip) {
             Ok(socket) => (Some(socket), true),
