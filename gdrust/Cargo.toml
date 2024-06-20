@@ -16,6 +16,8 @@ prost = "0"
 prost-types = { version = "0", optional = true }
 bytes = "1"
 
+[dev-dependencies]
+assert_cmd = "2"
 
 [lib]
 crate-type = ["cdylib"]
