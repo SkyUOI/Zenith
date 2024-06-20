@@ -1,13 +1,16 @@
-use anyhow::Ok;
+use anyhow::{anyhow, Ok};
+use bytes::{Bytes, BytesMut};
 use godot::engine::{INode, Node};
 use godot::prelude::*;
-use proto::connect::Join;
+use prost::Message;
+use proto::connect::{self, Join};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
+use tokio::io::AsyncWriteExt;
 use tokio::net::TcpStream;
-use tokio::runtime::{Builder, Runtime};
+use tokio::sync::mpsc;
 
-use crate::get_multi_single;
+use crate::{get_multi_single, get_tokio_runtime};
 
 pub struct MultiPlayerConnection {}
 
@@ -15,8 +18,12 @@ impl MultiPlayerConnection {}
 
 pub struct MultiManagerImpl {
     clients: HashMap<usize, MultiPlayerConnection>,
-    socket: Option<TcpStream>,
-    runtime: Runtime,
+    socket: Option<mpsc::Sender<bytes::Bytes>>,
+}
+
+async fn send(sender: mpsc::Sender<Bytes>, data: BytesMut) -> anyhow::Result<()> {
+    sender.send(data.into()).await?;
+    Ok(())
 }
 
 impl MultiManagerImpl {
@@ -24,16 +31,42 @@ impl MultiManagerImpl {
         if self.socket.is_some() {
             godot_warn!("Socket has value,but reset")
         }
-        self.socket = Some(TcpStream::from_std(std::net::TcpStream::connect(&ip)?)?);
+        // self.socket = Some(Arc::new(Mutex::new(TcpStream::from_std(
+        // std::net::TcpStream::connect(&ip)?,
+        // )?)));
+        let (sender, mut receiver) = mpsc::channel(32);
+        self.socket = Some(sender);
+        get_tokio_runtime().spawn(async move {
+            let mut socket = TcpStream::connect(&ip).await?;
+            while let Some(data) = receiver.recv().await {
+                socket.write_all(&data).await?;
+            }
+            Ok(())
+        });
         Ok(())
     }
 
     pub fn join_to_server(&mut self, player_name: String) -> anyhow::Result<()> {
-        let mut data = Join {
+        let socket = match &mut self.socket {
+            None => {
+                godot_error!("Socket doesn't exist");
+                return Err(anyhow!("Socket doesn't exist"));
+            }
+            Some(s) => s,
+        };
+        let data = Join {
             player_name,
             version: base::build::COMMIT_HASH.to_string(),
         };
+        let mut buf = bytes::BytesMut::new();
+        data.encode(&mut buf)?;
+        let sender = socket.clone();
+        get_tokio_runtime().spawn(send(sender, buf));
         Ok(())
+    }
+
+    pub fn close(&mut self) {
+        self.socket = None;
     }
 }
 
@@ -42,7 +75,6 @@ impl MultiManagerImpl {
         Self {
             clients: HashMap::new(),
             socket: None,
-            runtime: Builder::new_multi_thread().enable_all().build().unwrap(),
         }
     }
 }

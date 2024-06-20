@@ -9,11 +9,12 @@ godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 rand = "0.8"
 derive = { path = "./derive" }
 proto = { path = "proto" }
-tokio = "1"
+tokio = { version = "1", features = ["full"] }
 anyhow = "1"
 base = { path = "base" }
 prost = "0"
 prost-types = { version = "0", optional = true }
+bytes = "1"
 
 
 [lib]

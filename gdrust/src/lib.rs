@@ -16,6 +16,7 @@ use std::{
     panic::{set_hook, PanicInfo},
     sync::{Arc, Mutex, OnceLock},
 };
+use tokio::runtime::{Builder, Runtime};
 
 struct GdExtension;
 
@@ -23,6 +24,11 @@ type MultiSingle = Arc<Mutex<MultiManagerImpl>>;
 fn get_multi_single() -> &'static MultiSingle {
     static TMP: OnceLock<MultiSingle> = OnceLock::new();
     TMP.get_or_init(|| Arc::new(Mutex::new(MultiManagerImpl::new())))
+}
+
+fn get_tokio_runtime() -> &'static Runtime {
+    static TMP: OnceLock<Runtime> = OnceLock::new();
+    TMP.get_or_init(|| Builder::new_multi_thread().enable_all().build().unwrap())
 }
 
 fn panic_handler(info: &PanicInfo) {
