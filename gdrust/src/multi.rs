@@ -1,6 +1,7 @@
 use anyhow::Ok;
 use godot::engine::{INode, Node};
 use godot::prelude::*;
+use proto::connect::Join;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use tokio::net::TcpStream;
@@ -8,23 +9,30 @@ use tokio::runtime::{Builder, Runtime};
 
 use crate::get_multi_single;
 
-pub struct MultiPlayer {}
+pub struct MultiPlayerConnection {}
+
+impl MultiPlayerConnection {}
 
 pub struct MultiManagerImpl {
-    clients: HashMap<usize, MultiPlayer>,
+    clients: HashMap<usize, MultiPlayerConnection>,
     socket: Option<TcpStream>,
     runtime: Runtime,
 }
 
 impl MultiManagerImpl {
-    fn set_connection(&mut self, socket: TcpStream) {
+    pub fn connect_to_server(&mut self, ip: String) -> anyhow::Result<()> {
         if self.socket.is_some() {
             godot_warn!("Socket has value,but reset")
         }
-        self.socket = Some(socket)
+        self.socket = Some(TcpStream::from_std(std::net::TcpStream::connect(&ip)?)?);
+        Ok(())
     }
 
-    pub fn connect_to_server(&mut self, ip: &str) -> anyhow::Result<()> {
+    pub fn join_to_server(&mut self, player_name: String) -> anyhow::Result<()> {
+        let mut data = Join {
+            player_name,
+            version: base::build::COMMIT_HASH.to_string(),
+        };
         Ok(())
     }
 }

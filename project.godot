@@ -57,7 +57,6 @@ slow_down={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://locales/zh_cn.po")
 locale/translations_pot_files=PackedStringArray("res://scenes/multi_game.tscn")
 
 [layer_names]

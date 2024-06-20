@@ -3,7 +3,8 @@ package connect;
 
 message Join {
   string player_name = 1;
-  int32 version = 2;
+  // Commit Hash as the version
+  string version = 2;
 }
 
 enum Status {
@@ -13,5 +14,5 @@ enum Status {
 
 message Response {
   Status status = 1;
-  string message = 2;  
+  string message = 2;
 }

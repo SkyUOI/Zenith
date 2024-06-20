@@ -7,13 +7,10 @@ edition = "2021"
 tokio = { version = "1", features = ["full"] }
 bytes = "1"
 clap = { version = "4", features = ["derive"] }
-shadow-rs = "0"
 log = "0"
 env_logger = "0"
 anyhow = "1"
 prost = "0"
 prost-types = { version = "0", optional = true }
 proto = { path = "../proto" }
-
-[build-dependencies]
-shadow-rs = "0"
+base = { path = "../base" }

@@ -1,4 +1,4 @@
-use crate::debug_check;
+use crate::{debug_check, get_multi_single};
 use derive::gen_debug;
 use godot::engine::{AcceptDialog, Button, IButton};
 use godot::obj::WithBaseField;
@@ -28,16 +28,15 @@ impl IButton for MultiEnter {
 impl MultiEnter {
     #[func]
     fn connect_to_server(&mut self, ip: String) -> bool {
-        let global = self.base().get_node_as::<Node>("/root/Global");
-        let ret = true;
-        // (self.socket, ret) = match TcpStream::connect(&ip) {
-        //     Ok(socket) => (Some(socket), true),
-        //     Err(error) => {
-        //         self.show_dialog(format!("Connect failed:{}", error));
-        //         (None, false)
-        //     }
-        // };
-        ret
+        let mult_manager = get_multi_single();
+        let mut lock = mult_manager.lock().unwrap();
+        match lock.connect_to_server(ip) {
+            Ok(_) => true,
+            Err(err) => {
+                self.show_dialog(err.to_string());
+                false
+            }
+        }
     }
 
     #[debug]

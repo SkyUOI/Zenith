@@ -58,7 +58,7 @@ impl Connection {
 #[derive(Debug, Parser)]
 #[command(
     author = "SkyUOI",
-    version = crate::build::VERSION,
+    version = base::build::VERSION,
     about = "The Server Of Zenith",
     long_about = "Multi-player Game Server Of Zenith"
 )]
@@ -69,8 +69,6 @@ struct ArgsParser {
     #[arg(long, default_value_t = String::from(DEFAULT_IP))]
     ip: String,
 }
-
-shadow_rs::shadow!(build);
 
 async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
     // 首先获取连接请求

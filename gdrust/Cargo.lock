@@ -112,6 +112,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "base"
+version = "0.1.0"
+dependencies = [
+ "shadow-rs",
+]
+
+[[package]]
 name = "bitflags"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -318,8 +325,10 @@ name = "gdrust"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "base",
  "derive",
  "godot",
+ "prost",
  "proto",
  "rand",
  "tokio",
@@ -977,6 +986,7 @@ name = "server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "base",
  "bytes",
  "clap",
  "env_logger",
@@ -984,7 +994,6 @@ dependencies = [
  "prost",
  "prost-types",
  "proto",
- "shadow-rs",
  "tokio",
 ]
 

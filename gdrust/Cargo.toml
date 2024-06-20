@@ -11,6 +11,10 @@ derive = { path = "./derive" }
 proto = { path = "proto" }
 tokio = "1"
 anyhow = "1"
+base = { path = "base" }
+prost = "0"
+prost-types = { version = "0", optional = true }
+
 
 [lib]
 crate-type = ["cdylib"]
@@ -21,4 +25,4 @@ codegen-units = 1
 strip = true
 
 [workspace]
-members = [".", "derive", "proto", "server"]
+members = [".", "base", "derive", "proto", "server"]
