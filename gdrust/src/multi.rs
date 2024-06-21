@@ -3,10 +3,10 @@ use bytes::{Bytes, BytesMut};
 use godot::engine::{INode, Node};
 use godot::prelude::*;
 use prost::Message;
-use proto::connect::{self, Join};
+use proto::connect::Join;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
-use tokio::io::AsyncWriteExt;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
 use tokio::net::TcpStream;
 use tokio::sync::mpsc;
 
@@ -16,13 +16,45 @@ pub struct MultiPlayerConnection {}
 
 impl MultiPlayerConnection {}
 
+enum Requests {
+    Join(Join),
+}
+
 pub struct MultiManagerImpl {
     clients: HashMap<usize, MultiPlayerConnection>,
     socket: Option<mpsc::Sender<bytes::Bytes>>,
+    receiver: Option<std::sync::mpsc::Receiver<Requests>>,
 }
 
 async fn send(sender: mpsc::Sender<Bytes>, data: BytesMut) -> anyhow::Result<()> {
     sender.send(data.into()).await?;
+    Ok(())
+}
+
+async fn write_loop(
+    mut receiver: mpsc::Receiver<Bytes>,
+    mut write_socket: OwnedWriteHalf,
+) -> anyhow::Result<()> {
+    while let Some(data) = receiver.recv().await {
+        write_socket.write_all(&data).await?;
+    }
+    Ok(())
+}
+
+async fn read_loop(mut read_socket: OwnedReadHalf) -> anyhow::Result<()> {
+    let mut buf = BytesMut::new();
+    loop {
+        let n = read_socket.read(&mut buf).await?;
+        if n == 0 {
+            if buf.is_empty() {
+                godot_print!("Connection closed");
+                break;
+            } else {
+                godot_error!("Connection reset by peer");
+                return Err(anyhow::anyhow!("Connection reset by peer"));
+            }
+        }
+    }
     Ok(())
 }
 
@@ -31,20 +63,13 @@ impl MultiManagerImpl {
         if self.socket.is_some() {
             godot_warn!("Socket has value,but reset")
         }
-        // self.socket = Some(Arc::new(Mutex::new(TcpStream::from_std(
-        // std::net::TcpStream::connect(&ip)?,
-        // )?)));
         let socket = std::net::TcpStream::connect(&ip)?;
-        let (sender, mut receiver) = mpsc::channel(32);
+        let socket = TcpStream::from_std(socket)?;
+        let (read_socket, write_socket) = socket.into_split();
+        let (sender, receiver) = mpsc::channel(32);
         self.socket = Some(sender);
-        get_tokio_runtime().spawn(async move {
-            // let mut socket = TcpStream::connect(&ip).await?;
-            let mut socket = TcpStream::from_std(socket)?;
-            while let Some(data) = receiver.recv().await {
-                socket.write_all(&data).await?;
-            }
-            Ok(())
-        });
+        get_tokio_runtime().spawn(write_loop(receiver, write_socket));
+        get_tokio_runtime().spawn(read_loop(read_socket));
         Ok(())
     }
 
@@ -77,6 +102,7 @@ impl MultiManagerImpl {
         Self {
             clients: HashMap::new(),
             socket: None,
+            receiver: None,
         }
     }
 }
