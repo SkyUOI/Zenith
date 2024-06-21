@@ -10,7 +10,7 @@ use tokio::io::AsyncWriteExt;
 use tokio::net::TcpStream;
 use tokio::sync::mpsc;
 
-use crate::{get_multi_single, get_tokio_runtime};
+use crate::{get_multi_single, get_tokio_runtime, MultiSingle};
 
 pub struct MultiPlayerConnection {}
 
@@ -34,10 +34,12 @@ impl MultiManagerImpl {
         // self.socket = Some(Arc::new(Mutex::new(TcpStream::from_std(
         // std::net::TcpStream::connect(&ip)?,
         // )?)));
+        let socket = std::net::TcpStream::connect(&ip)?;
         let (sender, mut receiver) = mpsc::channel(32);
         self.socket = Some(sender);
         get_tokio_runtime().spawn(async move {
-            let mut socket = TcpStream::connect(&ip).await?;
+            // let mut socket = TcpStream::connect(&ip).await?;
+            let mut socket = TcpStream::from_std(socket)?;
             while let Some(data) = receiver.recv().await {
                 socket.write_all(&data).await?;
             }
@@ -83,7 +85,7 @@ impl MultiManagerImpl {
 #[class(base = Node)]
 pub struct MultiManager {
     base: Base<Node>,
-    multi_impl: Arc<Mutex<MultiManagerImpl>>,
+    multi_impl: MultiSingle,
 }
 
 #[godot_api()]
