@@ -4,7 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = [
+  "rt-multi-thread",
+  "macros",
+  "sync",
+  "net",
+  "io-std",
+  "io-util",
+] }
 bytes = "1"
 clap = { version = "4", features = ["derive"] }
 log = "0"
