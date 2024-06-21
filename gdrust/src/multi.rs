@@ -1,9 +1,10 @@
-use anyhow::{anyhow, Ok};
+use anyhow::anyhow;
 use bytes::{Bytes, BytesMut};
 use godot::engine::{INode, Node};
 use godot::prelude::*;
 use prost::Message;
 use proto::connect::Join;
+use proto::proto;
 use std::collections::HashMap;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
@@ -18,6 +19,8 @@ impl MultiPlayerConnection {}
 
 enum Requests {
     Join(Join),
+    Wrong(String),
+    ExitSuccess,
 }
 
 pub struct MultiManagerImpl {
@@ -41,21 +44,38 @@ async fn write_loop(
     Ok(())
 }
 
-async fn read_loop(mut read_socket: OwnedReadHalf) -> anyhow::Result<()> {
+async fn read_loop(
+    send_channel: std::sync::mpsc::Sender<Requests>,
+    mut read_socket: OwnedReadHalf,
+) -> anyhow::Result<()> {
     let mut buf = BytesMut::new();
     loop {
         let n = read_socket.read(&mut buf).await?;
+        match parse_request(&buf) {
+            None => {}
+            Some(data) => send_channel.send(data)?,
+        }
         if n == 0 {
             if buf.is_empty() {
                 godot_print!("Connection closed");
+                send_channel.send(Requests::ExitSuccess)?;
                 break;
             } else {
-                godot_error!("Connection reset by peer");
-                return Err(anyhow::anyhow!("Connection reset by peer"));
+                let err_msg = "Connection reset by peer";
+                godot_error!("{}", err_msg);
+                send_channel.send(Requests::Wrong(err_msg.to_string()))?;
+                return Err(anyhow::anyhow!(err_msg));
             }
         }
     }
     Ok(())
+}
+
+fn parse_request(buf: &BytesMut) -> Option<Requests> {
+    match proto::connect::Join::decode(&buf[..]) {
+        Ok(v) => Some(Requests::Join(v)),
+        Err(_) => None,
+    }
 }
 
 impl MultiManagerImpl {
@@ -67,9 +87,11 @@ impl MultiManagerImpl {
         let socket = TcpStream::from_std(socket)?;
         let (read_socket, write_socket) = socket.into_split();
         let (sender, receiver) = mpsc::channel(32);
+        let (request_sender, request_receiver) = std::sync::mpsc::channel();
+        self.receiver = Some(request_receiver);
         self.socket = Some(sender);
         get_tokio_runtime().spawn(write_loop(receiver, write_socket));
-        get_tokio_runtime().spawn(read_loop(read_socket));
+        get_tokio_runtime().spawn(read_loop(request_sender, read_socket));
         Ok(())
     }
 
