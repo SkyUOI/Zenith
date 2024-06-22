@@ -8,6 +8,11 @@ extends Area2D
 func _ready():
 	rotation = PI / 4 + Vector2(0, 0).angle_to_point(direction)
 	direction = direction.normalized()
+	var color = modulate
+	modulate.a = 0
+	create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD).tween_property(
+		self, "modulate", color, 0.1
+	)
 	$OutScreen.screen_exited.connect(queue_free)
 
 
@@ -24,7 +29,7 @@ var is_bound = false
 func _process(delta):
 	# 没用过正常移动
 	if !is_bound:
-		position += delta * speed * direction * (1.0 if $Start.time_left == 0 else (1.0 / 6.0))
+		position += delta * speed * direction
 	else:
 		position -= delta * speed * direction
 
