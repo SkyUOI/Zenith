@@ -21,29 +21,39 @@ use tokio::{
 struct Connection {
     stream: TcpStream,
     buffer: BytesMut,
+    shutdown: broadcast::Receiver<()>,
 }
 
 impl Connection {
-    pub fn new(stream: TcpStream) -> Self {
+    pub fn new(shutdown: broadcast::Receiver<()>, stream: TcpStream) -> Self {
         Self {
             stream,
             buffer: BytesMut::with_capacity(1024),
+            shutdown,
         }
     }
 
     pub async fn read_join(&mut self) -> anyhow::Result<Option<Join>> {
         loop {
-            if let Some(request) = self.parse_join()? {
-                return Ok(Some(request));
+            if self.shutdown.try_recv().is_ok() {
+                log::info!("Exit");
+                return Err(anyhow!("Exit"));
             }
-            if 0 == self.stream.read_buf(&mut self.buffer).await? {
+            let sz = self.stream.read_buf(&mut self.buffer).await?;
+            log::info!("Received:{}", sz);
+            if 0 == sz {
                 if self.buffer.is_empty() {
+                    log::info!("Join exiting(empty)...");
                     return Ok(None);
                 } else {
                     let msg = "Connection reset by peer";
                     log::info!("{}", msg);
                     return Err(anyhow!(msg));
                 }
+            }
+            if let Some(request) = self.parse_join()? {
+                log::info!("Join exiting...");
+                return Ok(Some(request));
             }
         }
     }
@@ -74,26 +84,37 @@ struct ArgsParser {
 
 async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
     // 首先获取连接请求
+    log::info!("start joining");
     let join_data = connect.read_join().await?;
-    loop {}
+    log::info!("joined");
+    let request = async { loop {} };
+    select! {
+        _ = request => {},
+        _ = connect.shutdown.recv() => {
+            log::info!("Player exited")
+        }
+    }
     Ok(())
 }
 
-async fn accept_sockets(tcplistener: TcpListener, mut shutdown_receiver: broadcast::Receiver<()>) {
+async fn accept_sockets(
+    tcplistener: TcpListener,
+    shutdown_sender: broadcast::Sender<()>,
+    mut shutdown_receiver: broadcast::Receiver<()>,
+) {
     let async_loop = async move {
         loop {
             let ret = tcplistener.accept().await;
             match ret {
                 Ok((socket, _)) => {
-                    if let Err(e) = tokio::spawn(async {
-                        if let Err(e) = process_request(Connection::new(socket)).await {
+                    let shutdown = shutdown_sender.subscribe();
+                    log::info!("Connected to a socket");
+                    tokio::spawn(async move {
+                        if let Err(e) = process_request(Connection::new(shutdown, socket)).await {
                             log::error!("When processing a request:{}", e)
                         }
-                    })
-                    .await
-                    {
-                        log::error!("Async error:{}", e);
-                    }
+                        log::info!("A socket exited successful");
+                    });
                 }
                 Err(e) => {
                     log::error!("Accepting a new player failed:{}", e)
@@ -122,7 +143,11 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
         }
     };
     let (shutdown_sender, mut shutdown_receiver) = broadcast::channel(32);
-    tokio::spawn(accept_sockets(tcplistener, shutdown_sender.subscribe()));
+    tokio::spawn(accept_sockets(
+        tcplistener,
+        shutdown_sender.clone(),
+        shutdown_sender.subscribe(),
+    ));
     tokio::spawn(async move {
         match tokio::signal::ctrl_c().await {
             Ok(()) => {

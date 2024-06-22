@@ -38,6 +38,7 @@ async fn write_loop(
     mut receiver: mpsc::Receiver<Bytes>,
     mut write_socket: OwnedWriteHalf,
 ) -> anyhow::Result<()> {
+    godot_print!("Starting writing loop");
     while let Some(data) = receiver.recv().await {
         write_socket.write_all(&data).await?;
     }
@@ -49,6 +50,7 @@ async fn read_loop(
     mut read_socket: OwnedReadHalf,
 ) -> anyhow::Result<()> {
     let mut buf = BytesMut::new();
+    godot_print!("Starting reading loop");
     loop {
         let n = read_socket.read(&mut buf).await?;
         match parse_request(&buf) {
@@ -84,14 +86,18 @@ impl MultiManagerImpl {
             godot_warn!("Socket has value,but reset")
         }
         let socket = std::net::TcpStream::connect(&ip)?;
-        let socket = TcpStream::from_std(socket)?;
-        let (read_socket, write_socket) = socket.into_split();
+        socket.set_nonblocking(true)?;
         let (sender, receiver) = mpsc::channel(32);
         let (request_sender, request_receiver) = std::sync::mpsc::channel();
         self.receiver = Some(request_receiver);
         self.socket = Some(sender);
-        get_tokio_runtime().spawn(write_loop(receiver, write_socket));
-        get_tokio_runtime().spawn(read_loop(request_sender, read_socket));
+        get_tokio_runtime().spawn(async move {
+            let socket = TcpStream::from_std(socket)?;
+            let (read_socket, write_socket) = socket.into_split();
+            get_tokio_runtime().spawn(write_loop(receiver, write_socket));
+            get_tokio_runtime().spawn(read_loop(request_sender, read_socket));
+            anyhow::Ok(())
+        });
         Ok(())
     }
 
