@@ -12,8 +12,10 @@ use std::{
     process::exit,
 };
 use tokio::{
-    io::AsyncReadExt,
+    io::{self, AsyncBufReadExt, AsyncReadExt, BufReader},
     net::{TcpListener, TcpStream},
+    select,
+    sync::broadcast,
 };
 
 struct Connection {
@@ -77,19 +79,8 @@ async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub async fn lib_main() -> Result<(), Box<dyn Error>> {
-    let parser = ArgsParser::parse();
-    let port = parser.port;
-    let ip = parser.ip;
-    let bind_addr = format!("{}:{}", ip, port);
-    let tcplistener = match TcpListener::bind(&bind_addr).await {
-        Ok(listener) => listener,
-        Err(e) => {
-            log::error!("Failed to bind {}:{}", bind_addr, e);
-            exit(1);
-        }
-    };
-    tokio::spawn(async move {
+async fn accept_sockets(tcplistener: TcpListener, mut shutdown_receiver: broadcast::Receiver<()>) {
+    let async_loop = async move {
         loop {
             let ret = tcplistener.accept().await;
             match ret {
@@ -109,27 +100,70 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
                 }
             }
         }
-    });
-    tokio::spawn(async {
+    };
+    select! {
+        _ = async_loop => {}
+        _ = shutdown_receiver.recv() => {
+                log::info!("Accepting loop exited")
+        }
+    }
+}
+
+pub async fn lib_main() -> Result<(), Box<dyn Error>> {
+    let parser = ArgsParser::parse();
+    let port = parser.port;
+    let ip = parser.ip;
+    let bind_addr = format!("{}:{}", ip, port);
+    let tcplistener = match TcpListener::bind(&bind_addr).await {
+        Ok(listener) => listener,
+        Err(e) => {
+            log::error!("Failed to bind {}:{}", bind_addr, e);
+            exit(1);
+        }
+    };
+    let (shutdown_sender, mut shutdown_receiver) = broadcast::channel(32);
+    tokio::spawn(accept_sockets(tcplistener, shutdown_sender.subscribe()));
+    tokio::spawn(async move {
         match tokio::signal::ctrl_c().await {
             Ok(()) => {
-                eprintln!("Shutdowning...");
-                exit(0);
+                log::info!("Exiting now...");
+                shutdown_sender.send(())?;
             }
             Err(err) => {
-                eprintln!("Unable to listen for shutdown signal: {}", err);
-                // we also shut down in case of error
+                log::error!("Unable to listen for shutdown signal: {}", err);
+                shutdown_sender.send(())?;
             }
         }
+        anyhow::Ok(())
     });
-    loop {
-        print!(">>>");
-        std::io::stdout().flush().unwrap();
-        let mut command = String::new();
-        std::io::stdin().read_line(&mut command)?;
-        if command.trim() == "exit" {
-            log::info!("Exiting now...");
-            break;
+    let mut console_reader = BufReader::new(io::stdin()).lines();
+    let input_loop = async {
+        loop {
+            print!(">>>");
+            std::io::stdout().flush().unwrap();
+            let command = match console_reader.next_line().await {
+                Ok(d) => match d {
+                    Some(data) => data,
+                    None => {
+                        break;
+                    }
+                },
+                Err(e) => {
+                    log::error!("{}", e);
+                    break;
+                }
+            };
+            if command.trim() == "exit" {
+                log::info!("Exiting now...");
+                break;
+            }
+        }
+        anyhow::Ok(())
+    };
+    select! {
+        _ = input_loop => {},
+        _ = shutdown_receiver.recv() => {
+            log::info!("Command loop exited")
         }
     }
     Ok(())

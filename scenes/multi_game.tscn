@@ -52,7 +52,8 @@ text = "IP"
 [node name="IP" type="LineEdit" parent="Input/IPBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "like 127.0.0.1:6371"
+text = "127.0.0.1:6789"
+placeholder_text = "format like 127.0.0.1:6789"
 
 [node name="PlayerBox" type="HBoxContainer" parent="Input"]
 layout_mode = 2
