@@ -110,6 +110,18 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
             }
         }
     });
+    tokio::spawn(async {
+        match tokio::signal::ctrl_c().await {
+            Ok(()) => {
+                eprintln!("Shutdowning...");
+                exit(0);
+            }
+            Err(err) => {
+                eprintln!("Unable to listen for shutdown signal: {}", err);
+                // we also shut down in case of error
+            }
+        }
+    });
     loop {
         print!(">>>");
         std::io::stdout().flush().unwrap();
