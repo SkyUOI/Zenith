@@ -5,7 +5,7 @@ use bytes::BytesMut;
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
 use prost::Message;
-use proto::connect::Join;
+use proto::{connect::Join, ProtoRequest};
 use std::{
     error::Error,
     io::{Cursor, Write},
@@ -39,6 +39,10 @@ impl Connection {
                 log::info!("Exit");
                 return Err(anyhow!("Exit"));
             }
+            if let Some(request) = self.parse_join()? {
+                log::info!("Join exiting...");
+                return Ok(Some(request));
+            }
             let sz = self.stream.read_buf(&mut self.buffer).await?;
             log::info!("Received:{}", sz);
             if 0 == sz {
@@ -51,10 +55,6 @@ impl Connection {
                     return Err(anyhow!(msg));
                 }
             }
-            if let Some(request) = self.parse_join()? {
-                log::info!("Join exiting...");
-                return Ok(Some(request));
-            }
         }
     }
 
@@ -63,6 +63,33 @@ impl Connection {
         match proto::connect::Join::decode(buf) {
             Ok(val) => Ok(Some(val)),
             Err(_) => Err(anyhow!("Not a join message")),
+        }
+    }
+
+    pub async fn process_request(&mut self) -> anyhow::Result<()> {
+        loop {
+            if self.shutdown.try_recv().is_ok() {
+                return Err(anyhow!("Exit"));
+            }
+            if let Some(request) = self.parse_request()? {}
+            let sz = self.stream.read_buf(&mut self.buffer).await?;
+            if 0 == sz {
+                if self.buffer.is_empty() {
+                    return Ok(());
+                } else {
+                    let msg = "Connection reset by peer";
+                    log::info!("{}", msg);
+                    return Err(anyhow!(msg));
+                }
+            }
+        }
+    }
+
+    pub fn parse_request(&mut self) -> anyhow::Result<Option<ProtoRequest>> {
+        let buf = Cursor::new(&self.buffer[..]);
+        match proto::connect::CreateObj::decode(buf) {
+            Ok(data) => Ok(Some(ProtoRequest::CreateObj(data))),
+            Err(_) => Err(anyhow!("Not a message")),
         }
     }
 }
@@ -87,13 +114,7 @@ async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
     log::info!("start joining");
     let join_data = connect.read_join().await?;
     log::info!("joined");
-    let request = async { loop {} };
-    select! {
-        _ = request => {},
-        _ = connect.shutdown.recv() => {
-            log::info!("Player exited")
-        }
-    }
+    connect.process_request().await?;
     Ok(())
 }
 

@@ -116,21 +116,21 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_rpkys")
 anim_player = NodePath("../AnimationPlayer")
-parameters/current_length = null
-parameters/current_position = null
-parameters/current_delta = null
-parameters/Animation/current_length = null
-parameters/Animation/current_position = null
-parameters/Animation/current_delta = null
-"parameters/Animation 2/current_length" = null
-"parameters/Animation 2/current_position" = null
-"parameters/Animation 2/current_delta" = null
-parameters/Blend2/current_length = 0
-parameters/Blend2/current_position = 0
-parameters/Blend2/current_delta = 0
+parameters/current_length = 1.5
+parameters/current_position = 0.449277
+parameters/current_delta = 0.0166667
+parameters/Animation/current_length = 1.5
+parameters/Animation/current_position = 0.449277
+parameters/Animation/current_delta = 0.0166667
+"parameters/Animation 2/current_length" = 1.0
+"parameters/Animation 2/current_position" = 1.0
+"parameters/Animation 2/current_delta" = 0.0
+parameters/Blend2/current_length = 1.5
+parameters/Blend2/current_position = 0.449277
+parameters/Blend2/current_delta = 0.0166667
 parameters/Blend2/blend_amount = 0.5
-parameters/output/current_length = null
-parameters/output/current_position = null
-parameters/output/current_delta = null
+parameters/output/current_length = 1.5
+parameters/output/current_position = 0.449277
+parameters/output/current_delta = 0.0166667
 
 [connection signal="timeout" from="FightTimer" to="." method="on_fight_timer_timeout"]

@@ -1,3 +1,4 @@
+use ::proto::ProtoRequest;
 use anyhow::anyhow;
 use bytes::{Bytes, BytesMut};
 use godot::engine::{INode, Node};
@@ -18,7 +19,7 @@ pub struct MultiPlayerConnection {}
 impl MultiPlayerConnection {}
 
 enum Requests {
-    Join(Join),
+    Proto(ProtoRequest),
     Wrong(String),
     ExitSuccess,
 }
@@ -75,7 +76,7 @@ async fn read_loop(
 
 fn parse_request(buf: &BytesMut) -> Option<Requests> {
     match proto::connect::Join::decode(&buf[..]) {
-        Ok(v) => Some(Requests::Join(v)),
+        Ok(v) => Some(Requests::Proto(ProtoRequest::Join(v))),
         Err(_) => None,
     }
 }

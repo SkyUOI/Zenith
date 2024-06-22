@@ -1,2 +1,1 @@
-#extends GlobalClass
-extends Node
+extends GlobalClass

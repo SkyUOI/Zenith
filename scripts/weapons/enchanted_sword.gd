@@ -1,4 +1,4 @@
-extends Sprite2D
+extends EnchantedSword
 
 var finished: bool
 

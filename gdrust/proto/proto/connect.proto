@@ -16,3 +16,5 @@ message Response {
   Status status = 1;
   string message = 2;
 }
+
+message CreateObj { string path = 1; }
