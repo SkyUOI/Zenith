@@ -18,7 +18,7 @@ func _ready():
 		verticalAttack.bind(Vector2(200, 500), Vector2(600, 100), 4),
 		rotateAttack.bind(Vector2(1000, 100), 6),
 		rotateAttack.bind(Vector2(500, 500), 6),
-		#func(): motionlessAttack(Vector2(500, 300), 5),
+		#motionlessAttack.bind(Vector2(500, 300), 5),
 		#func(): motionlessAttack(Vector2(600, 400), 6),
 		#func(): rushAttack(Vector2(130, 230), Vector2(800, 400)),
 		#func(): rushAttack(Vector2(800, 600), Vector2(200, 200)),
@@ -29,7 +29,7 @@ func _ready():
 
 # fight调用这个
 # 开始
-func fightStart():
+func start():
 	exit()
 
 
@@ -38,24 +38,12 @@ func fightStart():
 var now_func: Callable
 
 
-func start() -> bool:
-	# todo
-	if !finished:
-		return false
-	finished = false
-	#now_func = func_name
-	return true
-
-
 # 当前是第几个oper(用于opers)
 var oper_num: int = -1
 
 
 # 完成某一动作
 func exit():
-	finished = true
-	attack_finished.emit()
-	# 也许只是测试用, 前往下一个操作
 	nextOper()
 
 
@@ -76,9 +64,6 @@ func radToVector(rad: float) -> Vector2:
 	return Vector2(cos(rad), sin(rad))
 	
 
-
-
-
 # 发射附魔光束
 func swingShotBeam(start_pos : Vector2, end_pos : Vector2):
 	var beam = enchanted_beam.instantiate()	
@@ -94,8 +79,6 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 	const move_time = 0.4
 	const pre_move_time = 0.5
 	const wait_time = 0.05
-	if !start():
-		return
 	var to_target_rad = point.angle_to_point(to)
 	var swing_odd_rad = to_target_rad + (-PI * 2 / 3)
 	var swing_even_rad = to_target_rad + (PI * 1.5 / 3)
@@ -131,13 +114,10 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 	
 
 #--------------
-#
-##---motionless---
-## 原地旋转攻击, 并释放星型弹幕
-#
-#var last_rotation = 0.0
-#
-#
+
+# ---motionless---
+# 原地旋转攻击, 并释放星型弹幕
+
 #func motionlessShotBeam():
 	#var beams: Array[Node] = []
 	##让整体偏移
@@ -153,34 +133,23 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 	#for beam in beams:
 		#get_parent().add_child(beam)
 		#beam.get_node("Start").start()
-#
-#
-#func motionlessExit():
-	#times = 0
-	#wait.queue_free()
-	#shot.queue_free()
-	#exit()
-#
-#
-## to: 攻击时所在位置
-## time: 攻击持续时间
-## 先旋转到to, 再攻击time
-#func motionlessStart(to: Vector2, time: float):
-	#if !start(motionless):
-		#return
-	#target = to
-	#totTimes = 6
-	## 初始化wait
-	#wait = Timer.new()
-	#wait.one_shot = true
-	#wait.wait_time = time
-	#add_child(wait)
-	## 初始化shot
-	#shot = Timer.new()
-	#shot.wait_time = 0.15
-	#add_child(shot)
-	#shot.timeout.connect(motionlessShotBeam)
-#
+
+
+# to: 攻击时所在位置
+# time: 攻击持续时间
+# 先旋转到to, 再攻击time
+func motionlessAttack(to: Vector2, time: float):
+	const move_time = 0.7
+	create_tween().set_ease(Tween.EASE_OUT)\
+			.set_trans(Tween.TRANS_CUBIC).tween_property(self,
+			"position", to, move_time)
+	var sword_rotate = create_tween()
+	sword_rotate.tween_interval(move_time)
+	sword_rotate.tween_property(self, "rotation",
+			rotation + 3 * TAU * time, time)
+	
+	
+
 #
 #func motionless(delta):
 	#if wait.time_left == 0 && times > 0:
@@ -227,13 +196,9 @@ func rotateShotBeam(num : int):
 				, beam.position + 2000 * beam.direction, move_time)
 
 
-
 func rotateAttack(to: Vector2, tim: int):
 	const shot_time = 0.4
 	const wait_time = 0.1
-	if !start():
-		return
-		
 	# 移动
 	var move_time = (to - position).length() / 600
 	var move = create_tween()
@@ -257,9 +222,9 @@ func rotateAttack(to: Vector2, tim: int):
 #---vertical---
 # 垂直攻击
 # 在这两个点间反复横跳
-
 # 垂直攻击发射弹幕
 # 弹幕与剑头方向一致
+
 func verticalShotBeam(pos : Vector2, rad : float):
 	var beam = enchanted_beam.instantiate()
 	beam.direction = radToVector(rad)
@@ -274,8 +239,6 @@ func verticalShotBeam(pos : Vector2, rad : float):
 func verticalAttack(point: Vector2, to: Vector2, tim: int):
 	const move_time = 0.3
 	const wait_time = 0.3
-	if !start():
-		return
 	var shot_rad = point.angle_to_point(to) + PI / 2
 	var attack = create_tween().set_ease(Tween.EASE_OUT)\
 			.set_trans(Tween.TRANS_QUAD)
@@ -303,42 +266,7 @@ func verticalAttack(point: Vector2, to: Vector2, tim: int):
 					.bind(getPos.call(j), shot_rad))
 			shot.tween_interval(unit_time)
 		shot.tween_interval(wait_time)
-#
-#
 
-#
-#
-#func verticalExit():
-	#times = 0
-	#wait.queue_free()
-	#shot.queue_free()
-	#exit()
-#
-#
-#func vertical(delta: float):
-	#if wait.time_left != 0:
-		#return
-	#if shot.time_left == 0 && times != 0:
-		#shot.start()
-	#if times >= totTimes:
-		#verticalExit()
-		#return
-#
-	##在两个点之间反复横跳
-	#var arrive = normalMove(
-		#start_point if evenTimes() else target, (target - start_point).angle() + PI / 2, 1600, delta
-	#)
-	#if arrive:
-		#wait.start()
-		#shot.stop()
-		#times += 1
-#
-#
-##-----------
-#
-##-----------
-#
-#
 ##---rush---
 ## 冲刺攻击
 ## point, to: 首尾点
@@ -396,8 +324,3 @@ func verticalAttack(point: Vector2, to: Vector2, tim: int):
 		#wait.start()
 		#shot.stop()
 		#times += 1
-#
-#
-##-----------
-#
-#

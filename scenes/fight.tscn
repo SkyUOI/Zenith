@@ -69,7 +69,7 @@ scale = Vector2(3.28571, 3.28571)
 [node name="image" type="Sprite2D" parent="ZenithBegin"]
 texture = ExtResource("3_2spkb")
 
-[node name="Star_Wrath" parent="." instance=ExtResource("4_8ipx5")]
+[node name="StarWrath" parent="." instance=ExtResource("4_8ipx5")]
 
 [node name="Player" type="Player" parent="."]
 position = Vector2(570, 414)
@@ -207,6 +207,7 @@ texture = ExtResource("12_sm4t8")
 
 [node name="EnchantedSword" parent="." instance=ExtResource("13_1n0f0")]
 rotation = 0.710345
+enchanted_beam = null
 
 [node name="CategoryPanel" type="Sprite2D" parent="."]
 position = Vector2(41, 35)

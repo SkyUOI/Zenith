@@ -54,8 +54,6 @@ impl IArea2D for StarWrath {
         if self.base().get_tree().unwrap().get_current_scene().unwrap()
             == self.base().clone().upcast()
         {
-            let mut fight_time = self.get_fight_timer();
-            fight_time.start();
             self.start();
         } else {
             self.base_mut().hide();
@@ -98,7 +96,12 @@ impl StarWrath {
 
     #[func]
     fn start(&mut self) {
+        let mut fight_time = self.get_fight_timer();
+        fight_time.start();
         self.start_flag = true;
         self.new_bullet()
     }
+
+    #[signal]
+    fn attack_finished() {}
 }

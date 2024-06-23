@@ -1,7 +1,7 @@
 use std::sync::OnceLock;
 
 use crate::debug_check;
-use godot::classes::{Control, IControl, Sprite2D, Timer};
+use godot::classes::{Control, IControl, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::Rng;
@@ -13,15 +13,15 @@ struct Fight {
     shake_times: i32,
     origin_offset: Vector2,
     shake_delta: f32,
-    sword_idx: i32,
+    sword_idx: usize,
 }
 
-const ENCHANTED_START: &str = "fightStart";
+const START: &str = "start";
 const ATTACK_FINISHED: &str = "attack_finished";
 
 fn get_fight_list() -> &'static Vec<&'static str> {
     static TMP: OnceLock<Vec<&'static str>> = OnceLock::new();
-    TMP.get_or_init(|| vec!["EnchantedSword"])
+    TMP.get_or_init(|| vec!["EnchantedSword", "StarWrath"])
 }
 
 #[godot_api]
@@ -38,10 +38,8 @@ impl IControl for Fight {
 
     fn ready(&mut self) {
         debug_check!(self);
-        // let mut enchanted_sword = self.get_enchanted_sword();
-        // enchanted_sword.call(ENCHANTED_START.into(), &[]);
         self.shake(3.0, 1.0);
-        // enchanted_sword.connect("attack_finished".into(), self.get_end_fight());
+        self.start_fight();
     }
 }
 
@@ -86,8 +84,8 @@ impl Fight {
     fn check_sword(&self) {
         for i in get_fight_list() {
             let obj = self.base().get_node_as::<Node>(*i);
-            assert!(obj.has_method(ENCHANTED_START.into()));
-            assert!(obj.has_signal(ATTACK_FINISHED.into()));
+            assert!(obj.has_method(START.into()), "**{}**", *i);
+            assert!(obj.has_signal(ATTACK_FINISHED.into()), "**{}**", *i);
         }
     }
 
@@ -117,7 +115,15 @@ impl Fight {
     }
 
     #[func]
-    fn end_fight(&mut self) {
-        godot_print!("end fight")
+    fn start_fight(&mut self) {
+        let list = get_fight_list();
+        if self.sword_idx >= list.len() {
+            return;
+        }
+        let mut sword = self.get_sword(list[self.sword_idx]);
+        sword.connect("attack_finished".into(), self.get_end_fight());
+        sword.call(START.into(), &[]);
+        godot_print!("start fight:{}", self.sword_idx);
+        self.sword_idx += 1;
     }
 }
