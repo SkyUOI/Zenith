@@ -63,10 +63,6 @@ impl ICharacterBody2D for Player {
         }
     }
 
-    fn ready(&mut self) {
-        debug_check!(self)
-    }
-
     fn physics_process(&mut self, delta: f64) {
         let input_obj = Input::singleton();
         let mut down_rate = 1.0;
@@ -147,6 +143,10 @@ impl ICharacterBody2D for Player {
                 }
             }
         }
+    }
+
+    fn ready(&mut self) {
+        debug_check!(self)
     }
 }
 

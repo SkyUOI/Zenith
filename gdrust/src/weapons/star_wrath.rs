@@ -32,21 +32,6 @@ impl IArea2D for StarWrath {
         }
     }
 
-    fn ready(&mut self) {
-        // for debug
-        // 检查是否是当前场景
-        debug_check!(self);
-        if self.base().get_tree().unwrap().get_current_scene().unwrap()
-            == self.base().clone().upcast()
-        {
-            let mut fight_time = self.get_fight_timer();
-            fight_time.start();
-            self.start();
-        } else {
-            self.base_mut().hide();
-        }
-    }
-
     fn process(&mut self, delta: f64) {
         let mut animation = self.get_animation();
         // animation.play_ex().name("Wave".into()).done();
@@ -60,6 +45,21 @@ impl IArea2D for StarWrath {
             return;
         }
         if self.state == State::Wave1 {}
+    }
+
+    fn ready(&mut self) {
+        // for debug
+        // 检查是否是当前场景
+        debug_check!(self);
+        if self.base().get_tree().unwrap().get_current_scene().unwrap()
+            == self.base().clone().upcast()
+        {
+            let mut fight_time = self.get_fight_timer();
+            fight_time.start();
+            self.start();
+        } else {
+            self.base_mut().hide();
+        }
     }
 }
 

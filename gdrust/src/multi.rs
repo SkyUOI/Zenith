@@ -1,3 +1,4 @@
+use crate::{get_multi_single, get_tokio_runtime, MultiSingle};
 use ::proto::ProtoRequest;
 use anyhow::anyhow;
 use bytes::{Bytes, BytesMut};
@@ -5,28 +6,22 @@ use godot::classes::{INode, Node};
 use godot::prelude::*;
 use prost::Message;
 use proto::connect::Join;
-use std::collections::HashMap;
+use std::process::{Child, Command};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
 use tokio::net::TcpStream;
 use tokio::sync::mpsc;
 
-use crate::{get_multi_single, get_tokio_runtime, MultiSingle};
-
 pub struct MultiPlayerConnection {}
 
 impl MultiPlayerConnection {}
 
-enum Requests {
-    Proto(ProtoRequest),
-    Wrong(String),
-    ExitSuccess,
-}
-
 pub struct MultiManagerImpl {
-    clients: HashMap<usize, MultiPlayerConnection>,
+    /// 发送器
     socket: Option<mpsc::Sender<Bytes>>,
-    receiver: Option<std::sync::mpsc::Receiver<Requests>>,
+    /// 接收读取到的指令
+    receiver: Option<std::sync::mpsc::Receiver<ProtoRequest>>,
+    is_host: bool,
 }
 
 async fn send(sender: mpsc::Sender<Bytes>, data: BytesMut) -> anyhow::Result<()> {
@@ -46,7 +41,7 @@ async fn write_loop(
 }
 
 async fn read_loop(
-    send_channel: std::sync::mpsc::Sender<Requests>,
+    send_channel: std::sync::mpsc::Sender<ProtoRequest>,
     mut read_socket: OwnedReadHalf,
 ) -> anyhow::Result<()> {
     let mut buf = BytesMut::new();
@@ -60,12 +55,10 @@ async fn read_loop(
         if n == 0 {
             if buf.is_empty() {
                 godot_print!("Connection closed");
-                send_channel.send(Requests::ExitSuccess)?;
                 break;
             } else {
                 let err_msg = "Connection reset by peer";
                 godot_error!("{}", err_msg);
-                send_channel.send(Requests::Wrong(err_msg.to_string()))?;
                 return Err(anyhow::anyhow!(err_msg));
             }
         }
@@ -73,9 +66,9 @@ async fn read_loop(
     Ok(())
 }
 
-fn parse_request(buf: &BytesMut) -> Option<Requests> {
+fn parse_request(buf: &BytesMut) -> Option<ProtoRequest> {
     match Join::decode(&buf[..]) {
-        Ok(v) => Some(Requests::Proto(ProtoRequest::Join(v))),
+        Ok(v) => Some(ProtoRequest::Join(v)),
         Err(_) => None,
     }
 }
@@ -123,14 +116,45 @@ impl MultiManagerImpl {
     pub fn close(&mut self) {
         self.socket = None;
     }
+
+    pub fn send_data(&mut self, data: Bytes) {
+        let socket = self.socket.clone();
+        get_tokio_runtime().spawn(async {
+            match socket {
+                Some(socket) => {
+                    socket.send(data).await?;
+                }
+                None => {
+                    // Ignore in single mode
+                }
+            }
+            anyhow::Ok(())
+        });
+    }
+
+    pub fn alloc_id(&mut self) -> usize {
+        let socket = self.socket.clone();
+        // socket.unwrap().blocking_send(value);
+        // get_tokio_runtime().spawn(async {
+        //     match socket {
+        //         Some(socket) => {}
+        //         None => {}
+        //     }
+        // })
+        todo!()
+    }
+
+    pub fn is_host(&mut self, val: bool) {
+        self.is_host = val;
+    }
 }
 
 impl MultiManagerImpl {
     pub fn new() -> Self {
         Self {
-            clients: HashMap::new(),
             socket: None,
             receiver: None,
+            is_host: false,
         }
     }
 }
@@ -139,16 +163,13 @@ impl MultiManagerImpl {
 #[class(base = Node)]
 pub struct MultiManager {
     base: Base<Node>,
-    multi_impl: MultiSingle,
+    server: Option<Child>,
 }
 
 #[godot_api()]
 impl INode for MultiManager {
     fn init(base: Base<Node>) -> Self {
-        Self {
-            base,
-            multi_impl: get_multi_single().clone(),
-        }
+        Self { base, server: None }
     }
 }
 
@@ -156,4 +177,26 @@ impl INode for MultiManager {
 impl MultiManager {
     #[func]
     fn add_new_player(&mut self) {}
+
+    #[func]
+    fn set_up_server(&mut self) {
+        get_multi_single().lock().unwrap().is_host(true);
+        self.server = Some(
+            Command::new("your_command")
+                .spawn()
+                .expect("Failed to start process"),
+        );
+    }
+}
+
+impl Drop for MultiManager {
+    fn drop(&mut self) {
+        match &mut self.server {
+            None => {}
+            Some(data) => {
+                data.kill().expect("Stop server failed");
+                data.wait().expect("Waited failed");
+            }
+        }
+    }
 }
