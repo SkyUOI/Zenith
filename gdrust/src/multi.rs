@@ -6,6 +6,7 @@ use godot::classes::{INode, Node};
 use godot::prelude::*;
 use prost::Message;
 use proto::connect::Join;
+use std::mem::swap;
 use std::process::{Child, Command};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
@@ -22,7 +23,10 @@ pub struct MultiManagerImpl {
     /// 接收读取到的指令
     receiver: Option<std::sync::mpsc::Receiver<ProtoRequest>>,
     is_host: bool,
+    server: Option<Child>,
 }
+
+pub type MessageReceiver = std::sync::mpsc::Receiver<ProtoRequest>;
 
 async fn send(sender: mpsc::Sender<Bytes>, data: BytesMut) -> anyhow::Result<()> {
     sender.send(data.into()).await?;
@@ -144,8 +148,30 @@ impl MultiManagerImpl {
         todo!()
     }
 
-    pub fn is_host(&mut self, val: bool) {
+    pub fn set_host(&mut self, val: bool) {
         self.is_host = val;
+    }
+
+    pub fn set_up_server(&mut self) {
+        self.set_host(true);
+        self.server = Some(
+            Command::new("your_command")
+                .spawn()
+                .expect("Failed to start process"),
+        );
+    }
+
+    pub fn borrow_receiver(&mut self) -> Option<std::sync::mpsc::Receiver<ProtoRequest>> {
+        let mut tmp = None;
+        swap(&mut tmp, &mut self.receiver);
+        tmp
+    }
+
+    pub fn give_back_receiver(&mut self, receiver: std::sync::mpsc::Receiver<ProtoRequest>) {
+        if self.receiver.is_some() {
+            godot_error!("There is a receiver");
+        }
+        self.receiver = Some(receiver);
     }
 }
 
@@ -155,6 +181,7 @@ impl MultiManagerImpl {
             socket: None,
             receiver: None,
             is_host: false,
+            server: None,
         }
     }
 }
@@ -163,13 +190,12 @@ impl MultiManagerImpl {
 #[class(base = Node)]
 pub struct MultiManager {
     base: Base<Node>,
-    server: Option<Child>,
 }
 
 #[godot_api()]
 impl INode for MultiManager {
     fn init(base: Base<Node>) -> Self {
-        Self { base, server: None }
+        Self { base }
     }
 }
 
@@ -177,19 +203,9 @@ impl INode for MultiManager {
 impl MultiManager {
     #[func]
     fn add_new_player(&mut self) {}
-
-    #[func]
-    fn set_up_server(&mut self) {
-        get_multi_single().lock().unwrap().is_host(true);
-        self.server = Some(
-            Command::new("your_command")
-                .spawn()
-                .expect("Failed to start process"),
-        );
-    }
 }
 
-impl Drop for MultiManager {
+impl Drop for MultiManagerImpl {
     fn drop(&mut self) {
         match &mut self.server {
             None => {}

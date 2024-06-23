@@ -11,15 +11,15 @@ signal attack_finished
 func _ready():
 	
 	opers = [
-		swingAttack.bind(Vector2(330, 330), Vector2(800, 300), 4),
-		swingAttack.bind(Vector2(430, 200), Vector2(800, 750), 4),
-		swingAttack.bind(Vector2(830, 330), Vector2(300, 400), 4),
-		verticalAttack.bind(Vector2(200, 100), Vector2(900, 100), 4),
-		verticalAttack.bind(Vector2(200, 500), Vector2(600, 100), 4),
-		rotateAttack.bind(Vector2(1000, 100), 6),
-		rotateAttack.bind(Vector2(500, 500), 6),
-		#motionlessAttack.bind(Vector2(500, 300), 5),
-		#func(): motionlessAttack(Vector2(600, 400), 6),
+		#swingAttack.bind(Vector2(330, 330), Vector2(800, 300), 4),
+		#swingAttack.bind(Vector2(430, 200), Vector2(800, 750), 4),
+		#swingAttack.bind(Vector2(830, 330), Vector2(300, 400), 4),
+		#verticalAttack.bind(Vector2(200, 100), Vector2(900, 100), 4),
+		#verticalAttack.bind(Vector2(200, 500), Vector2(600, 100), 4),
+		#rotateAttack.bind(Vector2(1000, 100), 6),
+		#rotateAttack.bind(Vector2(500, 500), 6),
+		motionlessAttack.bind(Vector2(500, 300), 3),
+		motionlessAttack.bind(Vector2(600, 400), 3),
 		#func(): rushAttack(Vector2(130, 230), Vector2(800, 400)),
 		#func(): rushAttack(Vector2(800, 600), Vector2(200, 200)),
 	]
@@ -107,7 +107,8 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 		var even = (i % 2 == 0)
 		shot.tween_interval(move_time / 2)
 		for j in range(4):
-			var start_pos = getPos.call(j) if even else getPos.call(3 - j)
+			var start_pos = (swing_even_position + vector / 5 * (j + 1))\
+					if even else (swing_even_position + vector / 5 * (4 - j))
 			shot.tween_callback(swingShotBeam.bind(start_pos, to)\
 					if even else swingShotBeam.bind(start_pos, 2 * start_pos - (point * 2 - to)))
 		shot.tween_interval(move_time / 2 + wait_time)
@@ -118,28 +119,24 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 # ---motionless---
 # 原地旋转攻击, 并释放星型弹幕
 
-#func motionlessShotBeam():
-	#var beams: Array[Node] = []
-	##让整体偏移
-	#last_rotation += randf_range(-PI / 10, PI / 10)
-	#for i in range(totTimes):
-		#beams.push_back(enchanted_beam.instantiate())
-		#beams[i].get_node("Start").wait_time = 0.05
-		#beams[i].direction = radToVector(
-			#last_rotation + 2 * PI * i / totTimes + randf_range(-PI / 20, PI / 20)
-		#)
-		#beams[i].position = position
-		#beams[i].speed = 800
-	#for beam in beams:
-		#get_parent().add_child(beam)
-		#beam.get_node("Start").start()
-
-
 # to: 攻击时所在位置
 # time: 攻击持续时间
 # 先旋转到to, 再攻击time
+func motionlessShotBeam(num : int):
+	var beams: Array[Node] = []
+	for i in range(num):
+		beams.push_back(enchanted_beam.instantiate())
+		beams[i].direction = radToVector(rotation + TAU * i / num\
+				 + randf_range(-PI / 6, PI / 6))
+		beams[i].position = position + beams[i].direction * 10
+		beams[i].speed = 800
+	for i in beams:
+		get_parent().add_child(i)
+		
+		
 func motionlessAttack(to: Vector2, time: float):
 	const move_time = 0.7
+	const shot_time = 0.1
 	create_tween().set_ease(Tween.EASE_OUT)\
 			.set_trans(Tween.TRANS_CUBIC).tween_property(self,
 			"position", to, move_time)
@@ -147,29 +144,14 @@ func motionlessAttack(to: Vector2, time: float):
 	sword_rotate.tween_interval(move_time)
 	sword_rotate.tween_property(self, "rotation",
 			rotation + 3 * TAU * time, time)
+	sword_rotate.tween_callback(exit)
 	
+	var shot = create_tween()
+	shot.tween_interval(move_time)
+	var times = floor(time / shot_time)
+	for i in range(times):
+		shot.tween_callback(motionlessShotBeam.bind(6))
 	
-
-#
-#func motionless(delta):
-	#if wait.time_left == 0 && times > 0:
-		#motionlessExit()
-		#return
-	#if shot.time_left == 0 && times > 0:
-		#shot.start()
-#
-	## 旋转移向target
-	#var arrive: bool = false
-	#if times == 0:
-		#arrive = rotateMove(target, 1000, 4 * PI, delta)
-		#if arrive:
-			#wait.start()
-			#times += 1
-	#else:
-		#rotation += PI * 6 * delta
-#
-#
-#------------
 
 #---rotate---
 # 旋转攻击, 并释放星型弹幕
@@ -181,7 +163,7 @@ func rotateShotBeam(num : int):
 	var beams: Array[Node] = []
 	for i in range(num):
 		beams.push_back(enchanted_beam.instantiate())
-		beams[i].direction = radToVector(rotation + 2 * PI * i / num)
+		beams[i].direction = radToVector(rotation + TAU * i / num)
 		beams[i].position = position + beams[i].direction * 10
 		# 不让他自己动, 通过下列动画完成
 		beams[i].speed = 0
