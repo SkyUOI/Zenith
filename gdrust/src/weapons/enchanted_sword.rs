@@ -1,5 +1,5 @@
 use godot::{
-    engine::{ISprite2D, Sprite2D},
+    classes::{ISprite2D, Sprite2D},
     prelude::*,
 };
 use std::collections::HashMap;

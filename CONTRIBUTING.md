@@ -26,7 +26,7 @@ If you want to commit changes,please obey the following steps:
 
 ## Tests
 
-For your code,your should write necessary tests to cover your code in both GDScript and Rust.We use Github Action to run the tests
+For your code,you should write necessary tests to cover your code in both GDScript and Rust.We use Github Action to run the tests
 
 [Rust Test Guide](./docs/rust_test.md)
 

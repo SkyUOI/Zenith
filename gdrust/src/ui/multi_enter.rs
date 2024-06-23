@@ -1,6 +1,6 @@
 use crate::{debug_check, get_multi_single};
 use derive::gen_debug;
-use godot::engine::{AcceptDialog, Button, IButton};
+use godot::classes::{AcceptDialog, Button, IButton};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use std::net::TcpStream;

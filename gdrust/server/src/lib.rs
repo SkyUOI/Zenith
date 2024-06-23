@@ -46,21 +46,21 @@ impl Connection {
             let sz = self.stream.read_buf(&mut self.buffer).await?;
             log::info!("Received:{}", sz);
             if 0 == sz {
-                if self.buffer.is_empty() {
+                return if self.buffer.is_empty() {
                     log::info!("Join exiting(empty)...");
-                    return Ok(None);
+                    Ok(None)
                 } else {
                     let msg = "Connection reset by peer";
                     log::info!("{}", msg);
-                    return Err(anyhow!(msg));
-                }
+                    Err(anyhow!(msg))
+                };
             }
         }
     }
 
     pub fn parse_join(&mut self) -> anyhow::Result<Option<Join>> {
         let buf = Cursor::new(&self.buffer[..]);
-        match proto::connect::Join::decode(buf) {
+        match Join::decode(buf) {
             Ok(val) => Ok(Some(val)),
             Err(_) => Err(anyhow!("Not a join message")),
         }
@@ -74,13 +74,13 @@ impl Connection {
             if let Some(request) = self.parse_request()? {}
             let sz = self.stream.read_buf(&mut self.buffer).await?;
             if 0 == sz {
-                if self.buffer.is_empty() {
-                    return Ok(());
+                return if self.buffer.is_empty() {
+                    Ok(())
                 } else {
                     let msg = "Connection reset by peer";
                     log::info!("{}", msg);
-                    return Err(anyhow!(msg));
-                }
+                    Err(anyhow!(msg))
+                };
             }
         }
     }

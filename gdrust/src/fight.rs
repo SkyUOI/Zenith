@@ -1,5 +1,5 @@
 use crate::debug_check;
-use godot::engine::{Control, IControl, Sprite2D, Timer};
+use godot::classes::{Control, IControl, Sprite2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::Rng;

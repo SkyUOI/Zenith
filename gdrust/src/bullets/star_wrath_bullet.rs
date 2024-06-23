@@ -1,4 +1,4 @@
-use godot::engine::{Area2D, IArea2D};
+use godot::classes::{Area2D, IArea2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::{thread_rng, Rng};
@@ -47,7 +47,7 @@ impl StarWrathBullet {
     }
 
     fn random_speed(&mut self) {
-        self.speed = rand::thread_rng().gen_range(SPEED_MIN..=SPEED_MAX);
+        self.speed = thread_rng().gen_range(SPEED_MIN..=SPEED_MAX);
     }
 
     fn base_init(&mut self, rad: f32) {

@@ -1,4 +1,4 @@
-use godot::engine::{Area2D, CollisionPolygon2D, INode2D, Node2D, StaticBody2D};
+use godot::classes::{Area2D, CollisionPolygon2D, INode2D, Node2D, StaticBody2D};
 use godot::obj::{NewAlloc, WithBaseField};
 use godot::prelude::*;
 

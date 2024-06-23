@@ -1,11 +1,10 @@
 use ::proto::ProtoRequest;
 use anyhow::anyhow;
 use bytes::{Bytes, BytesMut};
-use godot::engine::{INode, Node};
+use godot::classes::{INode, Node};
 use godot::prelude::*;
 use prost::Message;
 use proto::connect::Join;
-use proto::proto;
 use std::collections::HashMap;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
@@ -26,7 +25,7 @@ enum Requests {
 
 pub struct MultiManagerImpl {
     clients: HashMap<usize, MultiPlayerConnection>,
-    socket: Option<mpsc::Sender<bytes::Bytes>>,
+    socket: Option<mpsc::Sender<Bytes>>,
     receiver: Option<std::sync::mpsc::Receiver<Requests>>,
 }
 
@@ -75,7 +74,7 @@ async fn read_loop(
 }
 
 fn parse_request(buf: &BytesMut) -> Option<Requests> {
-    match proto::connect::Join::decode(&buf[..]) {
+    match Join::decode(&buf[..]) {
         Ok(v) => Some(Requests::Proto(ProtoRequest::Join(v))),
         Err(_) => None,
     }
@@ -114,7 +113,7 @@ impl MultiManagerImpl {
             player_name,
             version: base::build::COMMIT_HASH.to_string(),
         };
-        let mut buf = bytes::BytesMut::new();
+        let mut buf = BytesMut::new();
         data.encode(&mut buf)?;
         let sender = socket.clone();
         get_tokio_runtime().spawn(send(sender, buf));

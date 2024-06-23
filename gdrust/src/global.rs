@@ -1,5 +1,5 @@
 use crate::multi::MultiManager;
-use godot::engine::{INode, Node};
+use godot::classes::{INode, Node};
 use godot::prelude::*;
 
 #[derive(GodotClass)]

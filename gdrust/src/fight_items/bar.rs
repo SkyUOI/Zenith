@@ -1,4 +1,4 @@
-use godot::engine::{Control, IControl};
+use godot::classes::{Control, IControl};
 use godot::prelude::*;
 
 #[derive(GodotClass)]

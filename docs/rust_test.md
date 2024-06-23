@@ -26,4 +26,4 @@ impl xxx {
 }
 ```
 
-Like this,the function marked by `#[debug]` will be ran in debug mode at the place of `debug_check!()` macro.
+Like this,the function marked by `#[debug]` will be running in debug mode at the place of `debug_check!()` macro.

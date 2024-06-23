@@ -1,7 +1,6 @@
 use core::panic;
 use derive::gen_debug;
-use godot::engine::{Area2D, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
-use godot::global::abs;
+use godot::classes::{Area2D, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use real_consts::PI;

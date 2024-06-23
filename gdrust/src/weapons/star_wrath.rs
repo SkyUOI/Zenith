@@ -1,6 +1,6 @@
 use crate::bullets::star_wrath_bullet::StarWrathBullet;
 use crate::debug_check;
-use godot::engine::{AnimationPlayer, AnimationTree, Area2D, IArea2D, Timer};
+use godot::classes::{AnimationTree, Area2D, IArea2D, Timer};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 

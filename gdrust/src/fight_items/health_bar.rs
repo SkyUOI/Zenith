@@ -1,4 +1,4 @@
-use godot::engine::{INode2D, Node2D};
+use godot::classes::{INode2D, Node2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
