@@ -11,6 +11,7 @@ use std::mem::swap;
 #[class(base = Control)]
 struct MultiSetup {
     base: Base<Control>,
+    players: Vec<String>,
     receiver: Option<MessageReceiver>,
 }
 
@@ -20,6 +21,7 @@ impl IControl for MultiSetup {
         Self {
             base,
             receiver: None,
+            players: vec![],
         }
     }
 
@@ -28,7 +30,9 @@ impl IControl for MultiSetup {
     }
 
     fn process(&mut self, delta: f64) {
-        match &mut self.receiver {
+        let mut receiver = None;
+        swap(&mut receiver, &mut self.receiver);
+        match receiver {
             None => {
                 panic!("receiver empty");
             }
@@ -36,7 +40,10 @@ impl IControl for MultiSetup {
                 while let Ok(data) = rec.try_recv() {
                     match data {
                         proto::ProtoRequest::Join(connect::Join { player_name, .. }) => {
-                            godot_print!("{} joined", &player_name)
+                            godot_print!("{} joined", &player_name);
+                            self.players.push(player_name);
+                            let text = self.gen_player_text();
+                            self.get_player_text().set_text(text.into());
                         }
                         _ => {
                             godot_error!("Wrong msg:{:?}", data)
@@ -58,8 +65,18 @@ impl MultiSetup {
     }
 
     #[debug]
-    fn get_panel(&mut self) -> Gd<Label> {
+    fn get_player_text(&mut self) -> Gd<Label> {
         self.base().get_node_as("Panel/Players")
+    }
+
+    #[func]
+    fn gen_player_text(&self) -> String {
+        let mut ret = String::new();
+        for i in self.players.iter() {
+            ret.push_str(i);
+            ret.push('\n')
+        }
+        ret
     }
 }
 
@@ -73,4 +90,3 @@ impl Drop for MultiSetup {
             .give_back_receiver(tmp.unwrap())
     }
 }
-
