@@ -11,14 +11,9 @@ func _ready():
 	var color = modulate
 	modulate.a = 0
 	create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD).tween_property(
-		self, "modulate", color, 0.1
+		self, "modulate", color, 0.15
 	)
 	$OutScreen.screen_exited.connect(queue_free)
-
-
-func start():
-	set_process(1)
-	$Start.start()
 
 
 # 是否被反弹

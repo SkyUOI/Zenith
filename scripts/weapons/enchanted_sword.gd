@@ -11,13 +11,13 @@ signal attack_finished
 func _ready():
 	
 	opers = [
-		func(): swingAttack(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): swingAttack(Vector2(430, 200), Vector2(800, 750), 4),
-		func(): swingAttack(Vector2(830, 330), Vector2(300, 400), 4),
-		func(): verticalAttack(Vector2(200, 100), Vector2(900, 100), 4),
-		func(): verticalAttack(Vector2(200, 500), Vector2(600, 100), 4),
-		#func(): rotateAttack(Vector2(1000, 100), 6),
-		#func(): rotateAttack(Vector2(500, 500), 6),
+		swingAttack.bind(Vector2(330, 330), Vector2(800, 300), 4),
+		swingAttack.bind(Vector2(430, 200), Vector2(800, 750), 4),
+		swingAttack.bind(Vector2(830, 330), Vector2(300, 400), 4),
+		verticalAttack.bind(Vector2(200, 100), Vector2(900, 100), 4),
+		verticalAttack.bind(Vector2(200, 500), Vector2(600, 100), 4),
+		rotateAttack.bind(Vector2(1000, 100), 6),
+		rotateAttack.bind(Vector2(500, 500), 6),
 		#func(): motionlessAttack(Vector2(500, 300), 5),
 		#func(): motionlessAttack(Vector2(600, 400), 6),
 		#func(): rushAttack(Vector2(130, 230), Vector2(800, 400)),
@@ -74,44 +74,9 @@ func is_even(x: int) -> bool:
 # 角度对应向量
 func radToVector(rad: float) -> Vector2:
 	return Vector2(cos(rad), sin(rad))
+	
 
 
-## 旋转不超过PI到指定角度并移动到指定位置
-## end_rotation:剑头的角度
-## Return:是否达到指定位置
-#func normalMove(end_point: Vector2, end_rotation: float, speed: float, delta: float) -> bool:
-	#var direction = radToVector(rotation).angle_to(radToVector(swordToRotation(end_rotation)))
-	#var vector = end_point - position
-	#if vector.length() == 0:
-		#return true
-	#var rotate_speed = direction / vector.length() * speed
-	#return rotateMove(end_point, speed, rotate_speed, delta)
-
-
-# 旋转几周并移动到指定位置(不考虑剑头方向)
-## return: 是否达到指定位置
-#func rotateMove(end_point: Vector2, speed: float, rotate_speed: float, delta: float) -> bool:
-	#rotation += rotate_speed * delta
-	## 避免到达后振动
-	#if (position - end_point).length() <= speed / 100:
-		#position = end_point
-		#return true
-	## 起点指向终点的向量
-	#var vector = (end_point - position).normalized() * speed
-	#position += vector * delta
-	#rotation += rotate_speed * delta
-	#return false
-
-
-# ---swing---
-var start_point: Vector2
-var target: Vector2
-var times: int
-var totTimes: int
-var toTargetRad: float
-# 挥舞后的等待
-var wait: Timer
-var shot: Timer
 
 
 # 发射附魔光束
@@ -126,6 +91,9 @@ func swingShotBeam(start_pos : Vector2, end_pos : Vector2):
 # point: 挥舞路径中点
 # to: 目标点
 func swingAttack(point: Vector2, to: Vector2, tim: int):
+	const move_time = 0.4
+	const pre_move_time = 0.5
+	const wait_time = 0.05
 	if !start():
 		return
 	var to_target_rad = point.angle_to_point(to)
@@ -135,29 +103,31 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 	var swing_even_position = point + 170 * radToVector(to_target_rad + PI / 2)
 	var swing = create_tween().set_ease(Tween.EASE_OUT)\
 			.set_trans(Tween.TRANS_CUBIC)
-	swing.tween_property(self, "position", point, 1)
-	swing.parallel().tween_property(self, "rotation", to_target_rad, 1)
+	swing.tween_property(self, "position", point, pre_move_time)
+	swing.parallel().tween_property(self, "rotation", to_target_rad, pre_move_time)
+	swing.tween_interval(wait_time)
 	for i in range(tim):
 		var even = is_even(i)
 		swing.tween_property(self, "position", swing_even_position \
-				if even else swing_odd_position, 0.4)
+				if even else swing_odd_position, move_time)
 		swing.parallel().tween_property(self, "rotation", swing_even_rad\
-				if even else swing_odd_rad, 0.4)
+				if even else swing_odd_rad, move_time)
+		swing.tween_interval(wait_time)
 	swing.tween_callback(exit)
 	
 	var vector = swing_odd_position - swing_even_position
 	var getPos = func(i : int) -> Vector2:
 		return (swing_even_position + vector / 5 * (i + 1))
 	var shot = create_tween()
-	shot.tween_interval(1)
+	shot.tween_interval(pre_move_time + wait_time)
 	for i in range(tim):
 		var even = (i % 2 == 0)
-		shot.tween_interval(0.2)
+		shot.tween_interval(move_time / 2)
 		for j in range(4):
 			var start_pos = getPos.call(j) if even else getPos.call(3 - j)
 			shot.tween_callback(swingShotBeam.bind(start_pos, to)\
 					if even else swingShotBeam.bind(start_pos, 2 * start_pos - (point * 2 - to)))
-		shot.tween_interval(0.2)
+		shot.tween_interval(move_time / 2 + wait_time)
 	
 
 #--------------
@@ -230,69 +200,59 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 		#rotation += PI * 6 * delta
 #
 #
-##------------
-#
-##---rotate---
-## 旋转攻击, 并释放星型弹幕
-#
-## point, to: 首尾点
-#
-#
-#func rotateShotBeam():
-	#var beams: Array[Node] = []
-	#for i in range(totTimes):
-		#beams.push_back(enchanted_beam.instantiate())
-		#beams[i].get_node("Start").wait_time = 0.35
-		#beams[i].direction = radToVector(rotation + 2 * PI * i / totTimes)
-		#beams[i].position = position
-		#beams[i].speed = 800
-	#for beam in beams:
-		#get_parent().add_child(beam)
-		#beam.get_node("Start").start()
-#
-#
-#func rotateExit():
-	#times = 0
-	#wait.queue_free()
-	#shot.queue_free()
-	#exit()
-#
-#
-#func rotateStart(to: Vector2, tim: int):
-	#if !start(rotateAttack):
-		#return
-	#target = to
-	## 一次几个弹幕
-	#totTimes = tim
-	## 初始化wait
-	#wait = Timer.new()
-	#wait.one_shot = true
-	#wait.wait_time = 0.15
-	#add_child(wait)
-	## 初始化shot
-	#shot = Timer.new()
-	#shot.wait_time = 0.2
-	#add_child(shot)
-	#shot.timeout.connect(rotateShotBeam)
-#
-#
-#func rotateAttack(delta):
-	## 到达且wait超时
-	#if wait.time_left == 0 && times > 0:
-		#verticalExit()
-		#return
-	#if shot.time_left == 0:
-		#shot.start()
-#
-	## 旋转移向target
-	#var arrive = rotateMove(target, 1000, 4 * PI, delta)
-	#if arrive && wait.time_left == 0:
-		#wait.start()
-		#shot.stop()
-		#times += 1
-#
-#
 #------------
+
+#---rotate---
+# 旋转攻击, 并释放星型弹幕
+
+# point, to: 首尾点
+
+
+func rotateShotBeam(num : int):
+	var beams: Array[Node] = []
+	for i in range(num):
+		beams.push_back(enchanted_beam.instantiate())
+		beams[i].direction = radToVector(rotation + 2 * PI * i / num)
+		beams[i].position = position + beams[i].direction * 10
+		# 不让他自己动, 通过下列动画完成
+		beams[i].speed = 0
+	
+	# 平均速度
+	const v = 800	
+	var move_time = 2000 / v
+	for beam in beams:
+		get_parent().add_child(beam)
+		var wait = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+		wait.tween_property(beam, "position"
+				, beam.position + 2000 * beam.direction, move_time)
+
+
+
+func rotateAttack(to: Vector2, tim: int):
+	const shot_time = 0.4
+	const wait_time = 0.1
+	if !start():
+		return
+		
+	# 移动
+	var move_time = (to - position).length() / 600
+	var move = create_tween()
+	move.tween_property(self, "position", to, move_time)
+	move.tween_interval(0.1)
+	move.tween_callback(exit)
+	
+	# 旋转
+	var end_rotation = rotation + TAU * 3.5 * move_time
+	create_tween().tween_property(self, "rotation", end_rotation, move_time + wait_time)
+	
+	var shot = create_tween()
+	shot.tween_callback(rotateShotBeam.bind(tim))
+	# 攻击次数
+	var times = floor(move_time / shot_time)
+	for i in range(times):
+		shot.tween_interval(shot_time)
+		shot.tween_callback(rotateShotBeam.bind(tim))
+
 
 #---vertical---
 # 垂直攻击
@@ -312,7 +272,7 @@ func verticalShotBeam(pos : Vector2, rad : float):
 # 在point 和 to 间反复横跳
 # 剑头方向为 point 指向 to 的向量转 PI / 2
 func verticalAttack(point: Vector2, to: Vector2, tim: int):
-	const move_time = 0.45
+	const move_time = 0.3
 	const wait_time = 0.3
 	if !start():
 		return

@@ -8,7 +8,7 @@ radius = 8.48529
 height = 70.7107
 
 [node name="EnchantedBeam" type="Area2D"]
-position = Vector2(629, 285)
+position = Vector2(1152, 652)
 scale = Vector2(1.5, 1.5)
 script = ExtResource("2_quqb1")
 direction = Vector2(-1, -1.5)
@@ -17,12 +17,11 @@ metadata/_edit_group_ = true
 
 [node name="OutScreen" type="VisibleOnScreenNotifier2D" parent="."]
 
-[node name="Start" type="Timer" parent="."]
-one_shot = true
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-13.3333, 13.3333)
 scale = Vector2(2, 2)
 texture = ExtResource("1_185ht")
+offset = Vector2(6.66667, -6.66666)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 0.785398
