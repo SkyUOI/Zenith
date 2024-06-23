@@ -11,17 +11,17 @@ signal attack_finished
 func _ready():
 	
 	opers = [
-		func(): swingStart(Vector2(330, 330), Vector2(800, 300), 4),
-		func(): swingStart(Vector2(430, 200), Vector2(800, 750), 4),
-		func(): swingStart(Vector2(830, 330), Vector2(300, 400), 4),
-		func(): verticalStart(Vector2(200, 100), Vector2(900, 100), 4),
-		func(): verticalStart(Vector2(200, 500), Vector2(600, 100), 4),
-		#func(): rotateStart(Vector2(1000, 100), 6),
-		#func(): rotateStart(Vector2(500, 500), 6),
-		#func(): motionlessStart(Vector2(500, 300), 5),
-		#func(): motionlessStart(Vector2(600, 400), 6),
-		#func(): rushStart(Vector2(130, 230), Vector2(800, 400)),
-		#func(): rushStart(Vector2(800, 600), Vector2(200, 200)),
+		func(): swingAttack(Vector2(330, 330), Vector2(800, 300), 4),
+		func(): swingAttack(Vector2(430, 200), Vector2(800, 750), 4),
+		func(): swingAttack(Vector2(830, 330), Vector2(300, 400), 4),
+		func(): verticalAttack(Vector2(200, 100), Vector2(900, 100), 4),
+		func(): verticalAttack(Vector2(200, 500), Vector2(600, 100), 4),
+		#func(): rotateAttack(Vector2(1000, 100), 6),
+		#func(): rotateAttack(Vector2(500, 500), 6),
+		#func(): motionlessAttack(Vector2(500, 300), 5),
+		#func(): motionlessAttack(Vector2(600, 400), 6),
+		#func(): rushAttack(Vector2(130, 230), Vector2(800, 400)),
+		#func(): rushAttack(Vector2(800, 600), Vector2(200, 200)),
 	]
 	if get_tree().current_scene == self:
 		exit()
@@ -30,7 +30,7 @@ func _ready():
 # fight调用这个
 # 开始
 func fightStart():
-	set_process(1)
+	exit()
 
 
 @export var enchanted_beam: PackedScene
@@ -125,7 +125,7 @@ func swingShotBeam(start_pos : Vector2, end_pos : Vector2):
 # 启动挥舞动作
 # point: 挥舞路径中点
 # to: 目标点
-func swingStart(point: Vector2, to: Vector2, tim: int):
+func swingAttack(point: Vector2, to: Vector2, tim: int):
 	if !start():
 		return
 	var to_target_rad = point.angle_to_point(to)
@@ -311,7 +311,7 @@ func verticalShotBeam(pos : Vector2, rad : float):
 # tim: 重复次数
 # 在point 和 to 间反复横跳
 # 剑头方向为 point 指向 to 的向量转 PI / 2
-func verticalStart(point: Vector2, to: Vector2, tim: int):
+func verticalAttack(point: Vector2, to: Vector2, tim: int):
 	const move_time = 0.45
 	const wait_time = 0.3
 	if !start():
