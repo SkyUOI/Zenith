@@ -1,3 +1,5 @@
+use std::sync::OnceLock;
+
 use crate::debug_check;
 use godot::classes::{Control, IControl, Sprite2D, Timer};
 use godot::obj::WithBaseField;
@@ -11,9 +13,16 @@ struct Fight {
     shake_times: i32,
     origin_offset: Vector2,
     shake_delta: f32,
+    sword_idx: i32,
 }
 
 const ENCHANTED_START: &str = "fightStart";
+const ATTACK_FINISHED: &str = "attack_finished";
+
+fn get_fight_list() -> &'static Vec<&'static str> {
+    static TMP: OnceLock<Vec<&'static str>> = OnceLock::new();
+    TMP.get_or_init(|| vec!["EnchantedSword"])
+}
 
 #[godot_api]
 impl IControl for Fight {
@@ -23,15 +32,16 @@ impl IControl for Fight {
             shake_times: 0,
             origin_offset: Vector2::ZERO,
             shake_delta: 0.0,
+            sword_idx: 0,
         }
     }
 
     fn ready(&mut self) {
         debug_check!(self);
-        let mut enchanted_sword = self.get_enchanted_sword();
-        enchanted_sword.call(ENCHANTED_START.into(), &[]);
+        // let mut enchanted_sword = self.get_enchanted_sword();
+        // enchanted_sword.call(ENCHANTED_START.into(), &[]);
         self.shake(3.0, 1.0);
-        enchanted_sword.connect("attack_finished".into(), self.get_end_fight());
+        // enchanted_sword.connect("attack_finished".into(), self.get_end_fight());
     }
 }
 
@@ -68,16 +78,17 @@ impl Fight {
         (camera, timer)
     }
 
-    #[debug]
-    fn get_enchanted_sword(&self) -> Gd<Sprite2D> {
-        self.base().get_node_as("EnchantedSword")
+    fn get_sword(&self, name: &str) -> Gd<Node> {
+        self.base().get_node_as(name)
     }
 
     #[debug]
-    #[cfg(debug_assertions)]
-    fn method_check(&self) {
-        let sword = self.get_enchanted_sword();
-        assert!(sword.has_method(ENCHANTED_START.into()))
+    fn check_sword(&self) {
+        for i in get_fight_list() {
+            let obj = self.base().get_node_as::<Node>(*i);
+            assert!(obj.has_method(ENCHANTED_START.into()));
+            assert!(obj.has_signal(ATTACK_FINISHED.into()));
+        }
     }
 
     #[func]
@@ -103,12 +114,6 @@ impl Fight {
     #[debug]
     fn get_end_fight(&self) -> Callable {
         self.base().callable("end_fight")
-    }
-
-    #[debug]
-    fn check_end_signal(&self) {
-        let sword = self.get_enchanted_sword();
-        assert!(sword.has_signal("attack_finished".into()));
     }
 
     #[func]
