@@ -1,4 +1,4 @@
-extends Button
+extends VBoxContainer
 
 
 # Called when the node enters the scene tree for the first time.
@@ -11,5 +11,9 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_pressed() -> void:
+func _on_join_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/multi_join.tscn")
+
+
+func _on_setup_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/multi_set_up.tscn")

@@ -49,7 +49,7 @@ impl INode2D for BlockDrawer {
         ];
         let mut staticbody = self.get_staticbody();
         for i in 0..4 {
-            let mut colliison_obj = CollisionPolygon2D::new_alloc();
+            let mut collision_obj = CollisionPolygon2D::new_alloc();
             let mut line = PackedVector2Array::new();
             let start_point = points[i % 4];
             let end_point = points[(i + 1) % 4];
@@ -66,8 +66,8 @@ impl INode2D for BlockDrawer {
             let end_near = end_point + offset_vec;
             line.push(end_near);
             line.push(end_point);
-            colliison_obj.set_polygon(line);
-            staticbody.add_child(colliison_obj.upcast());
+            collision_obj.set_polygon(line);
+            staticbody.add_child(collision_obj.upcast());
         }
     }
 

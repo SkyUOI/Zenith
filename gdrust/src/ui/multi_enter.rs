@@ -28,8 +28,8 @@ impl IButton for MultiEnter {
 impl MultiEnter {
     #[func]
     fn connect_to_server(&mut self, ip: String) -> bool {
-        let mult_manager = get_multi_single();
-        let mut lock = mult_manager.lock().unwrap();
+        let multi_manager = get_multi_single();
+        let mut lock = multi_manager.lock().unwrap();
         match lock.connect_to_server(ip) {
             Ok(_) => true,
             Err(err) => {

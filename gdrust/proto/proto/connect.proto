@@ -17,4 +17,13 @@ message Response {
   string message = 2;
 }
 
-message CreateObj { string path = 1; }
+message CreateObj {
+  string path = 1;
+  int32 id = 2;
+}
+
+message UpdateObj {
+  int32 id = 1;
+  int32 attr = 2;
+  bytes val = 3;
+}

@@ -26,8 +26,6 @@ impl INode2D for HealthBar {
         }
     }
 
-    fn ready(&mut self) {}
-
     fn draw(&mut self) {
         // godot_print!("again！");
         let start_pos = Vector2::new(Self::START_POSITION_X, Self::START_POSITION_Y);
@@ -47,6 +45,8 @@ impl INode2D for HealthBar {
             .width(Self::WIDTH)
             .done();
     }
+
+    fn ready(&mut self) {}
 }
 
 #[godot_api()]

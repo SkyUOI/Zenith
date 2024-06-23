@@ -24,6 +24,7 @@ base = { path = "base" }
 prost = "0"
 prost-types = { version = "0", optional = true }
 bytes = "1"
+collection_literals = "1"
 
 [dev-dependencies]
 assert_cmd = "2"
