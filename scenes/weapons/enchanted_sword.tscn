@@ -5,22 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://bi0hwjyalpjn6" path="res://scenes/bullets/enchanted_beam.tscn" id="3_ndj1h"]
 
 [node name="EnchantedSword" type="EnchantedSword"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
 z_index = 1
 position = Vector2(574, 291)
 rotation = -5.57284
 scale = Vector2(3, 3)
 texture = ExtResource("1_cwcxs")
 offset = Vector2(8.27271, -8.17079)
-enchanted_beam = ExtResource("3_ndj1h")
 script = ExtResource("2_h56vq")
 enchanted_beam = ExtResource("3_ndj1h")
 metadata/_edit_group_ = true
