@@ -160,7 +160,7 @@ impl Player {
     #[constant]
     const MAX_HEALTH: i32 = 100;
     #[signal]
-    fn hit_sig(attack: i32);
+    fn hit_sig(attack: i32) {}
 
     #[func]
     pub fn hit(&mut self, attack: i32) {
