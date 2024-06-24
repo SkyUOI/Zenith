@@ -7,6 +7,16 @@ message Join {
   string version = 2;
 }
 
+message Leave {}
+
+message JoinClient {}
+
+message JoinResponse {
+  Status status = 1;
+  uint32 alloc_id = 2;
+  repeated string player_list = 3;
+}
+
 enum Status {
   OK = 0;
   ERROR = 1;
@@ -14,7 +24,7 @@ enum Status {
 
 message Response {
   Status status = 1;
-  string message = 2;
+  optional string message = 2;
 }
 
 message CreateObj {

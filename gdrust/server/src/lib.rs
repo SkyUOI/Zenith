@@ -24,6 +24,69 @@ struct Connection {
     shutdown: broadcast::Receiver<()>,
 }
 
+struct Server {
+    alloc_id: usize,
+    ip: String,
+    port: usize,
+    bind_addr: String,
+    tcplistener: TcpListener,
+}
+
+impl Server {
+    pub async fn new(ip: impl Into<String>, port: usize) -> anyhow::Result<Self> {
+        let ip = ip.into();
+        let bind_addr = format!("{}:{}", ip.clone(), port);
+        let tcplistener = match TcpListener::bind(&bind_addr).await {
+            Ok(listener) => listener,
+            Err(e) => {
+                log::error!("Failed to bind {}:{}", bind_addr, e);
+                exit(1);
+            }
+        };
+        Ok(Self {
+            alloc_id: 0,
+            ip: ip.clone(),
+            port,
+            bind_addr,
+            tcplistener,
+        })
+    }
+
+    async fn accept_sockets(
+        &mut self,
+        shutdown_sender: broadcast::Sender<()>,
+        mut shutdown_receiver: broadcast::Receiver<()>,
+    ) {
+        let async_loop = async move {
+            loop {
+                let ret = self.tcplistener.accept().await;
+                match ret {
+                    Ok((socket, _)) => {
+                        let shutdown = shutdown_sender.subscribe();
+                        log::info!("Connected to a socket");
+                        tokio::spawn(async move {
+                            if let Err(e) = process_request(Connection::new(shutdown, socket)).await
+                            {
+                                log::error!("When processing a request:{}", e)
+                            }
+                            log::info!("A socket exited successful");
+                        });
+                    }
+                    Err(e) => {
+                        log::error!("Accepting a new player failed:{}", e)
+                    }
+                }
+            }
+        };
+        select! {
+            _ = async_loop => {}
+            _ = shutdown_receiver.recv() => {
+                    log::info!("Accepting loop exited")
+            }
+        }
+    }
+}
+
 impl Connection {
     pub fn new(shutdown: broadcast::Receiver<()>, stream: TcpStream) -> Self {
         Self {
@@ -104,7 +167,7 @@ impl Connection {
 #[command(propagate_version = true)]
 struct ArgsParser {
     #[arg(short, long, default_value_t = DEFAULT_PORT)]
-    port: i32,
+    port: usize,
     #[arg(long, default_value_t = String::from(DEFAULT_IP))]
     ip: String,
 }
@@ -118,57 +181,19 @@ async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn accept_sockets(
-    tcplistener: TcpListener,
-    shutdown_sender: broadcast::Sender<()>,
-    mut shutdown_receiver: broadcast::Receiver<()>,
-) {
-    let async_loop = async move {
-        loop {
-            let ret = tcplistener.accept().await;
-            match ret {
-                Ok((socket, _)) => {
-                    let shutdown = shutdown_sender.subscribe();
-                    log::info!("Connected to a socket");
-                    tokio::spawn(async move {
-                        if let Err(e) = process_request(Connection::new(shutdown, socket)).await {
-                            log::error!("When processing a request:{}", e)
-                        }
-                        log::info!("A socket exited successful");
-                    });
-                }
-                Err(e) => {
-                    log::error!("Accepting a new player failed:{}", e)
-                }
-            }
-        }
-    };
-    select! {
-        _ = async_loop => {}
-        _ = shutdown_receiver.recv() => {
-                log::info!("Accepting loop exited")
-        }
-    }
-}
-
 pub async fn lib_main() -> Result<(), Box<dyn Error>> {
     let parser = ArgsParser::parse();
     let port = parser.port;
     let ip = parser.ip;
-    let bind_addr = format!("{}:{}", ip, port);
-    let tcplistener = match TcpListener::bind(&bind_addr).await {
-        Ok(listener) => listener,
-        Err(e) => {
-            log::error!("Failed to bind {}:{}", bind_addr, e);
-            exit(1);
-        }
-    };
     let (shutdown_sender, mut shutdown_receiver) = broadcast::channel(32);
-    tokio::spawn(accept_sockets(
-        tcplistener,
-        shutdown_sender.clone(),
-        shutdown_sender.subscribe(),
-    ));
+    let mut server = Server::new(ip, port).await?;
+    let shutdown_sender_clone = shutdown_sender.clone();
+    let shutdown_receiver_clone = shutdown_sender.subscribe();
+    tokio::spawn(async move {
+        server
+            .accept_sockets(shutdown_sender_clone, shutdown_receiver_clone)
+            .await
+    });
     tokio::spawn(async move {
         match tokio::signal::ctrl_c().await {
             Ok(()) => {
