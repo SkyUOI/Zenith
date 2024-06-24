@@ -82,8 +82,7 @@ impl MultiSetup {
 
 impl Drop for MultiSetup {
     fn drop(&mut self) {
-        let mut tmp = None;
-        swap(&mut tmp, &mut self.receiver);
+        let tmp = self.receiver.take();
         get_multi_single()
             .lock()
             .unwrap()

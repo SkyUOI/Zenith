@@ -162,9 +162,7 @@ impl MultiManagerImpl {
     }
 
     pub fn borrow_receiver(&mut self) -> Option<std::sync::mpsc::Receiver<ProtoRequest>> {
-        let mut tmp = None;
-        swap(&mut tmp, &mut self.receiver);
-        tmp
+        self.receiver.take()
     }
 
     pub fn give_back_receiver(&mut self, receiver: std::sync::mpsc::Receiver<ProtoRequest>) {

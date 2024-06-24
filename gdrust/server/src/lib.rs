@@ -1,9 +1,11 @@
 mod cfg;
+mod connection;
 
 use anyhow::anyhow;
 use bytes::BytesMut;
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
+use connection::Connection;
 use prost::Message;
 use proto::{connect::Join, ProtoRequest};
 use std::{
@@ -17,12 +19,6 @@ use tokio::{
     select,
     sync::broadcast,
 };
-
-struct Connection {
-    stream: TcpStream,
-    buffer: BytesMut,
-    shutdown: broadcast::Receiver<()>,
-}
 
 struct Server {
     alloc_id: usize,
@@ -65,8 +61,8 @@ impl Server {
                         let shutdown = shutdown_sender.subscribe();
                         log::info!("Connected to a socket");
                         tokio::spawn(async move {
-                            if let Err(e) = process_request(Connection::new(shutdown, socket)).await
-                            {
+                            let mut connection = Connection::new(shutdown, socket);
+                            if let Err(e) = connection.start().await {
                                 log::error!("When processing a request:{}", e)
                             }
                             log::info!("A socket exited successful");
@@ -87,76 +83,6 @@ impl Server {
     }
 }
 
-impl Connection {
-    pub fn new(shutdown: broadcast::Receiver<()>, stream: TcpStream) -> Self {
-        Self {
-            stream,
-            buffer: BytesMut::with_capacity(1024),
-            shutdown,
-        }
-    }
-
-    pub async fn read_join(&mut self) -> anyhow::Result<Option<Join>> {
-        loop {
-            if self.shutdown.try_recv().is_ok() {
-                log::info!("Exit");
-                return Err(anyhow!("Exit"));
-            }
-            if let Some(request) = self.parse_join()? {
-                log::info!("Join exiting...");
-                return Ok(Some(request));
-            }
-            let sz = self.stream.read_buf(&mut self.buffer).await?;
-            log::info!("Received:{}", sz);
-            if 0 == sz {
-                return if self.buffer.is_empty() {
-                    log::info!("Join exiting(empty)...");
-                    Ok(None)
-                } else {
-                    let msg = "Connection reset by peer";
-                    log::info!("{}", msg);
-                    Err(anyhow!(msg))
-                };
-            }
-        }
-    }
-
-    pub fn parse_join(&mut self) -> anyhow::Result<Option<Join>> {
-        let buf = Cursor::new(&self.buffer[..]);
-        match Join::decode(buf) {
-            Ok(val) => Ok(Some(val)),
-            Err(_) => Err(anyhow!("Not a join message")),
-        }
-    }
-
-    pub async fn process_request(&mut self) -> anyhow::Result<()> {
-        loop {
-            if self.shutdown.try_recv().is_ok() {
-                return Err(anyhow!("Exit"));
-            }
-            if let Some(request) = self.parse_request()? {}
-            let sz = self.stream.read_buf(&mut self.buffer).await?;
-            if 0 == sz {
-                return if self.buffer.is_empty() {
-                    Ok(())
-                } else {
-                    let msg = "Connection reset by peer";
-                    log::info!("{}", msg);
-                    Err(anyhow!(msg))
-                };
-            }
-        }
-    }
-
-    pub fn parse_request(&mut self) -> anyhow::Result<Option<ProtoRequest>> {
-        let buf = Cursor::new(&self.buffer[..]);
-        match proto::connect::CreateObj::decode(buf) {
-            Ok(data) => Ok(Some(ProtoRequest::CreateObj(data))),
-            Err(_) => Err(anyhow!("Not a message")),
-        }
-    }
-}
-
 #[derive(Debug, Parser)]
 #[command(
     author = "SkyUOI",
@@ -170,15 +96,6 @@ struct ArgsParser {
     port: usize,
     #[arg(long, default_value_t = String::from(DEFAULT_IP))]
     ip: String,
-}
-
-async fn process_request(mut connect: Connection) -> anyhow::Result<()> {
-    // 首先获取连接请求
-    log::info!("start joining");
-    let join_data = connect.read_join().await?;
-    log::info!("joined");
-    connect.process_request().await?;
-    Ok(())
 }
 
 pub async fn lib_main() -> Result<(), Box<dyn Error>> {
