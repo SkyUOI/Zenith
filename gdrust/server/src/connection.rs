@@ -1,9 +1,8 @@
-use std::io::Cursor;
-
 use anyhow::anyhow;
 use bytes::BytesMut;
 use prost::Message;
 use proto::{connect, ProtoRequest};
+use std::io::Cursor;
 use tokio::{io::AsyncReadExt, net::TcpStream, sync::broadcast};
 
 pub struct Connection {

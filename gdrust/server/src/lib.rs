@@ -1,21 +1,13 @@
 mod cfg;
 mod connection;
 
-use anyhow::anyhow;
-use bytes::BytesMut;
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
 use connection::Connection;
-use prost::Message;
-use proto::{connect::Join, ProtoRequest};
-use std::{
-    error::Error,
-    io::{Cursor, Write},
-    process::exit,
-};
+use std::{collections::HashMap, error::Error, io::Write, process::exit};
 use tokio::{
-    io::{self, AsyncBufReadExt, AsyncReadExt, BufReader},
-    net::{TcpListener, TcpStream},
+    io::{self, AsyncBufReadExt, BufReader},
+    net::TcpListener,
     select,
     sync::broadcast,
 };
@@ -26,6 +18,7 @@ struct Server {
     port: usize,
     bind_addr: String,
     tcplistener: TcpListener,
+    connections: HashMap<usize, Connection>,
 }
 
 impl Server {
@@ -45,6 +38,7 @@ impl Server {
             port,
             bind_addr,
             tcplistener,
+            connections: HashMap::new(),
         })
     }
 
@@ -60,7 +54,7 @@ impl Server {
                     Ok((socket, _)) => {
                         let shutdown = shutdown_sender.subscribe();
                         log::info!("Connected to a socket");
-                        tokio::spawn(async move {
+                        tokio::spawn(async {
                             let mut connection = Connection::new(shutdown, socket);
                             if let Err(e) = connection.start().await {
                                 log::error!("When processing a request:{}", e)
