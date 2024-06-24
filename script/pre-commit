@@ -3,6 +3,6 @@
 # format gdscript
 gdformat .
 # format rust
-cd gdrust && cargo fmt -- --check
+cd gdrust && cargo fmt
 # save
 git add -A
