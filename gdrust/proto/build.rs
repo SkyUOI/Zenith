@@ -18,14 +18,14 @@ fn main() {
         }
     }
     if should_compile {
-        let mut compile = false;
+        let mut _compile = false;
         #[cfg(feature = "protobuf_feature")]
         {
             std::env::set_var("PROTOC", protobuf_src::protoc());
-            compile = true;
+            _compile = true;
         }
-        if !compile {
-            eprintln!("protoc not found,you can try use \"cargo build --features protobuf_feature\" to compile a protoc");
+        if !_compile {
+            eprintln!("protoc not found,you can try use \"cargo build --package proto --features protobuf_feature\" to compile a protoc");
             exit(1);
         }
     }

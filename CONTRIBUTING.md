@@ -12,7 +12,7 @@ First, thank you for being interested in this project and willing to do some con
 
 ## Code Style
 
-Please obey our [Code Style Guide](docs/code_style.md) to maintain code consistency
+Please obey our [Code Style Guide](./docs/code-style.md) to maintain code consistency
 
 ## Commit Changes
 
@@ -28,9 +28,9 @@ If you want to commit changes,please obey the following steps:
 
 For your code,you should write necessary tests to cover your code in both GDScript and Rust.We use Github Action to run the tests
 
-[Rust Test Guide](./docs/rust_test.md)
+[Rust Test Guide](./docs/rust-test.md)
 
-We will run some Godot scenes to check basic errors.The scenes should be ran is recorded in ```test_scene```.In daily development,you can run ```script/godot_test.py```to conduct basic testing
+We will run some Godot scenes to check basic errors.The scenes should be ran is recorded in `test_scene`.In daily development,you can run `script/godot_test.py`to conduct basic testing
 
 ## Version Control
 

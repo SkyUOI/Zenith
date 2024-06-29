@@ -12,7 +12,7 @@
 
 ## 代码风格
 
-请遵循我们的[代码风格指南](docs/code_style-zh.md)以保持代码的一致性。
+请遵循我们的[代码风格指南](docs/code-style-zh.md)以保持代码的一致性。
 
 ## 提交更改
 
@@ -28,9 +28,9 @@
 
 对于你的代码，无论是GDScript还是Rust都需要编写适当的测试来覆盖你的代码，我们使用Github Action来运行测试
 
-[关于Rust的测试的指引](./docs/rust_test-zh.md)
+[关于Rust的测试的指引](./docs/rust-test-zh.md)
 
-我们会运行一些Godot场景来检查基本的错误，要运行的Godot场景被记录于```test_scene```中，在日常开发中，你可以通过运行```script/godot_test.py```来进行基础的测试
+我们会运行一些Godot场景来检查基本的错误，要运行的Godot场景被记录于`test_scene`中，在日常开发中，你可以通过运行`script/godot_test.py`来进行基础的测试
 
 ## 版本控制
 

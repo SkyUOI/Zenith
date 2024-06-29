@@ -1,6 +1,6 @@
 # Zenith
 
-## [中文](./README_zh.md)
+## [中文](./README-zh.md)
 
 ![Total Lines](https://tokei.rs/github/skyuoi/zenith)
 |Platform|Status|
@@ -13,16 +13,7 @@ A indie fan game about undertale and terraria, developed in godot engine
 
 ## Build Guide
 
-| dependencies      |
-| :---------------- |
-| Godot 4.3         |
-| Gettext           |
-| Protobuf Compiler |
-| Rust Compiler     |
-
-Then you can run `cd script && python build.py` to build the extension (both Debug and Release)
-
-Finally,you can start godot editor and develop or export the game.
+For details,please see [this](./docs/build-guide.md)
 
 ## Contribution
 
