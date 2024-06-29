@@ -3,14 +3,27 @@ mod connection;
 
 use cfg::{DEFAULT_IP, DEFAULT_PORT};
 use clap::Parser;
-use connection::Connection;
-use std::{collections::HashMap, error::Error, io::Write, process::exit};
+use connection::{Connection, Operation};
+use std::{collections::HashMap, error::Error, io::Write, process::exit, usize};
 use tokio::{
     io::{self, AsyncBufReadExt, BufReader},
     net::TcpListener,
     select,
-    sync::broadcast,
+    sync::{broadcast, mpsc},
 };
+
+base::impl_newtype_int!(ClientId, usize);
+
+struct ConnectionChannel {
+    sender: mpsc::Sender<Operation>,
+    receiver: mpsc::Receiver<Operation>,
+}
+
+impl ConnectionChannel {
+    fn new(sender: mpsc::Sender<Operation>, receiver: mpsc::Receiver<Operation>) -> Self {
+        Self { sender, receiver }
+    }
+}
 
 struct Server {
     alloc_id: usize,
@@ -18,7 +31,7 @@ struct Server {
     port: usize,
     bind_addr: String,
     tcplistener: TcpListener,
-    connections: HashMap<usize, Connection>,
+    connections: HashMap<ClientId, ConnectionChannel>,
 }
 
 impl Server {
@@ -42,6 +55,21 @@ impl Server {
         })
     }
 
+    fn alloc_client_id(&mut self) -> ClientId {
+        let ret = self.alloc_id;
+        self.alloc_id += 1;
+        ClientId(ret)
+    }
+
+    fn add_connection(&mut self, id: ClientId, connection: ConnectionChannel) -> bool {
+        if self.connections.contains_key(&id) {
+            log::warn!("Client key conflicted:{}", id);
+            return false;
+        }
+        self.connections.insert(id, connection);
+        true
+    }
+
     async fn accept_sockets(
         &mut self,
         shutdown_sender: broadcast::Sender<()>,
@@ -54,13 +82,29 @@ impl Server {
                     Ok((socket, _)) => {
                         let shutdown = shutdown_sender.subscribe();
                         log::info!("Connected to a socket");
+                        let (channel1_sender, channel1_receiver) = mpsc::channel(32);
+                        let (channel2_sender, channel2_receiver) = mpsc::channel(32);
+                        let mut client_id;
+                        loop {
+                            client_id = self.alloc_client_id();
+                            if !self.connections.contains_key(&client_id) {
+                                break;
+                            }
+                        }
+                        let connection = ConnectionChannel::new(channel2_sender, channel1_receiver);
                         tokio::spawn(async {
-                            let mut connection = Connection::new(shutdown, socket);
+                            let mut connection = Connection::new(
+                                shutdown,
+                                socket,
+                                channel1_sender,
+                                channel2_receiver,
+                            );
                             if let Err(e) = connection.start().await {
                                 log::error!("When processing a request:{}", e)
                             }
                             log::info!("A socket exited successful");
                         });
+                        self.add_connection(client_id, connection);
                     }
                     Err(e) => {
                         log::error!("Accepting a new player failed:{}", e)

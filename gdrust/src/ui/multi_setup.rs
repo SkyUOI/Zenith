@@ -30,13 +30,12 @@ impl IControl for MultiSetup {
     }
 
     fn process(&mut self, delta: f64) {
-        let mut receiver = None;
-        swap(&mut receiver, &mut self.receiver);
+        let mut receiver = self.receiver.take();
         match receiver {
             None => {
                 panic!("receiver empty");
             }
-            Some(rec) => {
+            Some(ref rec) => {
                 while let Ok(data) = rec.try_recv() {
                     match data {
                         proto::ProtoRequest::Join(connect::Join { player_name, .. }) => {
@@ -52,6 +51,7 @@ impl IControl for MultiSetup {
                 }
             }
         }
+        self.receiver = receiver.take()
     }
 }
 
