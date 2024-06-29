@@ -22,11 +22,7 @@ var is_bound = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# 没用过正常移动
-	if !is_bound:
-		position += delta * speed * direction
-	else:
-		position -= delta * speed * direction
+	position += delta * speed * direction
 
 
 func _on_out_screen_screen_exited():
@@ -36,6 +32,7 @@ func _on_out_screen_screen_exited():
 func _on_area_entered(area):
 	# 防止重复伤害
 	if area.name == "Player":
+		speed = -speed
 		area.get_node("..").hit(10)
 		$CollisionShape2D.set_deferred("disabled", true)
 	#elif area.name == 盾
