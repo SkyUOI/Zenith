@@ -18,11 +18,13 @@ fn main() {
         }
     }
     if should_compile {
-        eprintln!("protoc not found,you can try use \"cargo build --features protobuf_feature\" to compile a protoc");
-        exit(1);
+        if cfg!(feature = "protobuf_feature") {
+            std::env::set_var("PROTOC", protobuf_src::protoc());
+        } else {
+            eprintln!("protoc not found,you can try use \"cargo build --features protobuf_feature\" to compile a protoc");
+            exit(1);
+        }
     }
-    #[cfg(feature = "protobuf_feature")]
-    std::env::set_var("PROTOC", protobuf_src::protoc());
     prost_build::Config::new()
         .out_dir("src/proto")
         .compile_protos(&["proto/connect.proto"], &["proto"])
