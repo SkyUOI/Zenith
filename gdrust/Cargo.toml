@@ -5,9 +5,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = [
-  "experimental-threads",
-] }
+godot = {version = "0", features = ["experimental-threads"]}
 rand = "0.8"
 derive = { path = "./derive" }
 proto = { path = "proto" }

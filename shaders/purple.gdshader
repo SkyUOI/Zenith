@@ -10,9 +10,9 @@ void fragment() {
 	// 垂直翻转Y坐标
 	screen_coords.y = (1.0 - screen_coords.y); 
 	// 紫色
-	vec4 purple_color = vec4(0.5, 0.0, 0.5, 1.0); 
+	vec4 purple_color = vec4(0.5, 0.0, 0.5, 0.5); 
 	// 半透明紫色
-	vec4 transparent_purple = vec4(0.5, 0.0, 0.5, 0.5); 
+	vec4 transparent_purple = vec4(0.5, 0.0, 0.5, 0.1); 
 	vec4 gradient_color = purple_color + (transparent_purple - purple_color) * screen_coords.y * 3.6;
 	// 设置最终颜色
 	COLOR = gradient_color;

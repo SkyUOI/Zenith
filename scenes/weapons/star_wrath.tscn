@@ -96,7 +96,7 @@ _data = {
 [node name="StarWrath" type="Node"]
 script = ExtResource("1_bo25j")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Bg" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_t64wj")
 anchors_preset = 15
 anchor_right = 1.0

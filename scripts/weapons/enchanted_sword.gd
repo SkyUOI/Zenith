@@ -99,8 +99,6 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 	swing.tween_callback(exit)
 	
 	var vector = swing_odd_position - swing_even_position
-	var getPos = func(i : int) -> Vector2:
-		return (swing_even_position + vector / 5 * (i + 1))
 	var shot = create_tween()
 	shot.tween_interval(pre_move_time + wait_time)
 	for i in range(tim):
