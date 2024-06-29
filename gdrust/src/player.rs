@@ -235,19 +235,29 @@ impl Player {
         self.base().get_node_as("Shield")
     }
 
+    const GENERAL_HIDE:&'static str = "general_hide";
+    const SHOW_WRAPPER:&'static str = "show_wrapper";
+
+    #[debug]
+    fn check_method(&self) {
+        let shield = self.get_shield();
+        assert!(shield.has_method(Self::GENERAL_HIDE.into()));
+        assert!(shield.has_method(Self::SHOW_WRAPPER.into()));
+    }
+
     /// 启动克盾保护
     #[func]
     fn turn_on_shield(&mut self) {
         let mut shield = self.get_shield();
         shield.set_rotation(self.cthulhu_rad());
-        shield.show();
+        shield.call(Self::SHOW_WRAPPER.into(), &[]);
     }
 
     /// 关闭克盾保护
     #[func]
     fn turn_off_shield(&mut self) {
         let mut shield = self.get_shield();
-        shield.hide();
+        shield.call(Self::GENERAL_HIDE.into(), &[]);
     }
 
     #[debug]

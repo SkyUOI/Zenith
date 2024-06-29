@@ -1,9 +1,10 @@
-[gd_scene load_steps=24 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=25 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Texture2D" uid="uid://cqp3l8q7xbxrt" path="res://resources/images/weapons/Zenith.webp" id="3_2spkb"]
 [ext_resource type="Texture2D" uid="uid://b5jjl8np5jm6q" path="res://resources/images/shields/shield.png" id="3_bdq2j"]
 [ext_resource type="PackedScene" uid="uid://dn2ixin15jtt3" path="res://scenes/weapons/star_wrath.tscn" id="4_8ipx5"]
 [ext_resource type="Texture2D" uid="uid://c71fsdux0i1r3" path="res://resources/images/PlayerHeart/Default/000.png" id="5_3ufqu"]
+[ext_resource type="Script" path="res://scripts/shield.gd" id="5_q7jwc"]
 [ext_resource type="Texture2D" uid="uid://b37v3b41jrx1x" path="res://resources/images/UI/UIFight/Default/000.png" id="6_5cs44"]
 [ext_resource type="Texture2D" uid="uid://dscxanl5ikwrj" path="res://resources/images/UI/UIFight/Highlight/000.png" id="7_rklqi"]
 [ext_resource type="Texture2D" uid="uid://cvx31mw3e38mx" path="res://resources/images/UI/UIAct/Default/000.png" id="8_yjyfq"]
@@ -18,7 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://drljhif31i83o" path="res://resources/images/UI/CategoryPanel.png" id="14_miw1s"]
 
 [sub_resource type="Gradient" id="Gradient_w6p7b"]
-offsets = PackedFloat32Array(0.315, 0.38125, 0.7, 0.814583, 1)
+offsets = PackedFloat32Array(0.386487, 0.391892, 0.397297, 0.683784, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.327103, 0.327103, 0.327103, 1, 0.584112, 0.584112, 0.584112, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0mtog"]
@@ -85,13 +86,15 @@ platform_floor_layers = 0
 platform_wall_layers = 4294967295
 
 [node name="virtual" type="GPUParticles2D" parent="Player"]
+scale = Vector2(0.996328, 1)
 emitting = false
-amount = 6
+amount = 10
 process_material = SubResource("ParticleProcessMaterial_adfmi")
 texture = ExtResource("5_3ufqu")
-lifetime = 0.1
+lifetime = 0.2
 speed_scale = 2.0
 trail_lifetime = 0.5
+trail_sections = 100
 
 [node name="HitPoint" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_yfrnq")
@@ -115,14 +118,17 @@ one_shot = true
 
 [node name="Shield" type="Area2D" parent="Player"]
 visible = false
+z_index = 1
+script = ExtResource("5_q7jwc")
 
 [node name="Shield" type="Sprite2D" parent="Player/Shield"]
 position = Vector2(95, -5)
-scale = Vector2(5, 6)
+scale = Vector2(8.37652, 17.2)
 texture = ExtResource("3_bdq2j")
 
 [node name="Protect" type="CollisionShape2D" parent="Player/Shield"]
 position = Vector2(110, -5)
+scale = Vector2(2.81964, 2.6714)
 shape = SubResource("CapsuleShape2D_g5ci8")
 
 [node name="BlockDrawer" type="BlockDrawer" parent="."]

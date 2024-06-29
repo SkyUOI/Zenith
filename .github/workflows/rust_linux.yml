@@ -18,9 +18,9 @@ jobs:
       - name: Config Env
         run: rustup install nightly && rustup default nightly && rustup component add rustfmt
       - name: Build
-        run: cd gdrust && cargo build --all
+        run: cd gdrust && cargo build --package proto --features protobuf_feature --all
       - name: Build Release
-        run: cd gdrust && cargo build --all --release
+        run: cd gdrust && cargo build --package proto --features protobuf_feature --all --release
       - name: Run tests Debug
         run: cd gdrust && cargo test --all
       - name: Run tests Release

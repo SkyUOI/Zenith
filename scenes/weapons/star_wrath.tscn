@@ -1,6 +1,11 @@
 [gd_scene load_steps=11 format=3 uid="uid://dn2ixin15jtt3"]
 
+[ext_resource type="Script" path="res://scripts/weapons/star_wrath.gd" id="1_bo25j"]
 [ext_resource type="Texture2D" uid="uid://wf3fpixhk4by" path="res://resources/images/weapons/Star_Wrath.webp" id="1_rb7dw"]
+[ext_resource type="Shader" path="res://shaders/purple.gdshader" id="2_xksic"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t64wj"]
+shader = ExtResource("2_xksic")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm46a"]
 size = Vector2(28.6936, 31.8029)
@@ -64,73 +69,62 @@ tracks/1/keys = {
 "values": []
 }
 
+[sub_resource type="Animation" id="Animation_j4myy"]
+resource_name = "enter_scene"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 2.54912),
+"update": 0,
+"values": [Vector2(-6.10352e-05, 1.99994), Vector2(250, 165)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_julpp"]
 _data = {
 "Float": SubResource("Animation_i5jfn"),
 "RESET": SubResource("Animation_ftjfs"),
-"Wave": SubResource("Animation_o8rnv")
+"Wave": SubResource("Animation_o8rnv"),
+"enter_scene": SubResource("Animation_j4myy")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f2u5f"]
-animation = &"Wave"
+[node name="StarWrath" type="Node"]
+script = ExtResource("1_bo25j")
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eoxxg"]
-animation = &"Float"
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_t64wj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
 
-[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_xm082"]
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_rpkys"]
-nodes/Animation/node = SubResource("AnimationNodeAnimation_eoxxg")
-nodes/Animation/position = Vector2(40, 0)
-"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_f2u5f")
-"nodes/Animation 2/position" = Vector2(40, 140)
-nodes/Blend2/node = SubResource("AnimationNodeBlend2_xm082")
-nodes/Blend2/position = Vector2(280, 0)
-nodes/output/position = Vector2(480, 60)
-node_connections = [&"Blend2", 0, &"Animation", &"Blend2", 1, &"Animation 2", &"output", 0, &"Blend2"]
-
-[node name="StarWrath" type="StarWrath"]
+[node name="StarWrath" type="StarWrath" parent="."]
+z_index = 1
 position = Vector2(554, 286)
-rotation = 0.202369
+rotation = -0.253092
 
-[node name="StarWrath" type="Sprite2D" parent="."]
+[node name="StarWrath" type="Sprite2D" parent="StarWrath"]
 scale = Vector2(2.97559, 2.97559)
 texture = ExtResource("1_rb7dw")
-offset = Vector2(-0.33606, -1.0082)
-flip_h = true
 
-[node name="FightTimer" type="Timer" parent="."]
+[node name="FightTimer" type="Timer" parent="StarWrath"]
 editor_description = "Debug"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-20.1263, -13.6814)
-rotation = 0.792934
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StarWrath"]
+rotation = 2.30812
 scale = Vector2(4.2, 1)
 shape = SubResource("RectangleShape2D_qm46a")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StarWrath"]
 libraries = {
 "": SubResource("AnimationLibrary_julpp")
 }
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeBlendTree_rpkys")
-anim_player = NodePath("../AnimationPlayer")
-parameters/current_length = 1.5
-parameters/current_position = 0.449277
-parameters/current_delta = 0.0166667
-parameters/Animation/current_length = 1.5
-parameters/Animation/current_position = 0.449277
-parameters/Animation/current_delta = 0.0166667
-"parameters/Animation 2/current_length" = 1.0
-"parameters/Animation 2/current_position" = 1.0
-"parameters/Animation 2/current_delta" = 0.0
-parameters/Blend2/current_length = 1.5
-parameters/Blend2/current_position = 0.449277
-parameters/Blend2/current_delta = 0.0166667
-parameters/Blend2/blend_amount = 0.5
-parameters/output/current_length = 1.5
-parameters/output/current_position = 0.449277
-parameters/output/current_delta = 0.0166667
-
-[connection signal="timeout" from="FightTimer" to="." method="on_fight_timer_timeout"]
+[connection signal="timeout" from="StarWrath/FightTimer" to="StarWrath" method="on_fight_timer_timeout"]

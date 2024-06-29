@@ -1,6 +1,7 @@
 use crate::bullets::star_wrath_bullet::StarWrathBullet;
 use crate::debug_check;
 use godot::classes::{AnimationTree, Area2D, IArea2D, Timer};
+use godot::engine::AnimationPlayer;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
@@ -33,7 +34,7 @@ impl IArea2D for StarWrath {
     }
 
     fn process(&mut self, delta: f64) {
-        let mut animation = self.get_animation();
+        // let mut animation = self.get_animation();
         // animation.play_ex().name("Wave".into()).done();
         // if !animation.is_playing() {
         //     animation.play_ex().name("Float".into()).done();
@@ -48,16 +49,7 @@ impl IArea2D for StarWrath {
     }
 
     fn ready(&mut self) {
-        // for debug
-        // 检查是否是当前场景
         debug_check!(self);
-        if self.base().get_tree().unwrap().get_current_scene().unwrap()
-            == self.base().clone().upcast()
-        {
-            self.start();
-        } else {
-            self.base_mut().hide();
-        }
     }
 }
 
@@ -84,14 +76,14 @@ impl StarWrath {
         self.new_bullet()
     }
 
-    #[debug]
-    fn get_fight_timer(&self) -> Gd<Timer> {
-        self.base().get_node_as::<Timer>("FightTimer")
+    #[func]
+    fn get_animation(&self) -> Gd<AnimationPlayer> {
+        self.base().get_node_as("AnimationPlayer")
     }
 
     #[debug]
-    fn get_animation(&self) -> Gd<AnimationTree> {
-        self.base().get_node_as::<AnimationTree>("AnimationTree")
+    fn get_fight_timer(&self) -> Gd<Timer> {
+        self.base().get_node_as::<Timer>("FightTimer")
     }
 
     #[func]
@@ -99,7 +91,9 @@ impl StarWrath {
         let mut fight_time = self.get_fight_timer();
         fight_time.start();
         self.start_flag = true;
-        self.new_bullet()
+        self.new_bullet();
+        let mut anmi = self.get_animation();
+        anmi.play_ex().name("enter_scene".into()).done();
     }
 
     #[signal]
