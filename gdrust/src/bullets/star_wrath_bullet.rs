@@ -1,3 +1,4 @@
+use derive::gen_debug;
 use godot::classes::{Area2D, IArea2D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -37,7 +38,8 @@ impl IArea2D for StarWrathBullet {
     }
 }
 
-#[godot_api()]
+#[godot_api]
+#[gen_debug]
 impl StarWrathBullet {
     /// 带方向的初始化
     #[func]
@@ -68,6 +70,27 @@ impl StarWrathBullet {
         godot_debug_assert!(self.direct.y >= 0.0 && self.direct.x <= 0.0);
         self.base_init(direct_rad);
         self.base_mut().set_global_position(pos);
+    }
+
+    /// 从天上致命坠落
+    /// x_idx:全局Y坐标
+    #[func]
+    pub fn init_from_sky(&mut self, x_idx: f32) {
+        let pos = Vector2::new(x_idx, 0.0);
+        self.base_mut().set_global_position(pos);
+        let mask = self.get_track_scene();
+        let mut new_mask = mask.instantiate().unwrap();
+        self.base_mut().add_child(new_mask.clone());
+        godot_print!("now pos:{}", pos);
+        new_mask.call("init".into(), &[pos.to_variant()]);
+        self.base_mut().show();
+        self.base_mut().set_rotation(-PI / 2.0);
+    }
+
+    #[func]
+    #[debug]
+    fn get_track_scene(&self) -> Gd<PackedScene> {
+        load::<PackedScene>("res://scenes/bullets/star_wrath_original/track.tscn")
     }
 
     #[func]
