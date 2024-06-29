@@ -7,7 +7,33 @@ extends Area2D
 # 大小最小, 会下落, 撞到地面炸开
 # pos: 初始
 func throw():
-	pass
+	area_entered.connect(throwShotBeam)
+	$OutScreen.screen_exited.connect(throwShotBeam.bind(Area2D.new()))
+	create_tween().tween_property(self, "rotation", rotation + 10.0 * TAU, 5)
+	var move = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	move.tween_interval(0.5)
+	move.tween_property(self, "position", position + Vector2(0, 6500), 3)
+
+
+func throwShotBeam(area: Area2D):
+	#if area.name != "down"
+	#return
+	const times = 4
+	var beams: Array[Area2D] = []
+	var velocity = [
+		Vector2(-50, -650),
+		Vector2(-30, -750),
+		Vector2(50, -650),
+		Vector2(30, -750),
+	]
+	for i in range(times):
+		beams.push_back(thorns.instantiate())
+		beams[i].is_fall = true
+		beams[i].position = position
+		beams[i].velocity = velocity[i]
+	for beam in beams:
+		get_parent().add_child(beam)
+	queue_free()
 
 
 # 启动爆炸动作
@@ -20,11 +46,11 @@ func burst(pos: Vector2):
 	scale = Vector2(1.5, 1.5)
 	var tween = create_tween()
 	tween.tween_property(self, "rotation", rotation + speed * time, time)
-	tween.tween_callback(burstShotBeam.bind(pos))
+	tween.tween_callback(burstShotBeam)
 	tween.tween_callback(queue_free)
 
 
-func burstShotBeam(pos: Vector2):
+func burstShotBeam():
 	const times = 15
 	var beams: Array[Area2D] = []
 	for i in range(times):
@@ -39,7 +65,7 @@ func burstShotBeam(pos: Vector2):
 
 func _ready():
 	$OutScreen.screen_exited.connect(queue_free)
-	burst(Vector2(300, 300))
+	throw()
 
 
 func _process(delta):
