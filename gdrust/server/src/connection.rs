@@ -3,20 +3,35 @@ use bytes::BytesMut;
 use prost::Message;
 use proto::{connect, ProtoRequest};
 use std::io::Cursor;
-use tokio::{io::AsyncReadExt, net::TcpStream, sync::broadcast};
+use tokio::{
+    io::AsyncReadExt,
+    net::TcpStream,
+    sync::{broadcast, mpsc},
+};
+
+pub enum Operation {}
 
 pub struct Connection {
     stream: TcpStream,
     buffer: BytesMut,
     shutdown: broadcast::Receiver<()>,
+    server_receiver: mpsc::Receiver<Operation>,
+    server_sender: mpsc::Sender<Operation>,
 }
 
 impl Connection {
-    pub fn new(shutdown: broadcast::Receiver<()>, stream: TcpStream) -> Self {
+    pub fn new(
+        shutdown: broadcast::Receiver<()>,
+        stream: TcpStream,
+        server_sender: mpsc::Sender<Operation>,
+        server_receiver: mpsc::Receiver<Operation>,
+    ) -> Self {
         Self {
             stream,
             buffer: BytesMut::with_capacity(1024),
             shutdown,
+            server_sender,
+            server_receiver,
         }
     }
 
