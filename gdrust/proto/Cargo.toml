@@ -9,4 +9,7 @@ prost-types = { version = "0", optional = true }
 
 [build-dependencies]
 prost-build = "0"
-protobuf-src = "2"
+protobuf-src = { version = "2", optional = true }
+
+[features]
+protobuf_feature = ["protobuf-src"]
