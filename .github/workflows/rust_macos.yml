@@ -22,6 +22,6 @@ jobs:
       - name: Build Release
         run: cd gdrust && cargo build --package proto --features protobuf_feature --all --release
       - name: Run tests Debug
-        run: cd gdrust && cargo test --all
+        run: cd gdrust && cargo test --package proto --features protobuf_feature --all
       - name: Run tests Release
-        run: cd gdrust && cargo test --all --release
+        run: cd gdrust && cargo test --package proto --features protobuf_feature --all --release
