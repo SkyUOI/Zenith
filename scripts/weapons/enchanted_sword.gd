@@ -245,7 +245,7 @@ func verticalAttack(point: Vector2, to: Vector2, tim: int):
 	for i in range(tim):
 		var even = is_even(i)
 		var unit = 70 * (to - point if even else point - to).normalized()
-		var getPos = func(i): return (point if even else to) + unit * i
+		var getPos = func(x): return (point if even else to) + unit * x
 		var num = floorf((point - to).length() / unit.length()) + 1
 		var unit_time = move_time / num
 		for j in range(num):

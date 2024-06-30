@@ -32,8 +32,8 @@ func _on_out_screen_screen_exited():
 func _on_area_entered(area):
 	# 防止重复伤害
 	if area.name == "Player":
-		speed = -speed
 		area.get_node("..").hit(10)
 		$CollisionShape2D.set_deferred("disabled", true)
 	#elif area.name == 盾
 	#is_bound = true
+	#speed = -speed
