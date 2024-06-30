@@ -84,8 +84,12 @@ impl Fight {
     fn check_sword(&self) {
         for i in get_fight_list() {
             let obj = self.base().get_node_as::<Node>(*i);
-            assert!(obj.has_method(START.into()), "**{}**", *i);
-            assert!(obj.has_signal(ATTACK_FINISHED.into()), "**{}**", *i);
+            assert!(obj.has_method(START.into()), "**{}** misses start", *i);
+            assert!(
+                obj.has_signal(ATTACK_FINISHED.into()),
+                "**{}** misses attack finished",
+                *i
+            );
         }
     }
 

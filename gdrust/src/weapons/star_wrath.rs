@@ -94,9 +94,6 @@ impl StarWrath {
         anmi.play_ex().name("enter_scene".into()).done();
     }
 
-    #[signal]
-    fn attack_finished() {}
-
     #[func]
     fn fall_star(&mut self) {
         let bullet = self.get_bullet_scene();

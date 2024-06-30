@@ -17,7 +17,7 @@ func _process(_delta: float) -> void:
 
 func next_operation():
 	if operation_idx >= operations.size():
-		attack_finished.emit()
+		$"..".attack_finished.emit()
 		return
 	operations[operation_idx].call()
 	operation_idx += 1
