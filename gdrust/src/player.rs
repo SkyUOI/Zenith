@@ -235,8 +235,8 @@ impl Player {
         self.base().get_node_as("Shield")
     }
 
-    const GENERAL_HIDE:&'static str = "general_hide";
-    const SHOW_WRAPPER:&'static str = "show_wrapper";
+    const GENERAL_HIDE: &'static str = "general_hide";
+    const SHOW_WRAPPER: &'static str = "show_wrapper";
 
     #[debug]
     fn check_method(&self) {
