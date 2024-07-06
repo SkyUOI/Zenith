@@ -5,9 +5,9 @@ use godot::prelude::*;
 use rand::{thread_rng, Rng};
 use std::f32::consts::PI;
 
-use crate::{debug_check, godot_debug_assert};
 use crate::player::Player;
 use crate::utils::split_to_vec;
+use crate::{debug_check, godot_debug_assert};
 
 #[derive(GodotClass)]
 #[class(base=Area2D)]
@@ -100,7 +100,7 @@ impl StarWrathBullet {
     #[func]
     #[debug]
     fn get_track_scene(&self) -> Gd<PackedScene> {
-         Gd::from_variant(&self.base().get_property().get("track".into()))
+        Gd::from_variant(&self.base().get_property().get("track".into()))
     }
 
     #[func]
