@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1po1tqcrrhe3"]
 
 [ext_resource type="Script" path="res://scenes/bullets/star_wrath/star_wrath_original.gd" id="1_y6as6"]
-[ext_resource type="Texture2D" uid="uid://co5oaasln1fg4" path="res://scenes/bullets/star_wrath/Star_Wrath_Original.png" id="2_k51u0"]
+[ext_resource type="Texture2D" uid="uid://co5oaasln1fg4" path="res://scenes/bullets/star_wrath/star_wrath_original.png" id="2_k51u0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kmd7p"]
 radius = 27.3309

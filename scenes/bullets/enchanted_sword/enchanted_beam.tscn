@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bi0hwjyalpjn6"]
 
 [ext_resource type="Script" path="res://scenes/bullets/enchanted_sword/enchanted_beam.gd" id="1_ikbyb"]
-[ext_resource type="Texture2D" uid="uid://doavl47vaddfj" path="res://scenes/bullets/enchanted_sword/Enchanted_Beam.png" id="2_plh30"]
+[ext_resource type="Texture2D" uid="uid://doavl47vaddfj" path="res://scenes/bullets/enchanted_sword/enchanted_beam.png" id="2_plh30"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fb1sb"]
 radius = 8.48529

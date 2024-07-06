@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dcuw1h05xwa5b"]
 
-[ext_resource type="Texture2D" uid="uid://ckmjjonp8tx4" path="res://scenes/weapons/enchanted_sword/Enchanted_Sword.png" id="1_cwcxs"]
+[ext_resource type="Texture2D" uid="uid://ckmjjonp8tx4" path="res://scenes/weapons/enchanted_sword/enchanted_sword.png" id="1_cwcxs"]
 [ext_resource type="Script" path="res://scenes/weapons/enchanted_sword/enchanted_sword.gd" id="2_h56vq"]
 [ext_resource type="PackedScene" uid="uid://bi0hwjyalpjn6" path="res://scenes/bullets/enchanted_sword/enchanted_beam.tscn" id="3_ndj1h"]
 

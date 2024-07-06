@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/weapons/star_wrath/star_wrath_root.gd" id="1_bo25j"]
 [ext_resource type="Shader" path="res://shaders/purple.gdshader" id="2_xksic"]
 [ext_resource type="Script" path="res://scenes/weapons/star_wrath/star_wrath.gd" id="3_u5scp"]
-[ext_resource type="Texture2D" uid="uid://wtqaglfh5mpm" path="res://scenes/weapons/star_wrath/Star_Wrath.png" id="4_ohxcu"]
+[ext_resource type="Texture2D" uid="uid://wtqaglfh5mpm" path="res://scenes/weapons/star_wrath/star_wrath.png" id="4_ohxcu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t64wj"]
 shader = ExtResource("2_xksic")
