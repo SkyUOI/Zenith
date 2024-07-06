@@ -11,6 +11,9 @@ func move(length: float) -> void:
 
 
 func _ready() -> void:
+	if get_tree().current_scene != $"..":
+		hide()
+		return
 	rotation = 0
 	follow.loop = 1
 	var start = 0
