@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnhbuadu80gjc"]
+
+[ext_resource type="Script" path="res://scenes/bullets/seedler/seedler_nut.gd" id="1_beaa2"]
+[ext_resource type="Texture2D" uid="uid://g6vbpvi4ja4e" path="res://resources/images/bullets/Seedler/Seedler_Nut.png" id="1_f2324"]
+[ext_resource type="PackedScene" uid="uid://belshnoaiu7mu" path="res://scenes/bullets/seedler/seedler_thorns.tscn" id="2_7qh40"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_70b6q"]
+radius = 16.0312
+
+[node name="SeedlerNut" type="Area2D"]
+position = Vector2(600, 344)
+script = ExtResource("1_beaa2")
+thorns = ExtResource("2_7qh40")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_f2324")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_70b6q")
+
+[node name="OutScreen" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

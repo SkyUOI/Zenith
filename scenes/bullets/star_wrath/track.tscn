@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnsij21hmxb85"]
+
+[ext_resource type="Script" path="res://scenes/bullets/star_wrath/track.gd" id="1_poiyo"]
+
+[node name="Track" type="Node2D"]
+script = ExtResource("1_poiyo")

@@ -13,11 +13,10 @@ config_version=5
 config/name="Zenith"
 run/main_scene="res://scenes/starter.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://resources/images/weapons/Zenith.webp"
 
 [autoload]
 
-Global="*res://scripts/global.gd"
+Global="*res://scenes/global.gd"
 
 [display]
 
