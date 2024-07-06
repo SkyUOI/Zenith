@@ -8,7 +8,7 @@ use rand::{thread_rng, Rng};
 
 #[derive(GodotClass)]
 #[class(base=Area2D)]
-struct StarWrath {
+pub struct StarWrath {
     base: Base<Area2D>,
     start_flag: bool,
     state: State,

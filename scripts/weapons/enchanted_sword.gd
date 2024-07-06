@@ -1,25 +1,32 @@
 extends EnchantedSword
 
+signal attack_finished
+@export var enchanted_beam: PackedScene
 var finished: bool
 
 # 操作序列(也许只是测试用)
 var opers: Array[Callable]
-signal attack_finished
+
+# 当前动作对应函数
+var now_func: Callable
+
+# 当前是第几个oper(用于opers)
+var oper_num: int = -1
 
 
 func _ready():
 	opers = [
-		swingAttack.bind(Vector2(330, 330), Vector2(800, 300), 4),
-		swingAttack.bind(Vector2(430, 200), Vector2(800, 750), 4),
-		swingAttack.bind(Vector2(830, 330), Vector2(300, 400), 4),
-		verticalAttack.bind(Vector2(200, 100), Vector2(900, 100), 4),
-		verticalAttack.bind(Vector2(200, 500), Vector2(600, 100), 4),
-		rotateAttack.bind(Vector2(1000, 100), 6),
-		rotateAttack.bind(Vector2(500, 500), 6),
-		motionlessAttack.bind(Vector2(500, 300), 3),
-		motionlessAttack.bind(Vector2(600, 400), 3),
-		rushAttack.bind(Vector2(130, 230), Vector2(800, 400)),
-		rushAttack.bind(Vector2(800, 600), Vector2(200, 200)),
+		swing_attack.bind(Vector2(330, 330), Vector2(800, 300), 4),
+		swing_attack.bind(Vector2(430, 200), Vector2(800, 750), 4),
+		swing_attack.bind(Vector2(830, 330), Vector2(300, 400), 4),
+		vertical_attack.bind(Vector2(200, 100), Vector2(900, 100), 4),
+		vertical_attack.bind(Vector2(200, 500), Vector2(600, 100), 4),
+		rotate_attack.bind(Vector2(1000, 100), 6),
+		rotate_attack.bind(Vector2(500, 500), 6),
+		motionless_attack.bind(Vector2(500, 300), 3),
+		motionless_attack.bind(Vector2(600, 400), 3),
+		rush_attack.bind(Vector2(130, 230), Vector2(800, 400)),
+		rush_attack.bind(Vector2(800, 600), Vector2(200, 200)),
 	]
 	if get_tree().current_scene == self:
 		exit()
@@ -31,21 +38,13 @@ func start():
 	exit()
 
 
-@export var enchanted_beam: PackedScene
-# 当前动作对应函数
-var now_func: Callable
-
-# 当前是第几个oper(用于opers)
-var oper_num: int = -1
-
-
 # 完成某一动作
 func exit():
-	nextOper()
+	next_oper()
 
 
 # 前往下一个动作
-func nextOper():
+func next_oper():
 	oper_num += 1
 	if oper_num >= opers.size():
 		attack_finished.emit()
@@ -58,12 +57,12 @@ func is_even(x: int) -> bool:
 
 
 # 角度对应向量
-func radToVector(rad: float) -> Vector2:
+func rad_to_vector(rad: float) -> Vector2:
 	return Vector2(cos(rad), sin(rad))
 
 
 # 发射附魔光束
-func swingShotBeam(start_pos: Vector2, end_pos: Vector2):
+func swing_shot_beam(start_pos: Vector2, end_pos: Vector2):
 	var beam = enchanted_beam.instantiate()
 	beam.direction = end_pos - start_pos
 	beam.position = start_pos
@@ -74,36 +73,36 @@ func swingShotBeam(start_pos: Vector2, end_pos: Vector2):
 # 启动挥舞动作
 # point: 挥舞路径中点
 # to: 目标点
-func swingAttack(point: Vector2, to: Vector2, tim: int):
-	const move_time = 0.4
-	const pre_move_time = 0.5
-	const wait_time = 0.05
+func swing_attack(point: Vector2, to: Vector2, tim: int):
+	const MOVE_TIME = 0.4
+	const PRE_MOVE_TIME = 0.5
+	const WAIT_TIME = 0.05
 	var to_target_rad = point.angle_to_point(to)
 	var swing_odd_rad = to_target_rad + (-PI * 2 / 3)
 	var swing_even_rad = to_target_rad + (PI * 1.5 / 3)
-	var swing_odd_position = point + 170 * radToVector(to_target_rad + (-PI / 2))
-	var swing_even_position = point + 170 * radToVector(to_target_rad + PI / 2)
+	var swing_odd_position = point + 170 * rad_to_vector(to_target_rad + (-PI / 2))
+	var swing_even_position = point + 170 * rad_to_vector(to_target_rad + PI / 2)
 	var swing = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	swing.tween_property(self, "position", point, pre_move_time)
-	swing.parallel().tween_property(self, "rotation", to_target_rad, pre_move_time)
-	swing.tween_interval(wait_time)
+	swing.tween_property(self, "position", point, PRE_MOVE_TIME)
+	swing.parallel().tween_property(self, "rotation", to_target_rad, PRE_MOVE_TIME)
+	swing.tween_interval(WAIT_TIME)
 	for i in range(tim):
 		var even = is_even(i)
 		swing.tween_property(
-			self, "position", swing_even_position if even else swing_odd_position, move_time
+			self, "position", swing_even_position if even else swing_odd_position, MOVE_TIME
 		)
 		swing.parallel().tween_property(
-			self, "rotation", swing_even_rad if even else swing_odd_rad, move_time
+			self, "rotation", swing_even_rad if even else swing_odd_rad, MOVE_TIME
 		)
-		swing.tween_interval(wait_time)
+		swing.tween_interval(WAIT_TIME)
 	swing.tween_callback(exit)
 
 	var vector = swing_odd_position - swing_even_position
 	var shot = create_tween()
-	shot.tween_interval(pre_move_time + wait_time)
+	shot.tween_interval(PRE_MOVE_TIME + WAIT_TIME)
 	for i in range(tim):
 		var even = i % 2 == 0
-		shot.tween_interval(move_time / 2)
+		shot.tween_interval(MOVE_TIME / 2)
 		for j in range(4):
 			var start_pos = (
 				(swing_even_position + vector / 5 * (j + 1))
@@ -112,12 +111,12 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 			)
 			shot.tween_callback(
 				(
-					swingShotBeam.bind(start_pos, to)
+					swing_shot_beam.bind(start_pos, to)
 					if even
-					else swingShotBeam.bind(start_pos, 2 * start_pos - (point * 2 - to))
+					else swing_shot_beam.bind(start_pos, 2 * start_pos - (point * 2 - to))
 				)
 			)
-		shot.tween_interval(move_time / 2 + wait_time)
+		shot.tween_interval(MOVE_TIME / 2 + WAIT_TIME)
 
 
 #--------------
@@ -129,34 +128,34 @@ func swingAttack(point: Vector2, to: Vector2, tim: int):
 # to: 攻击时所在位置
 # time: 攻击持续时间
 # 先旋转到to, 再攻击time
-func motionlessShotBeam(num: int):
+func motionless_shot_beam(num: int):
 	var beams: Array[Node] = []
 	for i in range(num):
 		beams.push_back(enchanted_beam.instantiate())
-		beams[i].direction = radToVector(rotation + TAU * i / num + randf_range(-PI / 6, PI / 6))
+		beams[i].direction = rad_to_vector(rotation + TAU * i / num + randf_range(-PI / 6, PI / 6))
 		beams[i].position = position + beams[i].direction * 10
 		beams[i].speed = 800
 	for i in beams:
 		get_parent().add_child(i)
 
 
-func motionlessAttack(to: Vector2, time: float):
-	const move_time = 0.7
-	const shot_time = 0.2
+func motionless_attack(to: Vector2, time: float):
+	const MOVE_TIME = 0.7
+	const SHOT_TIME = 0.2
 	create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).tween_property(
-		self, "position", to, move_time
+		self, "position", to, MOVE_TIME
 	)
 	var sword_rotate = create_tween()
-	sword_rotate.tween_interval(move_time)
+	sword_rotate.tween_interval(MOVE_TIME)
 	sword_rotate.tween_property(self, "rotation", rotation + 3 * TAU * time, time)
 	sword_rotate.tween_callback(exit)
 
 	var shot = create_tween()
-	shot.tween_interval(move_time)
-	var times = floor(time / shot_time)
+	shot.tween_interval(MOVE_TIME)
+	var times = floor(time / SHOT_TIME)
 	for i in range(times):
-		shot.tween_callback(motionlessShotBeam.bind(6))
-		shot.tween_interval(shot_time)
+		shot.tween_callback(motionless_shot_beam.bind(6))
+		shot.tween_interval(SHOT_TIME)
 
 
 #---rotate---
@@ -165,27 +164,27 @@ func motionlessAttack(to: Vector2, time: float):
 # point, to: 首尾点
 
 
-func rotateShotBeam(num: int):
+func rotate_shot_beam(num: int):
 	var beams: Array[Node] = []
 	for i in range(num):
 		beams.push_back(enchanted_beam.instantiate())
-		beams[i].direction = radToVector(rotation + TAU * i / num)
+		beams[i].direction = rad_to_vector(rotation + TAU * i / num)
 		beams[i].position = position + beams[i].direction * 10
 		# 不让他自己动, 通过下列动画完成
 		beams[i].speed = 0
 
 	# 平均速度
-	const v = 800
-	var move_time = 2000 / v
+	const V = 800
+	var move_time = 2000 / V
 	for beam in beams:
 		get_parent().add_child(beam)
 		var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 		tween.tween_property(beam, "position", beam.position + 2000 * beam.direction, move_time)
 
 
-func rotateAttack(to: Vector2, tim: int):
-	const shot_time = 0.4
-	const wait_time = 0.1
+func rotate_attack(to: Vector2, tim: int):
+	const SHOT_TIME = 0.4
+	const WAIT_TIME = 0.1
 	# 移动
 	var move_time = (to - position).length() / 600
 	var move = create_tween()
@@ -195,15 +194,15 @@ func rotateAttack(to: Vector2, tim: int):
 
 	# 旋转
 	var end_rotation = rotation + TAU * 3.5 * move_time
-	create_tween().tween_property(self, "rotation", end_rotation, move_time + wait_time)
+	create_tween().tween_property(self, "rotation", end_rotation, move_time + WAIT_TIME)
 
 	var shot = create_tween()
-	shot.tween_callback(rotateShotBeam.bind(tim))
+	shot.tween_callback(rotate_shot_beam.bind(tim))
 	# 攻击次数
-	var times = floor(move_time / shot_time)
+	var times = floor(move_time / SHOT_TIME)
 	for i in range(times):
-		shot.tween_interval(shot_time)
-		shot.tween_callback(rotateShotBeam.bind(tim))
+		shot.tween_interval(SHOT_TIME)
+		shot.tween_callback(rotate_shot_beam.bind(tim))
 
 
 #---vertical---
@@ -213,9 +212,9 @@ func rotateAttack(to: Vector2, tim: int):
 # 弹幕与剑头方向一致
 
 
-func verticalShotBeam(pos: Vector2, rad: float):
+func vertical_shot_beam(pos: Vector2, rad: float):
 	var beam = enchanted_beam.instantiate()
-	beam.direction = radToVector(rad)
+	beam.direction = rad_to_vector(rad)
 	beam.position = pos + beam.direction.normalized() * 30
 	beam.speed = 650
 	get_parent().add_child(beam)
@@ -225,9 +224,9 @@ func verticalShotBeam(pos: Vector2, rad: float):
 # tim: 重复次数
 # 在point 和 to 间反复横跳
 # 剑头方向为 point 指向 to 的向量转 PI / 2
-func verticalAttack(point: Vector2, to: Vector2, tim: int):
-	const move_time = 0.3
-	const wait_time = 0.3
+func vertical_attack(point: Vector2, to: Vector2, tim: int):
+	const MOVE_TIME = 0.3
+	const WAIT_TIME = 0.3
 	var shot_rad = point.angle_to_point(to) + PI / 2
 	var attack = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	attack.tween_property(self, "position", point, 1)
@@ -235,8 +234,8 @@ func verticalAttack(point: Vector2, to: Vector2, tim: int):
 
 	for i in range(tim):
 		var even = is_even(i)
-		attack.tween_property(self, "position", to if even else point, move_time)
-		attack.tween_interval(wait_time)
+		attack.tween_property(self, "position", to if even else point, MOVE_TIME)
+		attack.tween_interval(WAIT_TIME)
 	attack.tween_callback(exit)
 
 	var shot = create_tween()
@@ -245,53 +244,53 @@ func verticalAttack(point: Vector2, to: Vector2, tim: int):
 	for i in range(tim):
 		var even = is_even(i)
 		var unit = 70 * (to - point if even else point - to).normalized()
-		var getPos = func(x): return (point if even else to) + unit * x
+		var get_pos = func(x): return (point if even else to) + unit * x
 		var num = floorf((point - to).length() / unit.length()) + 1
-		var unit_time = move_time / num
+		var unit_time = MOVE_TIME / num
 		for j in range(num):
-			shot.tween_callback(verticalShotBeam.bind(getPos.call(j), shot_rad))
+			shot.tween_callback(vertical_shot_beam.bind(get_pos.call(j), shot_rad))
 			shot.tween_interval(unit_time)
-		shot.tween_interval(wait_time)
+		shot.tween_interval(WAIT_TIME)
 
 
 #---rush---
 # 冲刺攻击
 # point, to: 首尾点
 # 剑头方向为 point 指向 to
-func rushAttack(point: Vector2, to: Vector2):
-	const pre_move_time = 0.8
-	const move_time = 0.6
-	const add_time = -0.25
+func rush_attack(point: Vector2, to: Vector2):
+	const PRE_MOVE_TIME = 0.8
+	const MOVE_TIME = 0.6
+	const ADD_TIME = -0.25
 	var move = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	move.tween_property(self, "position", point, pre_move_time)
+	move.tween_property(self, "position", point, PRE_MOVE_TIME)
 	var end_rotation = point.angle_to_point(to) + PI / 4
-	move.parallel().tween_property(self, "rotation", end_rotation, pre_move_time)
-	move.tween_property(self, "position", to, move_time)
+	move.parallel().tween_property(self, "rotation", end_rotation, PRE_MOVE_TIME)
+	move.tween_property(self, "position", to, MOVE_TIME)
 	move.tween_callback(exit)
 
 	var unit = 70 * (to - point).normalized()
-	var getPos = func(i): return point + unit * i
+	var get_pos = func(i): return point + unit * i
 	var num = floorf((point - to).length() / unit.length()) + 1
-	var unit_time = move_time / (2 * num)
+	var unit_time = MOVE_TIME / (2 * num)
 	var shot = create_tween()
-	shot.tween_interval(pre_move_time)
-	var getTime = func(i): return move_time + add_time - unit_time * (i - 1)
+	shot.tween_interval(PRE_MOVE_TIME)
+	var get_time = func(i): return MOVE_TIME + ADD_TIME - unit_time * (i - 1)
 
 	for i in range(num):
 		shot.tween_callback(
-			rushShotBeam.bind(getPos.call(i), point.angle_to_point(to), getTime.call(i))
+			rush_shot_beam.bind(get_pos.call(i), point.angle_to_point(to), get_time.call(i))
 		)
 		shot.tween_interval(unit_time)
 
 
-func rushShotBeam(pos: Vector2, rad: float, wait_time: float):
-	const v = 800
+func rush_shot_beam(pos: Vector2, rad: float, wait_time: float):
+	const V = 800
 	var beam = enchanted_beam.instantiate()
-	beam.direction = radToVector(rad)
+	beam.direction = rad_to_vector(rad)
 	beam.position = pos + beam.direction.normalized() * 30
 	beam.speed = 0
 	get_parent().add_child(beam)
-	var move_time = 2000 / v
+	var move_time = 2000 / V
 	var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_interval(wait_time)
 	tween.tween_property(beam, "position", beam.position + 2000 * beam.direction, move_time)

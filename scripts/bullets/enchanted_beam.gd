@@ -3,6 +3,9 @@ extends Area2D
 @export var direction: Vector2
 @export var speed: float
 
+# 是否被反弹
+var is_bound = false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,10 +17,6 @@ func _ready():
 		self, "modulate", color, 0.15
 	)
 	$OutScreen.screen_exited.connect(queue_free)
-
-
-# 是否被反弹
-var is_bound = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
