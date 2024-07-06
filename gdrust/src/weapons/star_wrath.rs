@@ -95,14 +95,14 @@ impl StarWrath {
     }
 
     #[func]
+    /// 新建一个从天而降垂直下落的弹幕
     fn fall_star(&mut self) {
         let bullet = self.get_bullet_scene();
         let mut star = bullet.instantiate_as::<StarWrathBullet>();
-        let sz = self.base_mut().get_viewport_rect().size.x;
-        let random_x = thread_rng().gen_range(0.0..sz);
+        let sz = self.base_mut().get_viewport_rect().size.x - 100.0;
+        let random_x = thread_rng().gen_range(100.0..sz);
         godot_print!("{}", random_x);
+        self.base_mut().add_child(star.clone().upcast());
         star.bind_mut().init_from_sky(random_x);
-        self.base_mut().add_child(star.upcast());
-        // godot_print!("Star Falling!")
     }
 }

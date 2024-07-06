@@ -13,7 +13,7 @@ mod zenith;
 use godot::prelude::*;
 use multi::{MultiManager, MultiManagerImpl};
 use std::{
-    panic::{set_hook, PanicHookInfo},
+    panic::{set_hook, PanicInfo},
     sync::{Arc, Mutex, OnceLock},
 };
 use tokio::runtime::{Builder, Runtime};
@@ -31,7 +31,7 @@ fn get_tokio_runtime() -> &'static Runtime {
     TMP.get_or_init(|| Builder::new_multi_thread().enable_all().build().unwrap())
 }
 
-fn panic_handler(info: &PanicHookInfo) {
+fn panic_handler(info: &PanicInfo) {
     if let Some(p) = info.location() {
         godot_error!(
             "Panic occurred in file '{}' at line {}\n",

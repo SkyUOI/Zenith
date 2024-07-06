@@ -36,6 +36,8 @@ impl IArea2D for StarWrathBullet {
         let tmp = self.base().get_position() + self.direct * delta as f32 * self.speed as f32;
         self.base_mut().set_position(tmp);
     }
+
+    fn draw(&mut self) {}
 }
 
 #[godot_api]
@@ -79,12 +81,16 @@ impl StarWrathBullet {
         let pos = Vector2::new(x_idx, 0.0);
         self.base_mut().set_global_position(pos);
         let mask = self.get_track_scene();
-        let mut new_mask = mask.instantiate().unwrap();
-        self.base_mut().add_child(new_mask.clone());
+        // let mut new_mask = mask.instantiate().unwrap();
+        // self.base_mut().add_child(new_mask.clone());
         godot_print!("now pos:{}", pos);
-        new_mask.call("init".into(), &[pos.to_variant()]);
+        // new_mask.call("init".into(), &[pos.to_variant()]);
         self.base_mut().show();
-        self.base_mut().set_rotation(-PI / 2.0);
+        self.base_mut().set_global_rotation(-PI / 2.0);
+    }
+
+    fn track(&mut self) {
+        self.base_mut().queue_redraw();
     }
 
     #[func]

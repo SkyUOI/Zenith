@@ -1,11 +1,10 @@
-cargo-features = ["edition2024", "profile-rustflags"]
 [package]
 name = "gdrust"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
-godot = {version = "0", features = ["experimental-threads"]}
+godot = { version = "0", features = ["experimental-threads"] }
 rand = "0.8"
 derive = { path = "./derive" }
 proto = { path = "proto" }

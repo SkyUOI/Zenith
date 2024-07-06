@@ -1,13 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1po1tqcrrhe3"]
+[gd_scene load_steps=4 format=3 uid="uid://d1po1tqcrrhe3"]
 
 [ext_resource type="Texture2D" uid="uid://ca6gwuskjes5u" path="res://resources/images/bullets/star_wrath/Star_Wrath_Original_Bullet.webp" id="1_do8sq"]
+[ext_resource type="Script" path="res://scripts/bullets/star_wrath_original.gd" id="1_y6as6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kmd7p"]
 radius = 27.3309
 height = 172.02
 
 [node name="StarWrathBullet" type="StarWrathBullet"]
-visible = false
+script = ExtResource("1_y6as6")
 
 [node name="Image" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
