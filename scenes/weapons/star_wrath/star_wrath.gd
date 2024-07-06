@@ -1,7 +1,7 @@
 extends StarWrath
 
+@export var star_wrath_origin: PackedScene
 var operations = [func(): self.fall_star()]
-
 var operation_idx = 0
 
 

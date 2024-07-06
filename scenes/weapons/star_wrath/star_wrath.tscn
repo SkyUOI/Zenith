@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dn2ixin15jtt3"]
+[gd_scene load_steps=13 format=3 uid="uid://dn2ixin15jtt3"]
 
 [ext_resource type="Script" path="res://scenes/weapons/star_wrath/star_wrath_root.gd" id="1_bo25j"]
 [ext_resource type="Shader" path="res://shaders/virtual.gdshader" id="2_xksic"]
 [ext_resource type="Script" path="res://scenes/weapons/star_wrath/star_wrath.gd" id="3_u5scp"]
+[ext_resource type="PackedScene" uid="uid://d1po1tqcrrhe3" path="res://scenes/bullets/star_wrath/star_wrath_original.tscn" id="4_eglqk"]
 [ext_resource type="Texture2D" uid="uid://wtqaglfh5mpm" path="res://scenes/weapons/star_wrath/star_wrath.png" id="4_ohxcu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t64wj"]
@@ -127,6 +128,7 @@ z_index = 1
 position = Vector2(554, 286)
 rotation = -0.253092
 script = ExtResource("3_u5scp")
+star_wrath_origin = ExtResource("4_eglqk")
 
 [node name="StarWrath" type="Sprite2D" parent="StarWrath"]
 scale = Vector2(2.97559, 2.97559)

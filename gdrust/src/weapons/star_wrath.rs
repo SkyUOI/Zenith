@@ -70,7 +70,7 @@ impl StarWrath {
     #[func]
     #[debug]
     fn get_bullet_scene(&self) -> Gd<PackedScene> {
-        load("res://scenes/bullets/star_wrath/star_wrath_original.tscn")
+        Gd::from_variant(&self.base().get_property().get("star_wrath_origin".into()))
     }
 
     #[func]

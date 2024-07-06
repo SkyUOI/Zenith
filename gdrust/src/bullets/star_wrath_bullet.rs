@@ -100,7 +100,7 @@ impl StarWrathBullet {
     #[func]
     #[debug]
     fn get_track_scene(&self) -> Gd<PackedScene> {
-        load::<PackedScene>("res://scenes/bullets/star_wrath/track.tscn")
+         Gd::from_variant(&self.base().get_property().get("track".into()))
     }
 
     #[func]
