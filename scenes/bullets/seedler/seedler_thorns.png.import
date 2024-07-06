@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://g6vbpvi4ja4e"
-path="res://.godot/imported/Seedler_Nut.png-463cb8f60b039abee762a8c3697237e1.ctex"
+uid="uid://betqbnnoc7vvq"
+path="res://.godot/imported/seedler_thorns.png-d35e8fcb90264b0619fbec6d7ef295e3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/bullets/Seedler/Seedler_Nut.png"
-dest_files=["res://.godot/imported/Seedler_Nut.png-463cb8f60b039abee762a8c3697237e1.ctex"]
+source_file="res://scenes/bullets/seedler/seedler_thorns.png"
+dest_files=["res://.godot/imported/seedler_thorns.png-d35e8fcb90264b0619fbec6d7ef295e3.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://belshnoaiu7mu"]
 
 [ext_resource type="Script" path="res://scenes/bullets/seedler/seedler_thorns.gd" id="1_8vk37"]
-[ext_resource type="Texture2D" uid="uid://betqbnnoc7vvq" path="res://resources/images/bullets/Seedler/Seedler_Thorns.png" id="1_nmv8w"]
+[ext_resource type="Texture2D" uid="uid://betqbnnoc7vvq" path="res://scenes/bullets/seedler/seedler_thorns.png" id="1_nmv8w"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ur18u"]
 radius = 4.0

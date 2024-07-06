@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://betqbnnoc7vvq"
-path="res://.godot/imported/Seedler_Thorns.png-7e1952da7bde014cff20016b1ff91c97.ctex"
+uid="uid://bqwx5dm7jefu6"
+path="res://.godot/imported/seedler.png-7024c294a5cfe11d2078fec853b506ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/images/bullets/Seedler/Seedler_Thorns.png"
-dest_files=["res://.godot/imported/Seedler_Thorns.png-7e1952da7bde014cff20016b1ff91c97.ctex"]
+source_file="res://scenes/weapons/seedler/seedler.png"
+dest_files=["res://.godot/imported/seedler.png-7024c294a5cfe11d2078fec853b506ae.ctex"]
 
 [params]
 

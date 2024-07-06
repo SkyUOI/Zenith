@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7unyob7tl6gs"]
 
-[ext_resource type="Texture2D" uid="uid://bqwx5dm7jefu6" path="res://resources/images/weapons/Seedler.png" id="1_3obt5"]
+[ext_resource type="Texture2D" uid="uid://bqwx5dm7jefu6" path="res://scenes/weapons/seedler/seedler.png" id="1_3obt5"]
 [ext_resource type="Script" path="res://scenes/weapons/seedler/seedler.gd" id="2_6mejc"]
 
 [sub_resource type="Curve2D" id="Curve2D_elleu"]

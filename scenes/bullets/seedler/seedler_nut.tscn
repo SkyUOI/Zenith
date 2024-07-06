@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cnhbuadu80gjc"]
 
 [ext_resource type="Script" path="res://scenes/bullets/seedler/seedler_nut.gd" id="1_beaa2"]
-[ext_resource type="Texture2D" uid="uid://g6vbpvi4ja4e" path="res://resources/images/bullets/Seedler/Seedler_Nut.png" id="1_f2324"]
+[ext_resource type="Texture2D" uid="uid://g6vbpvi4ja4e" path="res://scenes/bullets/seedler/seedler_nut.png" id="1_f2324"]
 [ext_resource type="PackedScene" uid="uid://belshnoaiu7mu" path="res://scenes/bullets/seedler/seedler_thorns.tscn" id="2_7qh40"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_70b6q"]
