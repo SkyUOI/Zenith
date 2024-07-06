@@ -16,3 +16,9 @@
 ## 贡献
 
 如果你想做出任何贡献，请看[CONTRIBUTING.md](./CONTRIBUTING-zh.md)
+
+## 联系作者
+
+Email: `limuyang202011@163.com`
+微信: angelgel2020
+QQ: 3570249647
