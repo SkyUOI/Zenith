@@ -5,7 +5,7 @@ use godot::prelude::*;
 use rand::{thread_rng, Rng};
 use std::f32::consts::PI;
 
-use crate::godot_debug_assert;
+use crate::{debug_check, godot_debug_assert};
 use crate::player::Player;
 use crate::utils::split_to_vec;
 
@@ -38,6 +38,10 @@ impl IArea2D for StarWrathBullet {
     }
 
     fn draw(&mut self) {}
+
+    fn ready(&mut self) {
+        debug_check!(self)
+    }
 }
 
 #[godot_api]
@@ -96,7 +100,7 @@ impl StarWrathBullet {
     #[func]
     #[debug]
     fn get_track_scene(&self) -> Gd<PackedScene> {
-        load::<PackedScene>("res://scenes/bullets/star_wrath_original/track.tscn")
+        load::<PackedScene>("res://scenes/bullets/star_wrath/track.tscn")
     }
 
     #[func]

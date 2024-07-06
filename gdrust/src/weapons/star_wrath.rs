@@ -70,7 +70,7 @@ impl StarWrath {
     #[func]
     #[debug]
     fn get_bullet_scene(&self) -> Gd<PackedScene> {
-        load("res://scenes/bullets/star_wrath_original.tscn")
+        load("res://scenes/bullets/star_wrath/star_wrath_original.tscn")
     }
 
     #[func]
