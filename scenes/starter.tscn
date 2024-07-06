@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dg0blw2bcacx5"]
+[gd_scene load_steps=3 format=3 uid="uid://dg0blw2bcacx5"]
 
 [ext_resource type="Script" path="res://scenes/multi_game.gd" id="1_joi1g"]
+[ext_resource type="PackedScene" uid="uid://vmiwhsyggblr" path="res://scenes/multi_game/multi_join.tscn" id="2_s6vvx"]
 
 [node name="Starter" type="Control"]
 layout_mode = 3
@@ -25,5 +26,6 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Multi Player"
 script = ExtResource("1_joi1g")
+multi_join = ExtResource("2_s6vvx")
 
 [connection signal="pressed" from="MultiPlay" to="MultiPlay" method="_on_pressed"]

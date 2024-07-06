@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dertwnnfyebti"]
+[gd_scene load_steps=4 format=3 uid="uid://dertwnnfyebti"]
 
 [ext_resource type="Script" path="res://scenes/multi_game/select.gd" id="1_d5ypr"]
+[ext_resource type="PackedScene" uid="uid://vmiwhsyggblr" path="res://scenes/multi_game/multi_join.tscn" id="2_0kwui"]
+[ext_resource type="PackedScene" uid="uid://shdywgibimvd" path="res://scenes/multi_game/multi_set_up.tscn" id="3_wjc7w"]
 
 [node name="MultiGame" type="Control"]
 layout_mode = 3
@@ -24,6 +26,8 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_d5ypr")
+multi_join = ExtResource("2_0kwui")
+multi_set_up = ExtResource("3_wjc7w")
 
 [node name="Join" type="Button" parent="Select"]
 layout_mode = 2

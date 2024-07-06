@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://vmiwhsyggblr"]
+[gd_scene load_steps=3 format=3 uid="uid://vmiwhsyggblr"]
 
 [ext_resource type="Script" path="res://scenes/multi_game/enter.gd" id="1_8dfk5"]
+[ext_resource type="PackedScene" uid="uid://cibwxaqnuodid" path="res://scenes/fight.tscn" id="2_r8315"]
 
 [node name="MultiGame" type="Control"]
 layout_mode = 3
@@ -24,6 +25,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "OK"
 script = ExtResource("1_8dfk5")
+fight_scene = ExtResource("2_r8315")
 
 [node name="WrongDialog" type="AcceptDialog" parent="Ok"]
 title = "Warning!"

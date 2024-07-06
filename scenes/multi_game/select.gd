@@ -1,5 +1,8 @@
 extends VBoxContainer
 
+@export var multi_join: PackedScene
+@export var multi_set_up: PackedScene
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,8 +15,8 @@ func _process(_delta: float) -> void:
 
 
 func _on_join_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/multi_join.tscn")
+	get_tree().change_scene_to_packed(multi_join)
 
 
 func _on_setup_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/multi_set_up.tscn")
+	get_tree().change_scene_to_packed(multi_set_up)
