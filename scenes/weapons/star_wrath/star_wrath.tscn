@@ -124,7 +124,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="StarWrath" type="StarWrath" parent="."]
-z_index = 1
 position = Vector2(554, 286)
 rotation = -0.253092
 script = ExtResource("3_u5scp")

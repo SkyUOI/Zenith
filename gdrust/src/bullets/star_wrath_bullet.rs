@@ -1,5 +1,6 @@
 use derive::gen_debug;
 use godot::classes::{Area2D, IArea2D};
+use godot::global::print;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::{thread_rng, Rng};
@@ -33,8 +34,9 @@ impl IArea2D for StarWrathBullet {
     }
 
     fn process(&mut self, delta: f64) {
-        let tmp = self.base().get_position() + self.direct * delta as f32 * self.speed as f32;
-        self.base_mut().set_position(tmp);
+        let tmp =
+            self.base().get_global_position() + self.direct * delta as f32 * self.speed as f32;
+        self.base_mut().set_global_position(tmp);
     }
 
     fn draw(&mut self) {}
@@ -54,6 +56,7 @@ impl StarWrathBullet {
         self.base_init((direct.y / direct.x).atan());
     }
 
+    /// 设置随机运行速度
     fn random_speed(&mut self) {
         self.speed = thread_rng().gen_range(SPEED_MIN..=SPEED_MAX);
     }
@@ -85,12 +88,13 @@ impl StarWrathBullet {
         let pos = Vector2::new(x_idx, 0.0);
         self.base_mut().set_global_position(pos);
         let mask = self.get_track_scene();
-        // let mut new_mask = mask.instantiate().unwrap();
-        // self.base_mut().add_child(new_mask.clone());
-        godot_print!("now pos:{}", pos);
-        // new_mask.call("init".into(), &[pos.to_variant()]);
+        let mut new_mask = mask.instantiate().unwrap();
+        self.base_mut().add_child(new_mask.clone());
+        new_mask.call("init".into(), &[]);
         self.base_mut().show();
         self.base_mut().set_global_rotation(-PI / 2.0);
+        self.random_speed();
+        self.direct = Vector2::DOWN;
     }
 
     fn track(&mut self) {
@@ -101,12 +105,6 @@ impl StarWrathBullet {
     #[debug]
     fn get_track_scene(&self) -> Gd<PackedScene> {
         Gd::from_variant(&self.base().get_property().get("track".into()))
-    }
-
-    #[func]
-    fn on_killer_screen_exited(&mut self) {
-        // godot_print!("free bullet");
-        self.base_mut().queue_free()
     }
 
     #[func]

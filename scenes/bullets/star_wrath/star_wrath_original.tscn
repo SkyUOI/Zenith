@@ -9,6 +9,7 @@ radius = 27.3309
 height = 172.02
 
 [node name="StarWrathBullet" type="StarWrathBullet"]
+z_index = 1
 script = ExtResource("1_y6as6")
 track = ExtResource("2_b34na")
 
@@ -23,7 +24,7 @@ rotation = 1.55575
 scale = Vector2(1, 0.600045)
 shape = SubResource("CapsuleShape2D_kmd7p")
 
-[node name="Killer" type="VisibleOnScreenEnabler2D" parent="."]
+[node name="Killer" type="VisibleOnScreenNotifier2D" parent="."]
 
 [connection signal="area_entered" from="." to="." method="area_entered"]
-[connection signal="screen_exited" from="Killer" to="." method="on_killer_screen_exited"]
+[connection signal="screen_exited" from="Killer" to="." method="_on_killer_screen_exited"]
