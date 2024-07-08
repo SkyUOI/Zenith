@@ -7,15 +7,15 @@ extends Area2D
 # 大小最小, 会下落, 撞到地面炸开
 # pos: 初始
 func throw():
-	area_entered.connect(throwShotBeam)
-	$OutScreen.screen_exited.connect(throwShotBeam.bind(Area2D.new()))
+	area_entered.connect(throw_shot_beam)
+	$OutScreen.screen_exited.connect(throw_shot_beam.bind(Area2D.new()))
 	create_tween().tween_property(self, "rotation", rotation + 10.0 * TAU, 5)
 	var move = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 	move.tween_interval(0.5)
 	move.tween_property(self, "position", position + Vector2(0, 6500), 3)
 
 
-func throwShotBeam(area: Area2D):
+func throw_shot_beam(area: Area2D):
 	#if area.name != "down"
 	#return
 	const times = 4
@@ -46,11 +46,11 @@ func burst(pos: Vector2):
 	scale = Vector2(1.5, 1.5)
 	var tween = create_tween()
 	tween.tween_property(self, "rotation", rotation + speed * time, time)
-	tween.tween_callback(burstShotBeam)
+	tween.tween_callback(burst_shot_beam)
 	tween.tween_callback(queue_free)
 
 
-func burstShotBeam():
+func burst_shot_beam():
 	const times = 15
 	var beams: Array[Area2D] = []
 	for i in range(times):
@@ -65,7 +65,7 @@ func burstShotBeam():
 
 # 启动超级爆炸
 # 最大, 原地旋转
-func superBurst(pos : Vector2):
+func super_burst(pos : Vector2):
 	const time = 0.8
 	const wait_time = 0.65
 	# TAU / s
@@ -74,11 +74,11 @@ func superBurst(pos : Vector2):
 	scale = Vector2(2, 2)
 	var tween = create_tween()
 	tween.tween_property(self, "rotation", rotation + speed * time, time)
-	tween.tween_callback(superBurstShotBeam.bind())
+	tween.tween_callback(super_burst_shot_beam.bind())
 	tween.tween_interval(wait_time)
 	tween.tween_callback(queue_free)
 
-func superBurstShotBeam():
+func super_burst_shot_beam():
 	const times = 12
 	const num = 6
 	for j in range(num):
@@ -96,7 +96,7 @@ func superBurstShotBeam():
 
 func _ready():
 	$OutScreen.screen_exited.connect(queue_free)
-	superBurst(Vector2(300, 300))
+	super_burst(Vector2(300, 300))
 
 
 func _process(delta):
@@ -112,4 +112,3 @@ func _on_area_entered(area):
 	if area.name == "Player":
 		area.get_node("..").hit(10)
 		$CollisionShape2D.set_deferred("disabled", true)
-
