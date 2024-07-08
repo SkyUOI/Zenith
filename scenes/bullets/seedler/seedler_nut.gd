@@ -58,14 +58,45 @@ func burstShotBeam():
 		beams[i].is_fall = false
 		beams[i].position = position
 		var rad = TAU / times * i + (TAU / 12 if i % 2 == 0 else -TAU / 12)
+		beams[i].rotation = rad
 		beams[i].velocity = Vector2(sin(rad), cos(rad)) * 800
 	for beam in beams:
 		get_parent().add_child(beam)
 
+# 启动超级爆炸
+# 最大, 原地旋转
+func superBurst(pos : Vector2):
+	const time = 0.8
+	const wait_time = 0.65
+	# TAU / s
+	const speed = 1.5 * TAU
+	position = pos
+	scale = Vector2(2, 2)
+	var tween = create_tween()
+	tween.tween_property(self, "rotation", rotation + speed * time, time)
+	tween.tween_callback(superBurstShotBeam.bind())
+	tween.tween_interval(wait_time)
+	tween.tween_callback(queue_free)
+
+func superBurstShotBeam():
+	const times = 12
+	const num = 6
+	for j in range(num):
+		print("aaa")
+		var beams: Array[Area2D] = []
+		for i in range(times):
+			beams.push_back(thorns.instantiate())
+			beams[i].is_fall = false
+			beams[i].position = position
+			var rad = TAU / times * i + (TAU / 12 if i % 2 == 0 else -TAU / 12)
+			beams[i].velocity = Vector2(sin(rad), cos(rad)) * 800
+		for beam in beams:
+			get_parent().add_child(beam)
+		await get_tree().create_timer(0.1).timeout
 
 func _ready():
 	$OutScreen.screen_exited.connect(queue_free)
-	throw()
+	superBurst(Vector2(300, 300))
 
 
 func _process(delta):
@@ -81,3 +112,4 @@ func _on_area_entered(area):
 	if area.name == "Player":
 		area.get_node("..").hit(10)
 		$CollisionShape2D.set_deferred("disabled", true)
+
