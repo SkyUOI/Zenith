@@ -1,14 +1,11 @@
 use derive::gen_debug;
 use godot::{
     engine::{INode, Node},
+    log::godot_print,
     obj::{Base, Gd, WithBaseField},
     register::{godot_api, GodotClass},
 };
-use std::{
-    collections::{HashMap, HashSet},
-    fs,
-    sync::OnceLock,
-};
+use std::{collections::HashSet, fs, sync::OnceLock};
 
 use crate::{cfg::SWORD_DEBUG, debug_check};
 
@@ -22,13 +19,14 @@ pub struct SwordManager {
 pub const START: &str = "start";
 pub const ATTACK_FINISHED: &str = "attack_finished";
 
+fn get_sword_basic() -> &'static Vec<&'static str> {
+    static TMP: OnceLock<Vec<&str>> = OnceLock::new();
+    TMP.get_or_init(|| vec!["EnchantedSword", "StarWrath"])
+}
+
 fn get_sword_map() -> &'static HashSet<&'static str> {
     static TMP: OnceLock<HashSet<&'static str>> = OnceLock::new();
-    TMP.get_or_init(|| {
-        collection_literals::collection! {
-            "EnchantedSword", "StarWrath"
-        }
-    })
+    TMP.get_or_init(|| get_sword_basic().clone().into_iter().collect())
 }
 
 fn get_fight_list() -> &'static Vec<&'static str> {
@@ -41,15 +39,16 @@ fn get_fight_list() -> &'static Vec<&'static str> {
                 Err(_) => {}
                 Ok(sword) => {
                     // 检查剑是否存在
-                    if get_sword_map().contains(sword.as_str()) {
-                        return vec![get_sword_map().get(sword.as_str()).unwrap()];
+                    let sword = sword.trim();
+                    if get_sword_map().contains(sword) {
+                        return vec![get_sword_map().get(sword).unwrap()];
                     } else {
                         panic!("Found {},but sword {} not found", SWORD_DEBUG, sword)
                     }
                 }
             }
         }
-        get_sword_map().clone().into_iter().collect()
+        get_sword_basic().clone()
     })
 }
 
@@ -61,6 +60,7 @@ impl INode for SwordManager {
 
     fn ready(&mut self) {
         debug_check!(self);
+        godot_print!("{:?}", get_fight_list())
     }
 }
 
