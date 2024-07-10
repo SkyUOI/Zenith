@@ -1,6 +1,5 @@
 use derive::gen_debug;
 use godot::classes::{Area2D, IArea2D};
-use godot::global::print;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::{thread_rng, Rng};

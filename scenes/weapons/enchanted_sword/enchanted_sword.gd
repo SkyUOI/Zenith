@@ -30,11 +30,14 @@ func _ready():
 	]
 	if get_tree().current_scene == self:
 		exit()
+	else:
+		hide()
 
 
 # fight调用这个
 # 开始
 func start():
+	show()
 	exit()
 
 

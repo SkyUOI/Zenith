@@ -101,7 +101,7 @@ impl StarWrath {
         let mut star = bullet.instantiate_as::<StarWrathBullet>();
         let sz = self.base_mut().get_viewport_rect().size.x - 100.0;
         let random_x = thread_rng().gen_range(100.0..sz);
-        godot_print!("{}", random_x);
+        // godot_print!("{}", random_x);
         self.base_mut().add_child(star.clone().upcast());
         star.bind_mut().init_from_sky(random_x);
     }

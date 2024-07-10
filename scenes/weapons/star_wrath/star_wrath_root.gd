@@ -9,7 +9,7 @@ func _ready() -> void:
 		$StarWrath.start()
 	else:
 		$StarWrath.hide()
-
+		$Bg.hide()
 
 func start():
 	$StarWrath.start()

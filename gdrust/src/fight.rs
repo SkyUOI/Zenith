@@ -1,5 +1,3 @@
-use std::sync::OnceLock;
-
 use crate::debug_check;
 use crate::fight_items::sword::{SwordManager, START};
 use godot::classes::{Control, IControl, Timer};

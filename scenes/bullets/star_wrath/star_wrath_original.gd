@@ -12,5 +12,4 @@ func _ready() -> void:
 
 func _on_killer_screen_exited() -> void:
 	await get_tree().create_timer(0.5).timeout
-	print("Killing")
 	queue_free()

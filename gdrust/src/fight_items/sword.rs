@@ -4,9 +4,13 @@ use godot::{
     obj::{Base, Gd, WithBaseField},
     register::{godot_api, GodotClass},
 };
-use std::sync::OnceLock;
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+    sync::OnceLock,
+};
 
-use crate::debug_check;
+use crate::{cfg::SWORD_DEBUG, debug_check};
 
 #[derive(GodotClass)]
 #[class(base = Node)]
@@ -18,9 +22,35 @@ pub struct SwordManager {
 pub const START: &str = "start";
 pub const ATTACK_FINISHED: &str = "attack_finished";
 
+fn get_sword_map() -> &'static HashSet<&'static str> {
+    static TMP: OnceLock<HashSet<&'static str>> = OnceLock::new();
+    TMP.get_or_init(|| {
+        collection_literals::collection! {
+            "EnchantedSword", "StarWrath"
+        }
+    })
+}
+
 fn get_fight_list() -> &'static Vec<&'static str> {
     static TMP: OnceLock<Vec<&'static str>> = OnceLock::new();
-    TMP.get_or_init(|| vec!["EnchantedSword", "StarWrath"])
+    TMP.get_or_init(|| {
+        #[cfg(debug_assertions)]
+        {
+            // 检查是否存在提前运行的文件
+            match fs::read_to_string(SWORD_DEBUG) {
+                Err(_) => {}
+                Ok(sword) => {
+                    // 检查剑是否存在
+                    if get_sword_map().contains(sword.as_str()) {
+                        return vec![get_sword_map().get(sword.as_str()).unwrap()];
+                    } else {
+                        panic!("Found {},but sword {} not found", SWORD_DEBUG, sword)
+                    }
+                }
+            }
+        }
+        get_sword_map().clone().into_iter().collect()
+    })
 }
 
 #[godot_api]

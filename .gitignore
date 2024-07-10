@@ -19,11 +19,11 @@ mono_crash.*.json
 
 target/
 
-# Godot Cpp
-gdcpp/extension_api.json
-
 # Python
 __pycache__/
 
 # Protobuf
 gdrust/proto/src/proto/*.rs
+
+# For Debug
+debug/

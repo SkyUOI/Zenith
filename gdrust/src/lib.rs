@@ -1,4 +1,5 @@
 mod bullets;
+mod cfg;
 mod consts;
 mod fight;
 mod fight_items;

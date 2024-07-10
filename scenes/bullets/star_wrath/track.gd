@@ -24,10 +24,9 @@ func general_hide():
 
 
 func _draw() -> void:
-	draw_set_transform_matrix(Transform2D(global_transform.inverse()))
+	draw_set_transform_matrix(global_transform.inverse())
 	var real_color = color
 	real_color.a = a / 255.0
-	print("draw", real_color)
 	var y_sz = get_viewport_rect().size.y
 	const WIDTH = 50
 	draw_rect(
