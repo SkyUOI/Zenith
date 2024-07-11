@@ -32,6 +32,10 @@ For your code,you should write necessary tests to cover your code in both GDScri
 
 We will run some Godot scenes to check basic errors.The scenes should be ran is recorded in `test_scene`.In daily development,you can run `script/godot_test.py`to conduct basic testing
 
+We also provide several functions to test the development of the project,listing;
+
+- You can create file ```debug/sword``` ,and write down the name of the sword should be tested.This file will be read automatically and this sword will be run immediately
+
 ## Version Control
 
 Please write your commit message in [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)。

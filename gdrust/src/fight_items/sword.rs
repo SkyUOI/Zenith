@@ -40,10 +40,18 @@ fn get_fight_list() -> &'static Vec<&'static str> {
                 Ok(sword) => {
                     // 检查剑是否存在
                     let sword = sword.trim();
-                    if get_sword_map().contains(sword) {
-                        return vec![get_sword_map().get(sword).unwrap()];
-                    } else {
-                        panic!("Found {},but sword {} not found", SWORD_DEBUG, sword)
+                    match get_sword_map().get(sword) {
+                        Some(val) => {
+                            return vec![val];
+                        }
+                        None => {
+                            panic!(
+                                "Found {},but sword {} not found.Available sword names are {:?}",
+                                SWORD_DEBUG,
+                                sword,
+                                get_sword_basic()
+                            )
+                        }
                     }
                 }
             }
