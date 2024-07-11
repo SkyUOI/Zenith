@@ -11,18 +11,7 @@ use rand::{thread_rng, Rng};
 pub struct StarWrath {
     base: Base<Area2D>,
     start_flag: bool,
-    state: State,
 }
-
-#[derive(PartialEq, Eq)]
-enum State {
-    Wave1,
-    Wave2,
-    WaveReSet,
-    None,
-}
-
-pub type Action = fn(&mut StarWrath);
 
 const BULLETS_NUM: i32 = 3;
 
@@ -32,7 +21,6 @@ impl IArea2D for StarWrath {
         Self {
             base,
             start_flag: false,
-            state: State::Wave1,
         }
     }
 
@@ -85,8 +73,7 @@ impl StarWrath {
 
     #[func]
     fn start(&mut self) {
-        // let mut fight_time = self.get_fight_timer();
-        // fight_time.start();
+        godot_print!("start star wrath");
         self.base_mut().set_process(true);
         self.start_flag = true;
         self.new_bullet();
@@ -99,8 +86,9 @@ impl StarWrath {
     fn fall_star(&mut self) {
         let bullet = self.get_bullet_scene();
         let mut star = bullet.instantiate_as::<StarWrathBullet>();
-        let sz = self.base_mut().get_viewport_rect().size.x - 100.0;
-        let random_x = thread_rng().gen_range(100.0..sz);
+        const SZ_TO_SIDE: f32 = 200.0;
+        let sz = self.base_mut().get_viewport_rect().size.x - SZ_TO_SIDE;
+        let random_x = thread_rng().gen_range(SZ_TO_SIDE..sz);
         // godot_print!("{}", random_x);
         self.base_mut().add_child(star.clone().upcast());
         star.bind_mut().init_from_sky(random_x);

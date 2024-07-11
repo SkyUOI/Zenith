@@ -11,7 +11,6 @@ use crate::debug_check;
 #[derive(GodotClass)]
 #[class(base = CharacterBody2D)]
 pub struct Player {
-    #[var]
     health: i32,
     base: Base<CharacterBody2D>,
     status: Movement,

@@ -1,5 +1,6 @@
 use derive::gen_debug;
 use godot::classes::{Area2D, IArea2D};
+use godot::engine::CollisionShape2D;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 use rand::{thread_rng, Rng};
@@ -37,8 +38,6 @@ impl IArea2D for StarWrathBullet {
             self.base().get_global_position() + self.direct * delta as f32 * self.speed as f32;
         self.base_mut().set_global_position(tmp);
     }
-
-    fn draw(&mut self) {}
 
     fn ready(&mut self) {
         debug_check!(self)
@@ -96,10 +95,6 @@ impl StarWrathBullet {
         self.direct = Vector2::DOWN;
     }
 
-    fn track(&mut self) {
-        self.base_mut().queue_redraw();
-    }
-
     #[func]
     #[debug]
     fn get_track_scene(&self) -> Gd<PackedScene> {
@@ -111,6 +106,14 @@ impl StarWrathBullet {
         if obj.get_name() == "Player".into() {
             let mut obj = obj.get_parent().unwrap().cast::<Player>();
             obj.bind_mut().hit(1);
+            // 关闭碰撞检测
+            self.get_collison()
+                .set_deferred("disabled".into(), true.to_variant());
         }
+    }
+
+    #[debug]
+    fn get_collison(&mut self) -> Gd<CollisionShape2D> {
+        self.base_mut().get_node_as("CollisionShape2D")
     }
 }
