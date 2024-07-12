@@ -39,7 +39,7 @@ func throw_shot_beam(_area: Area2D):
 		beams[i].position = position
 		beams[i].velocity = velocity[i]
 	for beam in beams:
-		get_parent().add_child(beam)
+		get_parent().call_deferred("add_child", beam)
 	queue_free()
 
 

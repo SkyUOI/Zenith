@@ -24,6 +24,7 @@ func shot_beam(x: int, pos: Vector2):
 
 
 func start() -> void:
+	show()
 	rotation = 0
 	follow.loop = 1
 	var start_val = 0
@@ -59,7 +60,6 @@ func start() -> void:
 
 func _ready() -> void:
 	if get_tree().current_scene == get_parent():
-		show()
 		start()
 	else:
 		hide()
