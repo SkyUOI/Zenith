@@ -1,6 +1,9 @@
 extends Node
 
 signal attack_finished
+@onready var star_wrath = $StarWrath
+@onready var bg = $Bg
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -9,14 +12,17 @@ func _ready() -> void:
 	else:
 		hide()
 
+
 func hide():
-	$StarWrath.hide()
-	$Bg.hide()
+	star_wrath.hide()
+	bg.hide()
+
 
 func show():
-	$StarWrath.show()
-	$Bg.show()
+	star_wrath.show()
+	bg.show()
+
 
 func start():
 	show()
-	$StarWrath.start()
+	star_wrath.start()

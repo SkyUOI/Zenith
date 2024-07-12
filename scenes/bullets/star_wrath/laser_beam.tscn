@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cx8edyix2wwjs"]
+
+[ext_resource type="Script" path="res://scenes/bullets/star_wrath/laser_beam.gd" id="1_pxjff"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ksbrs"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nsxxn"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_025qw"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[node name="LaserBeam" type="RayCast2D"]
+script = ExtResource("1_pxjff")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 100, 0)
+closed = true
+
+[node name="CastingParticles" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_ksbrs")
+
+[node name="BeamParticles" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_nsxxn")
+
+[node name="CollisionParticles" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_025qw")
