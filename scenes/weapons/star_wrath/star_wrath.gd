@@ -22,7 +22,8 @@ func next_operation():
 	operations[operation_idx].call()
 	operation_idx += 1
 
+
 func fall_star_process():
 	for i in range(10):
 		self.fall_star()
-		await get_tree().create_timer(randf_range(1.0,2.0)).timeout
+		await get_tree().create_timer(randf_range(1.0, 2.0)).timeout
