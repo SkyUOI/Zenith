@@ -2,9 +2,9 @@ extends Sprite2D
 
 signal attack_finished
 const TIMES = 5
+@export var beam: PackedScene
 @onready var path = $"../Path2D"
 @onready var follow = $"../Path2D/PathFollow2D"
-@export var beam: PackedScene
 
 
 func move(length: float) -> void:

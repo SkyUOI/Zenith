@@ -1,6 +1,12 @@
 extends Area2D
 
+const WIDTH = 8
 @export var thorns: PackedScene
+var alpha: float
+var line1_from: Vector2
+var line1_to: Vector2
+var line2_from: Vector2
+var line2_to: Vector2
 
 
 # 启动投掷动作
@@ -96,18 +102,10 @@ func super_burst(pos: Vector2):
 	tween.tween_callback(queue_free)
 
 
-var alpha: float
-var line1_from: Vector2
-var line1_to: Vector2
-var line2_from: Vector2
-var line2_to: Vector2
-const width = 8
-
-
 func _draw():
 	var yellow = Color(Color.GOLD, alpha)
-	draw_line(line1_from, line1_to, yellow, width)
-	draw_line(line2_from, line2_to, yellow, width)
+	draw_line(line1_from, line1_to, yellow, WIDTH)
+	draw_line(line2_from, line2_to, yellow, WIDTH)
 
 
 func super_burst_shot_beam():
