@@ -40,17 +40,19 @@ fn get_fight_list() -> &'static Vec<&'static str> {
                 Ok(sword) => {
                     // 检查剑是否存在
                     let sword = sword.trim();
-                    match get_sword_map().get(sword) {
-                        Some(val) => {
-                            return vec![val];
-                        }
-                        None => {
-                            panic!(
+                    if !sword.is_empty() {
+                        match get_sword_map().get(sword) {
+                            Some(val) => {
+                                return vec![val];
+                            }
+                            None => {
+                                panic!(
                                 "Found {},but sword {} not found.Available sword names are {:?}",
                                 SWORD_DEBUG,
                                 sword,
                                 get_sword_basic()
                             )
+                            }
                         }
                     }
                 }
@@ -99,6 +101,11 @@ impl SwordManager {
             return;
         }
         self.sword_idx += 1;
+    }
+
+    #[func]
+    fn has_sword(&mut self) -> bool {
+        self.sword_idx < get_fight_list().len()
     }
 
     #[func]

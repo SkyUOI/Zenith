@@ -76,7 +76,7 @@ impl StarWrath {
         godot_print!("start star wrath");
         self.base_mut().set_process(true);
         self.start_flag = true;
-        self.new_bullet();
+        // // self.new_bullet();
         let mut anmi = self.get_animation();
         anmi.play_ex().name("enter_scene".into()).done();
     }
