@@ -1,5 +1,6 @@
 extends Sprite2D
 
+signal attack_finished
 const TIMES = 5
 @onready var path = $"../Path2D"
 @onready var follow = $"../Path2D/PathFollow2D"
@@ -34,7 +35,9 @@ func start() -> void:
 	movement.tween_method(move, mid, end, 1.25)
 	var exit = create_tween()
 	exit.tween_interval(TIMES * 2.5)
+	exit.tween_callback(attack_finished.emit)
 	exit.tween_callback(queue_free)
+
 	var rotate_tween = create_tween().set_loops(TIMES)
 	rotate_tween.tween_property(self, "rotation", TAU * 5, 2.5)
 	rotate_tween.tween_callback(func(): rotation = 0)
