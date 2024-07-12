@@ -1,11 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7unyob7tl6gs"]
+[gd_scene load_steps=5 format=3 uid="uid://c7unyob7tl6gs"]
 
 [ext_resource type="Texture2D" uid="uid://bqwx5dm7jefu6" path="res://scenes/weapons/seedler/seedler.png" id="1_3obt5"]
 [ext_resource type="Script" path="res://scenes/weapons/seedler/seedler.gd" id="2_6mejc"]
+[ext_resource type="PackedScene" uid="uid://cnhbuadu80gjc" path="res://scenes/bullets/seedler/seedler_nut.tscn" id="3_heb0u"]
 
 [sub_resource type="Curve2D" id="Curve2D_elleu"]
 _data = {
-"points": PackedVector2Array(-47.0096, -0.651695, 47.0096, 0.651695, -80.5, -136.5, -42.668, -1.96383, 42.668, 1.96383, 125.696, 126.007, 1.12246, 50.4974, -1.12246, -50.4974, 164.043, 13.6843, 37.1347, 0.841369, -37.1347, -0.841369, 128, -131, 22.7463, -1.90143, -22.7463, 1.90143, -74.6522, 124.324, -1.12246, 64.7276, 1.12246, -64.7276, -123.957, -4.40512, -41.4783, -0.841369, 41.4783, 0.841369, -80.5, -136.5)
+"points": PackedVector2Array(-47.0096, -0.651695, 47.0096, 0.651695, -80.5, -136.5, -42.668, -1.96383, 42.668, 1.96383, 125.696, 126.007, 1.12246, 50.4974, -1.12246, -50.4974, 164.043, 13.6843, 37.1347, 0.841369, -37.1347, -0.841369, 128, -131, 33.3115, 0.201991, -33.3115, -0.201991, -74.6522, 124.324, -1.12246, 64.7276, 1.12246, -64.7276, -123.957, -4.40512, -41.4783, -0.841369, 41.4783, 0.841369, -80.5, -136.5)
 }
 point_count = 7
 
@@ -25,3 +26,4 @@ position = Vector2(572, 321)
 scale = Vector2(2, 2)
 texture = ExtResource("1_3obt5")
 script = ExtResource("2_6mejc")
+beam = ExtResource("3_heb0u")
