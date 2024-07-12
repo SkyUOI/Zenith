@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7unyob7tl6gs"]
+[gd_scene load_steps=6 format=3 uid="uid://c7unyob7tl6gs"]
 
 [ext_resource type="Texture2D" uid="uid://bqwx5dm7jefu6" path="res://scenes/weapons/seedler/seedler.png" id="1_3obt5"]
+[ext_resource type="Script" path="res://scenes/weapons/seedler/seedler_root.gd" id="1_ecfup"]
 [ext_resource type="Script" path="res://scenes/weapons/seedler/seedler.gd" id="2_6mejc"]
 [ext_resource type="PackedScene" uid="uid://cnhbuadu80gjc" path="res://scenes/bullets/seedler/seedler_nut.tscn" id="3_heb0u"]
 
@@ -11,6 +12,7 @@ _data = {
 point_count = 7
 
 [node name="Seedler" type="Node"]
+script = ExtResource("1_ecfup")
 
 [node name="Path2D" type="Path2D" parent="."]
 position = Vector2(524.778, 326.471)
