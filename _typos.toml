@@ -1,2 +1,2 @@
 [files]
-extend-exclude = ["addons"]
+extend-exclude = ["addons", "*.tscn", "*.import"]
