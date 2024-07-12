@@ -6,7 +6,8 @@ extends Area2D
 # 启动投掷动作
 # 大小最小, 会下落, 撞到地面炸开
 # pos: 初始
-func throw():
+func throw(pos: Vector2):
+	position = pos
 	area_entered.connect(throw_shot_beam)
 	$OutScreen.screen_exited.connect(throw_shot_beam.bind(Area2D.new()))
 	create_tween().tween_property(self, "rotation", rotation + 10.0 * TAU, 5)
@@ -132,11 +133,10 @@ func super_burst_shot_beam():
 func _ready():
 	$OutScreen.screen_exited.connect(queue_free)
 	if get_tree().current_scene == self:
-		super_burst(Vector2(300, 300))
+		throw(position)
 
 
 func _on_area_entered(area):
-	# thornsCreate()
 	# 防止重复伤害
 	if area.name == "Player":
 		area.get_node("..").hit(10)
