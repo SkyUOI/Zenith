@@ -26,4 +26,4 @@ __pycache__/
 gdrust/proto/src/proto/*.rs
 
 # For Debug
-debug/
+debug/sword
