@@ -1,6 +1,7 @@
 extends Node
 
 signal attack_finished
+var tween
 @onready var star_wrath = $StarWrath
 @onready var bg = $Bg
 
@@ -21,6 +22,20 @@ func hide():
 func show():
 	star_wrath.show()
 	bg.show()
+
+
+func general_hide():
+	tween = create_tween().set_loops()
+	tween.tween_callback(self.general_hide_interal.bind()).set_delay(0.01)
+
+
+func general_hide_interal():
+	var tmp = bg.material.get_shader_parameter("alpha_bias")
+	if tmp >= 0.9:
+		tween.kill()
+		bg.hide()
+		star_wrath.hide()
+	bg.material.set_shader_parameter("alpha_bias", tmp + 0.01)
 
 
 func start():

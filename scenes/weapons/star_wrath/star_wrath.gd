@@ -1,11 +1,10 @@
 extends StarWrath
 
 @export var star_wrath_origin: PackedScene
+var operation_idx = 0
+var operations = [func(): self.fall_star_process(), func(): self.leave()]
 @onready var animation_player = $AnimationPlayer
 @onready var star_wrath = $StarWrath
-
-var operations = [func(): self.fall_star_process(), func(): self.leave()]
-var operation_idx = 0
 
 
 func next_operation():
@@ -28,6 +27,7 @@ func leave():
 	await self.get_tree().create_timer(0.3).timeout
 	var tween = create_tween()
 	tween.tween_property(star_wrath, "global_position", Vector2(-100.0, -100), 2)
+	tween.tween_callback($"..".general_hide.bind())
 	next_operation()
 
 

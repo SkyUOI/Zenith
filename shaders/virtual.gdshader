@@ -2,6 +2,7 @@ shader_type canvas_item;
 
 uniform vec4 color_end;
 uniform vec4 color_start;
+uniform float alpha_bias = 0;
 
 void vertex() {
 	// Called for every vertex the material is visible on.
@@ -15,6 +16,7 @@ void fragment() {
 	vec4 gradient_color = color_start + (color_end - color_start) * screen_coords.y * 3.6;
 	// 设置最终颜色
 	COLOR = gradient_color;
+	COLOR.a -= alpha_bias;
 }
 
 //void light() {
