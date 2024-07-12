@@ -26,10 +26,10 @@ func show():
 
 func general_hide():
 	tween = create_tween().set_loops()
-	tween.tween_callback(self.general_hide_interal.bind()).set_delay(0.01)
+	tween.tween_callback(self.general_hide_internal.bind()).set_delay(0.01)
 
 
-func general_hide_interal():
+func general_hide_internal():
 	var tmp = bg.material.get_shader_parameter("alpha_bias")
 	if tmp >= 0.9:
 		tween.kill()
