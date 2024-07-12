@@ -130,6 +130,7 @@ script = ExtResource("3_u5scp")
 star_wrath_origin = ExtResource("4_eglqk")
 
 [node name="StarWrath" type="Sprite2D" parent="StarWrath"]
+position = Vector2(-100, -60)
 scale = Vector2(2.97559, 2.97559)
 texture = ExtResource("4_ohxcu")
 
