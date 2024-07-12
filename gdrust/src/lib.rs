@@ -3,7 +3,7 @@ mod cfg;
 mod consts;
 mod fight;
 mod fight_items;
-mod global;
+pub mod global;
 mod multi;
 mod player;
 mod ui;
@@ -12,7 +12,7 @@ mod weapons;
 mod zenith;
 
 use godot::prelude::*;
-use multi::{MultiManager, MultiManagerImpl};
+use multi::MultiManagerImpl;
 use std::{
     panic::{set_hook, PanicInfo},
     sync::{Arc, Mutex, OnceLock},

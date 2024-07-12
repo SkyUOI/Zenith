@@ -7,8 +7,9 @@ use rand::{thread_rng, Rng};
 use std::f32::consts::PI;
 
 use crate::player::Player;
+use crate::utils::screen_effects::ScreenEffects;
 use crate::utils::split_to_vec;
-use crate::{debug_check, godot_debug_assert};
+use crate::{debug_check, get_global, godot_debug_assert};
 
 #[derive(GodotClass)]
 #[class(base=Area2D)]
@@ -107,13 +108,13 @@ impl StarWrathBullet {
             let mut obj = obj.get_parent().unwrap().cast::<Player>();
             obj.bind_mut().hit(1);
             // 关闭碰撞检测
-            self.get_collison()
+            self.get_collision()
                 .set_deferred("disabled".into(), true.to_variant());
         }
     }
 
     #[debug]
-    fn get_collison(&mut self) -> Gd<CollisionShape2D> {
+    fn get_collision(&mut self) -> Gd<CollisionShape2D> {
         self.base_mut().get_node_as("CollisionShape2D")
     }
 }

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b601ywspu5w2b"]
+
+[node name="ScreenEffects" type="ScreenEffects"]
+position = Vector2(576, 324)
+
+[node name="Shake" type="Timer" parent="."]
+wait_time = 0.1
+
+[connection signal="timeout" from="Shake" to="." method="shake_timeout"]

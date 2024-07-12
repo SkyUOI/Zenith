@@ -2,10 +2,9 @@ use crate::multi::MessageReceiver;
 use crate::{debug_check, get_multi_single};
 use derive::gen_debug;
 use godot::classes::{Control, IControl};
-use godot::engine::{Label, Panel};
+use godot::engine::Label;
 use godot::prelude::*;
 use proto::connect;
-use std::mem::swap;
 
 #[derive(GodotClass)]
 #[class(base = Control)]

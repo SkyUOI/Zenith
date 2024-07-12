@@ -1,3 +1,4 @@
+pub mod screen_effects;
 use godot::prelude::*;
 
 #[macro_export()]
@@ -27,6 +28,18 @@ macro_rules! debug_check {
         {
             $sself.debug_check()
         }
+    };
+}
+
+#[macro_export]
+macro_rules! get_global {
+    ($sself:ident) => {
+        $sself
+            .base()
+            .get_node_as::<$crate::global::GlobalClass>("/root/Global")
+    };
+    ($sself:ident, screen_effects) => {
+        get_global!($sself).bind().screen_effects.clone()
     };
 }
 
