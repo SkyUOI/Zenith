@@ -1,5 +1,5 @@
 use crate::fight_items::sword::{SwordManager, START};
-use crate::{debug_check, get_global};
+use crate::{debug_check, get_global, get_global_screen_effects};
 use godot::classes::{Control, IControl};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -18,7 +18,7 @@ impl IControl for Fight {
 
     fn ready(&mut self) {
         debug_check!(self);
-        get_global!(self, screen_effects).bind_mut().shake(3.0, 1.0);
+        get_global_screen_effects!(self).bind_mut().shake(3.0, 1.0);
         self.start_fight();
     }
 }

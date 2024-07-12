@@ -21,7 +21,7 @@ pub const ATTACK_FINISHED: &str = "attack_finished";
 
 fn get_sword_basic() -> &'static Vec<&'static str> {
     static TMP: OnceLock<Vec<&str>> = OnceLock::new();
-    TMP.get_or_init(|| vec!["EnchantedSword", "StarWrath"])
+    TMP.get_or_init(|| vec!["EnchantedSword", "StarWrath", "Seedler"])
 }
 
 fn get_sword_map() -> &'static HashSet<&'static str> {

@@ -38,7 +38,11 @@ macro_rules! get_global {
             .base()
             .get_node_as::<$crate::global::GlobalClass>("/root/Global")
     };
-    ($sself:ident, screen_effects) => {
+}
+
+#[macro_export]
+macro_rules! get_global_screen_effects {
+    ($sself:ident) => {
         get_global!($sself).bind().screen_effects.clone()
     };
 }
