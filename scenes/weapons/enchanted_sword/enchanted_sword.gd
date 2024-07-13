@@ -24,9 +24,10 @@ func _ready():
 		rotate_attack.bind(Vector2(1000, 100), 6),
 		rotate_attack.bind(Vector2(500, 500), 6),
 		motionless_attack.bind(Vector2(500, 300), 3),
-		motionless_attack.bind(Vector2(600, 400), 3),
+		motionless_attack.bind(Vector2(800, 400), 3),
 		rush_attack.bind(Vector2(130, 230), Vector2(800, 400)),
 		rush_attack.bind(Vector2(800, 600), Vector2(200, 200)),
+		end_animation.bind(Vector2(100, 100)),
 	]
 	if get_tree().current_scene == self:
 		exit()
@@ -71,6 +72,16 @@ func swing_shot_beam(start_pos: Vector2, end_pos: Vector2):
 	beam.position = start_pos
 	beam.speed = 750
 	get_parent().add_child(beam)
+
+
+func end_animation(pos: Vector2):
+	var rota = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	rota.tween_property(self, "position", pos, 1)
+	rota.parallel().tween_property(self, "rotation", rotation + TAU * 2, 1)
+	rota.parallel().tween_property(self, "modulate:a", 0, 1)
+	rota.tween_callback(exit)
+	rota.tween_interval(2)
+	rota.tween_callback(queue_free)
 
 
 # 启动挥舞动作
@@ -264,6 +275,7 @@ func rush_attack(point: Vector2, to: Vector2):
 	const PRE_MOVE_TIME = 0.8
 	const MOVE_TIME = 0.6
 	const ADD_TIME = -0.25
+	rotation = rad_to_vector(rotation).angle()
 	var move = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	move.tween_property(self, "position", point, PRE_MOVE_TIME)
 	var end_rotation = point.angle_to_point(to) + PI / 4

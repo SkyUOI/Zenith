@@ -34,7 +34,8 @@ func start() -> void:
 	movement.tween_method(move, start_val, mid, 1.25)
 	movement.tween_method(move, mid, end, 1.25)
 	var exit = create_tween()
-	exit.tween_interval(TIMES * 2.5)
+	exit.tween_interval(TIMES * 2.5 - 0.5)
+	exit.tween_property(self, "modulate:a", 0, 0.5)
 	exit.tween_callback($"..".attack_finished.emit)
 	exit.tween_callback(queue_free)
 

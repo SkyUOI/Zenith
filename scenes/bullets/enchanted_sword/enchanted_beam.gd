@@ -11,10 +11,9 @@ var is_bound = false
 func _ready():
 	rotation = PI / 4 + Vector2(0, 0).angle_to_point(direction)
 	direction = direction.normalized()
-	var color = modulate
 	modulate.a = 0
 	create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD).tween_property(
-		self, "modulate", color, 0.15
+		self, "modulate:a", 1, 0.15
 	)
 	$OutScreen.screen_exited.connect(queue_free)
 
