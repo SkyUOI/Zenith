@@ -16,11 +16,13 @@ particle_flag_disable_z = true
 gravity = Vector3(0, 98, 0)
 
 [node name="LaserBeam" type="RayCast2D"]
+collision_mask = 2
 script = ExtResource("1_pxjff")
 
 [node name="Line2D" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 100, 0)
 closed = true
+width = 20.0
 default_color = Color(0.906203, 0.352697, 0.705898, 1)
 texture_mode = 2
 joint_mode = 2
