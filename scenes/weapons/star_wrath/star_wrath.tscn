@@ -139,6 +139,7 @@ texture = ExtResource("4_ohxcu")
 editor_description = "Debug"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StarWrath"]
+position = Vector2(-88.8015, -56.0204)
 rotation = 2.30812
 scale = Vector2(4.2, 1)
 shape = SubResource("RectangleShape2D_qm46a")
