@@ -149,15 +149,16 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
             .accept_sockets(shutdown_sender_clone, shutdown_receiver_clone)
             .await
     });
+    let shutdown_sender_clone = shutdown_sender.clone();
     tokio::spawn(async move {
         match tokio::signal::ctrl_c().await {
             Ok(()) => {
                 log::info!("Exiting now...");
-                shutdown_sender.send(())?;
+                shutdown_sender_clone.send(())?;
             }
             Err(err) => {
-                log::error!("Unable to listen for shutdown signal: {}", err);
-                shutdown_sender.send(())?;
+                log::error!("Unable to listen to shutdown signal: {}", err);
+                shutdown_sender_clone.send(())?;
             }
         }
         anyhow::Ok(())
@@ -187,7 +188,9 @@ pub async fn lib_main() -> Result<(), Box<dyn Error>> {
         anyhow::Ok(())
     };
     select! {
-        _ = input_loop => {},
+        _ = input_loop => {
+            shutdown_sender.send(())?;
+        },
         _ = shutdown_receiver.recv() => {
             log::info!("Command loop exited")
         }
