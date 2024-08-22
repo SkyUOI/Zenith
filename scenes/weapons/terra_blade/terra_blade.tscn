@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://clwl2jjjehebp"]
+
+[ext_resource type="Texture2D" uid="uid://cykbxj82pu7no" path="res://scenes/weapons/terra_blade/terra_blade.png" id="1_477b2"]
+
+[node name="TerraBlade" type="Node"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(572, 307)
+scale = Vector2(2.3, 2.3)
+texture = ExtResource("1_477b2")
+metadata/_edit_group_ = true
