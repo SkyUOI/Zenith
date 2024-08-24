@@ -4,11 +4,11 @@ var tween = create_tween()
 
 
 func straight_move(
-	from: Vector2, to: Vector2, time: float, ease: Tween.EaseType, trans: Tween.TransitionType
+	from: Vector2, to: Vector2, time: float, ease_: Tween.EaseType, trans: Tween.TransitionType
 ):
 	rotation = (to - from).angle()
 	position = from
-	tween.tween_property(self, "position", to, time).set_ease(ease).set_trans(trans)
+	tween.tween_property(self, "position", to, time).set_ease(ease_).set_trans(trans)
 
 
 func _on_out_screen_screen_exited():
