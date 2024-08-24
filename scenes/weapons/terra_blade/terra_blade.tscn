@@ -1,11 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://clwl2jjjehebp"]
+[gd_scene load_steps=4 format=3 uid="uid://clwl2jjjehebp"]
 
+[ext_resource type="Script" path="res://scenes/weapons/terra_blade/terra_blade.gd" id="1_1hrqx"]
 [ext_resource type="Texture2D" uid="uid://cykbxj82pu7no" path="res://scenes/weapons/terra_blade/terra_blade.png" id="1_477b2"]
+[ext_resource type="PackedScene" uid="uid://1megnlcsse45" path="res://scenes/bullets/terra_blade/TerraBladeBeam.tscn" id="2_yp2sf"]
 
 [node name="TerraBlade" type="Node"]
+script = ExtResource("1_1hrqx")
+terra_blade_beam = ExtResource("2_yp2sf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(572, 307)
+position = Vector2(527.511, 314.206)
+rotation = 0.748746
 scale = Vector2(2.3, 2.3)
 texture = ExtResource("1_477b2")
+offset = Vector2(12.0369, -15.4621)
 metadata/_edit_group_ = true

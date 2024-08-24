@@ -1,38 +1,29 @@
-[gd_scene load_steps=7 format=3 uid="uid://1megnlcsse45"]
+[gd_scene load_steps=4 format=3 uid="uid://1megnlcsse45"]
 
 [ext_resource type="Script" path="res://scenes/bullets/terra_blade/terra_blade_beam.gd" id="1_va6li"]
-[ext_resource type="Shader" path="res://scenes/bullets/terra_blade/TerraBladeBeam.gdshader" id="2_aqn2b"]
 [ext_resource type="Texture2D" uid="uid://co2n6okllm0tl" path="res://scenes/bullets/terra_blade/terra_blade_beam.png" id="2_n1wh2"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_awmjb"]
-shader = ExtResource("2_aqn2b")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ieue"]
 radius = 8.48517
 height = 86.9787
 
-[sub_resource type="Environment" id="Environment_jcpgb"]
-background_mode = 3
-glow_enabled = true
-
 [node name="TerraBladeBeam" type="Area2D"]
 position = Vector2(600, 384)
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_va6li")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_awmjb")
+position = Vector2(-23.0017, 1.05356)
 rotation = 0.785398
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_n1wh2")
+offset = Vector2(10.3465, -11.3398)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_1ieue")
 
 [node name="OutScreen" type="VisibleOnScreenNotifier2D" parent="."]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_jcpgb")
 
 [connection signal="screen_exited" from="OutScreen" to="." method="_on_out_screen_screen_exited"]

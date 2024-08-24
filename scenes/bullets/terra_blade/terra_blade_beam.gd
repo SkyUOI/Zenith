@@ -14,6 +14,5 @@ func straight_move(
 func _on_out_screen_screen_exited():
 	queue_free()
 
-
-func _ready():
-	straight_move(Vector2(100, 100), Vector2(500, 500), 2, Tween.EASE_IN, Tween.TRANS_CUBIC)
+#func _ready():
+#straight_move(Vector2(100, 100), Vector2(500, 500), 2, Tween.EASE_IN, Tween.TRANS_CUBIC)
