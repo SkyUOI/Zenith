@@ -6,5 +6,3 @@ gdformat .
 gdlint .
 # format rust
 cd gdrust && cargo fmt
-# save
-git add -A
