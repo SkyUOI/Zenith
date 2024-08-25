@@ -24,6 +24,7 @@ position = Vector2(-80.5, -136.5)
 rotation = 0.013862
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1.5, 1.5, 1.5, 1)
 position = Vector2(572, 321)
 scale = Vector2(2, 2)
 texture = ExtResource("1_3obt5")
