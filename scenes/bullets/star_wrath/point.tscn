@@ -1,3 +1,9 @@
-[gd_scene format=3 uid="uid://bgq78c0mfx381"]
+[gd_scene load_steps=3 format=3 uid="uid://bgq78c0mfx381"]
+
+[ext_resource type="Texture2D" uid="uid://cyrklccri8jt4" path="res://scenes/bullets/star_wrath/point.png" id="1_ssiky"]
+[ext_resource type="Script" path="res://scenes/bullets/star_wrath/point.gd" id="2_5xsjg"]
 
 [node name="Point" type="Sprite2D"]
+modulate = Color(2, 2, 2, 1)
+texture = ExtResource("1_ssiky")
+script = ExtResource("2_5xsjg")
