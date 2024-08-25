@@ -7,9 +7,8 @@ use rand::{thread_rng, Rng};
 use std::f32::consts::PI;
 
 use crate::player::Player;
-use crate::utils::screen_effects::ScreenEffects;
 use crate::utils::split_to_vec;
-use crate::{debug_check, get_global, godot_debug_assert};
+use crate::{debug_check, godot_debug_assert};
 
 #[derive(GodotClass)]
 #[class(base=Area2D)]
@@ -17,6 +16,8 @@ pub struct StarWrathBullet {
     base: Base<Area2D>,
     direct: Vector2,
     speed: i32,
+    #[var]
+    explode: bool,
 }
 
 const SPEED_MIN: i32 = 300;
@@ -31,6 +32,7 @@ impl IArea2D for StarWrathBullet {
             base,
             direct: Vector2::ZERO,
             speed: 0,
+            explode: false,
         }
     }
 

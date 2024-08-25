@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bgq78c0mfx381"]
+
+[node name="Point" type="Sprite2D"]

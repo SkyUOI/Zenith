@@ -2,11 +2,17 @@ extends StarWrath
 
 @export var star_wrath_origin: PackedScene
 var operation_idx = 0
-# func(): self.fall_star_process(),
-var operations = [func(): self.beam_shoot1(), func(): self.leave()]
+var operations = [
+	func(): self.fall_star_process(),
+	func(): self.beam_shoot1(),
+	func(): self.fall_star_explode(),
+	func(): five_surrounding_points(),
+	func(): self.leave()
+]
 @onready var animation_player = $AnimationPlayer
 @onready var star_wrath = $StarWrath
 var beam_scene: PackedScene = preload("res://scenes/bullets/star_wrath/laser_beam.tscn")
+var point_scene: PackedScene = preload("res://scenes/bullets/star_wrath/point.tscn")
 
 
 func next_operation():
@@ -20,9 +26,23 @@ func next_operation():
 
 func fall_star_process():
 	for i in range(10):
-		self.fall_star()
+		self.fall_star(false)
 		await get_tree().create_timer(randf_range(1.0, 2.0)).timeout
 	next_operation()
+
+
+func fall_star_explode():
+	for i in range(4):
+		self.fall_star(true)
+		await get_tree().create_timer(randf_range(5.0, 6.0)).timeout
+	next_operation()
+
+
+func five_surrounding_points():
+	var points = []
+	for i in range(5):
+		var point = point_scene.instantiate()
+		points.push_back(point)
 
 
 func beam_shoot1():

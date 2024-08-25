@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtboow2wo76hq"]
+
+[ext_resource type="Texture2D" uid="uid://dsq0jnh5u5avq" path="res://scenes/bullets/star_wrath/littlestar.png" id="1_hkmep"]
+[ext_resource type="Script" path="res://scenes/bullets/star_wrath/little_star.gd" id="2_kxmji"]
+
+[node name="LittleStar" type="Sprite2D"]
+texture = ExtResource("1_hkmep")
+script = ExtResource("2_kxmji")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

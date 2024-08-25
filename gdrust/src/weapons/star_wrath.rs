@@ -83,9 +83,10 @@ impl StarWrath {
 
     #[func]
     /// 新建一个从天而降垂直下落的弹幕
-    fn fall_star(&mut self) {
+    fn fall_star(&mut self, explode: bool) {
         let bullet = self.get_bullet_scene();
         let mut star = bullet.instantiate_as::<StarWrathBullet>();
+        star.bind_mut().set_explode(explode);
         const SZ_TO_SIDE: f32 = 200.0;
         let sz = self.base_mut().get_viewport_rect().size.x - SZ_TO_SIDE;
         let random_x = thread_rng().gen_range(SZ_TO_SIDE..sz);
