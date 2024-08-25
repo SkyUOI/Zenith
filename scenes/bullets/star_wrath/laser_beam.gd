@@ -41,6 +41,9 @@ func init(pos: Vector2):
 # 设置激光的方向
 func set_direct(direct_arg: Vector2) -> void:
 	self.direct = direct_arg.normalized()
+	var rad = direct.y / direct.x
+	# 激光的角度
+	beam_particles.rotation = rad
 
 
 func cast_beam():

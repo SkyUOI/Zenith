@@ -31,7 +31,7 @@ func beam_shoot1():
 	beam.init(Vector2(200, 450))
 	beam.set_is_casting(true)
 	beam.set_direct(beam.to_local(Vector2(300, 450)))
-	await get_tree().create_timer(10.0).timeout
+	await get_tree().create_timer(3.0).timeout
 	beam.set_is_casting(false)
 
 
