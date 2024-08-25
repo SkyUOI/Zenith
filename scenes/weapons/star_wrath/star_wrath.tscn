@@ -8,9 +8,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t64wj"]
 shader = ExtResource("2_xksic")
-shader_parameter/color_end = Vector4(0.5, 0, 0.5, 0.1)
-shader_parameter/color_start = Vector4(0.5, 0, 0.5, 0.5)
-shader_parameter/alpha_bias = 0.0
+shader_parameter/color = Vector4(0.5, 0, 0.5, 0)
+shader_parameter/alpha_end = 0.0
+shader_parameter/alpha_start = 0.5
+shader_parameter/end_y_position = 0.6
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm46a"]
 size = Vector2(28.6936, 31.8029)
@@ -131,6 +132,7 @@ script = ExtResource("3_u5scp")
 star_wrath_origin = ExtResource("4_eglqk")
 
 [node name="StarWrath" type="Sprite2D" parent="StarWrath"]
+self_modulate = Color(1.6, 1.5, 1.5, 1)
 position = Vector2(-100, -60)
 scale = Vector2(2.97559, 2.97559)
 texture = ExtResource("4_ohxcu")

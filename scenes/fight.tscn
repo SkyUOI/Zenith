@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cibwxaqnuodid"]
+[gd_scene load_steps=29 format=3 uid="uid://cibwxaqnuodid"]
 
 [ext_resource type="Script" path="res://scenes/fight.gd" id="1_dqpk1"]
 [ext_resource type="Texture2D" uid="uid://byln211i8r3lq" path="res://scenes/Zenith.png" id="1_jsdtx"]
@@ -19,6 +19,13 @@
 [ext_resource type="Texture2D" uid="uid://wawi1y6785j5" path="res://scenes/ui/ui_mercy/Highlight/000.png" id="13_lrcvx"]
 [ext_resource type="Texture2D" uid="uid://drljhif31i83o" path="res://scenes/ui/category_panel.png" id="14_miw1s"]
 [ext_resource type="Texture2D" uid="uid://bjxheh0afj37f" path="res://scenes/ui/shield_of_cthulhu.png" id="18_12j3n"]
+
+[sub_resource type="Environment" id="Environment_oaeg7"]
+background_mode = 3
+glow_enabled = true
+glow_blend_mode = 1
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_64jai"]
 
 [sub_resource type="Gradient" id="Gradient_w6p7b"]
 offsets = PackedFloat32Array(0.386487, 0.391892, 0.397297, 0.683784, 1)
@@ -55,6 +62,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_dqpk1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_oaeg7")
+camera_attributes = SubResource("CameraAttributesPractical_64jai")
 
 [node name="BgColor" type="ColorRect" parent="."]
 layout_mode = 1

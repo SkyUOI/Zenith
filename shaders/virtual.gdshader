@@ -1,8 +1,9 @@
 shader_type canvas_item;
 
-uniform vec4 color_end;
-uniform vec4 color_start;
-uniform float alpha_bias = 0;
+uniform vec4 color;
+uniform float alpha_end;
+uniform float alpha_start;
+uniform float end_y_position;
 
 void vertex() {
 	// Called for every vertex the material is visible on.
@@ -11,12 +12,14 @@ void vertex() {
 void fragment() {
 	// Called for every pixel the material is visible on.
 	vec2 screen_coords = SCREEN_UV;
-	// 垂直翻转Y坐标
-	screen_coords.y = (1.0 - screen_coords.y);
-	vec4 gradient_color = color_start + (color_end - color_start) * screen_coords.y * 3.6;
-	// 设置最终颜色
-	COLOR = gradient_color;
-	COLOR.a -= alpha_bias;
+	if(screen_coords.y < end_y_position) {
+		COLOR = vec4(0,0,0,0);
+	} else {
+		// 垂直翻转Y坐标
+		screen_coords.y = (1.0 - screen_coords.y);
+		COLOR = color;
+		COLOR.a = alpha_start + (alpha_end - alpha_start) * screen_coords.y / (end_y_position / 1.5);
+	}
 }
 
 //void light() {
