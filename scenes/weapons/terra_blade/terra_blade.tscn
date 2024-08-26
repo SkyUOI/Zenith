@@ -11,15 +11,18 @@ script = ExtResource("1_1hrqx")
 terra_blade_beam = ExtResource("2_yp2sf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1.5, 1.5, 1.5, 1)
 position = Vector2(527.511, 314.206)
 rotation = 0.748746
-scale = Vector2(2.3, 2.3)
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("1_477b2")
 offset = Vector2(12.0369, -15.4621)
 metadata/_edit_group_ = true
 
 [node name="CirclePainter" type="Node2D" parent="."]
+modulate = Color(1.5, 1.5, 1.5, 1)
 script = ExtResource("4_nmed2")
 
 [node name="RoundPainter" type="Node2D" parent="."]
+modulate = Color(1.5, 1.5, 1.5, 1)
 script = ExtResource("5_abxlu")
